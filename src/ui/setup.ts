@@ -14,8 +14,9 @@ import {
   parseProfile,
   saveProfile,
 } from "../profile/profile";
-import { BUTTON, fill, h, icon } from "./dom";
-import { page, section } from "./layout";
+import { type SetupSectionId, sectionSummaries } from "../profile/summary";
+import { BUTTON, type Child, fill, h, icon } from "./dom";
+import { page } from "./layout";
 
 const INPUT =
   "mt-1 block min-h-14 w-full rounded-xl bg-card px-3 py-2 text-xl text-ink ring-2 ring-hair placeholder:text-muted/80 focus:ring-ai";
@@ -225,27 +226,83 @@ function medRow(med: Med, save: () => void): HTMLElement[] {
   ];
 }
 
+/** The form's six parts, each a collapsible card whose header says what it holds. */
+const GROUPS: { id: SetupSectionId; icon: string; title: string }[] = [
+  { id: "traveller", icon: "🙂", title: "旅客" },
+  { id: "hotels", icon: "🏨", title: "飯店" },
+  { id: "places", icon: "🚉", title: "每天的行程" },
+  { id: "contacts", icon: "📞", title: "聯絡人" },
+  { id: "health", icon: "💊", title: "健康" },
+  { id: "allergy", icon: "🍽️", title: "過敏・飲食・保險" },
+];
+
 export function renderSetup(root: HTMLElement): void {
   // Edited in place; every change is saved at once, so nothing is lost if the page closes.
   const profile: Profile = loadProfile();
-  const save = () => saveProfile(parseProfile(profile));
   const year = profile.birthYear === null ? "" : String(profile.birthYear);
+
+  const progress = h("span", { class: "min-w-0 text-lg font-bold" });
+  const saved = h("span", { class: "shrink-0 text-base font-bold text-ok", "aria-live": "polite" });
+  const headers = new Map<SetupSectionId, { text: HTMLElement; mark: HTMLElement }>();
+  let savedTimer = 0;
+
+  /** Rewrites the section headers and the progress line from the current data. */
+  function refresh(): void {
+    const summaries = sectionSummaries(parseProfile(profile));
+    for (const summary of summaries) {
+      const header = headers.get(summary.id);
+      if (!header) continue;
+      header.text.textContent = summary.text;
+      header.mark.textContent = summary.done ? "✓" : "";
+    }
+    progress.textContent = `已填 ${summaries.filter((s) => s.done).length}／${summaries.length} 段・會自動儲存`;
+  }
+
+  function save(): void {
+    saveProfile(parseProfile(profile));
+    refresh();
+    saved.textContent = "✓ 已儲存";
+    window.clearTimeout(savedTimer);
+    savedTimer = window.setTimeout(() => (saved.textContent = ""), 1500);
+  }
+
+  function group(id: SetupSectionId, ...children: Child[]): HTMLElement {
+    const meta = GROUPS.find((g) => g.id === id)!;
+    const text = h("span", { class: "block truncate text-base font-normal text-muted" });
+    const mark = h("span", { class: "w-6 shrink-0 text-center text-2xl text-ok", "aria-hidden": "true" });
+    headers.set(id, { text, mark });
+    const details = h(
+      "details",
+      { class: "group mt-4 rounded-2xl bg-card ring-2 ring-hair open:ring-ai/50" },
+      h(
+        "summary",
+        { class: "flex min-h-16 cursor-pointer list-none items-center gap-3 px-4 py-2 [&::-webkit-details-marker]:hidden" },
+        h("span", { class: "text-3xl", "aria-hidden": "true" }, meta.icon),
+        h("span", { class: "min-w-0 flex-1" }, h("span", { class: "block text-xl font-bold" }, meta.title), text),
+        mark,
+        icon("next", "h-6 w-6 shrink-0 text-ai transition group-open:rotate-90"),
+      ),
+      h("div", { class: "space-y-4 border-t-2 border-hair px-4 pb-4 pt-3" }, children),
+    );
+    // Only the first part starts open, so the whole form fits on a few screens.
+    details.open = id === "traveller";
+    return details;
+  }
+
+  const SUB = "pt-2 text-lg font-bold text-muted";
 
   page(root, "設定資料", [
     h(
-      "p",
-      { class: "mt-2 rounded-2xl bg-ai-soft p-4 text-lg leading-relaxed" },
-      "出發前填好，到時候就不用打字。全部都可以不填，填越多越好用。",
-      h("br"),
-      "資料只存在這支手機，",
-      h("b", null, "不會上傳到任何地方"),
-      "。",
+      "div",
+      { class: "mt-2 rounded-2xl bg-ai-soft p-4" },
+      h("p", { class: "flex items-baseline justify-between gap-2" }, progress, saved),
+      h("p", { class: "mt-1 text-base leading-relaxed" }, "全部都可以不填，填越多越好用。資料只存在這支手機，", h("b", null, "不會上傳"), "。"),
     ),
-    section(
-      "旅客",
+    group(
+      "traveller",
       h(
         "div",
-        { class: CARD },
+        { class: "space-y-4" },
         field("稱呼", profile.callName, (v) => ((profile.callName = v), save()), {
           placeholder: "例：媽媽、小美",
           hint: "首頁會用這個稱呼打招呼。",
@@ -267,18 +324,18 @@ export function renderSetup(root: HTMLElement): void {
         ),
       ),
     ),
-    section(
-      "飯店",
+    group(
+      "hotels",
       listEditor({ items: profile.hotels, noun: "飯店", make: (): Hotel => ({ name: "", kana: "", address: "", phone: "", from: "", to: "" }), row: (hotel) => hotelRow(hotel, save), onChange: save }),
     ),
-    section(
-      "每天要去的車站或地點",
-      h("p", { class: "mb-3 text-lg text-muted" }, "「我想去〇〇站」「這班車有停〇〇嗎」會直接用這些名稱，不用打字。"),
+    group(
+      "places",
+      h("p", { class: "text-lg text-muted" }, "「我想去〇〇站」「這班車有停〇〇嗎」會直接用這些名稱，不用打字。"),
       listEditor({ items: profile.places, noun: "目的地", make: (): Place => ({ kind: "station", name: "", kana: "", zh: "", date: "" }), row: (place, i) => placeRow(place, i, save), onChange: save }),
     ),
-    section(
-      "緊急聯絡人",
-      h("p", { class: "mb-3 text-lg text-muted" }, "通常是在台灣的家人。第一位會放在求救卡上。"),
+    group(
+      "contacts",
+      h("p", { class: "text-lg text-muted" }, "通常是在台灣的家人。第一位會放在求救卡上。"),
       listEditor({
         items: profile.contacts,
         noun: "聯絡人",
@@ -286,9 +343,7 @@ export function renderSetup(root: HTMLElement): void {
         row: (contact) => contactFields(contact, save, "台灣手機直接寫 09 開頭就好，例：0912-345-678。"),
         onChange: save,
       }),
-    ),
-    section(
-      "日本當地聯絡人（可不填）",
+      h("h3", { class: SUB }, "日本當地聯絡人（可不填）"),
       h(
         "div",
         { class: CARD },
@@ -296,55 +351,48 @@ export function renderSetup(root: HTMLElement): void {
         ...contactFields(profile.localContact, save, "日本電話，例：090-1234-5678。"),
       ),
     ),
-    section(
-      "慢性病",
+    group(
+      "health",
+      h("h3", { class: SUB }, "慢性病"),
       presets(CONDITIONS, profile.health.conditions, (ids) => ((profile.health.conditions = ids), save())),
-      h(
-        "div",
-        { class: "mt-3" },
-        field("其他（請寫英文）", profile.health.conditionsOther, (v) => ((profile.health.conditionsOther = v), save()), {
-          max: LIMITS.long,
-          placeholder: "例：Glaucoma",
-        }),
-      ),
-    ),
-    section(
-      "常吃的藥",
+      field("其他慢性病（請寫英文）", profile.health.conditionsOther, (v) => ((profile.health.conditionsOther = v), save()), {
+        max: LIMITS.long,
+        placeholder: "例：Glaucoma",
+      }),
+      h("h3", { class: SUB }, "常吃的藥"),
       listEditor({ items: profile.health.meds, noun: "藥", make: (): Med => ({ ingredient: "", dose: "" }), row: (med) => medRow(med, save), onChange: save }),
-    ),
-    section(
-      "血型",
       h(
-        "select",
-        {
-          class: INPUT,
-          "aria-label": "血型",
-          onchange: (event: Event) => {
-            profile.health.bloodType = (event.target as HTMLSelectElement).value as Profile["health"]["bloodType"];
-            save();
+        "label",
+        { class: "block text-lg font-bold" },
+        "血型",
+        h(
+          "select",
+          {
+            class: INPUT,
+            onchange: (event: Event) => {
+              profile.health.bloodType = (event.target as HTMLSelectElement).value as Profile["health"]["bloodType"];
+              save();
+            },
           },
-        },
-        (["", "A", "B", "O", "AB"] as const).map((type) =>
-          h("option", { value: type, selected: profile.health.bloodType === type }, type ? `${type} 型` : "不知道／不填"),
+          (["", "A", "B", "O", "AB"] as const).map((type) =>
+            h("option", { value: type, selected: profile.health.bloodType === type }, type ? `${type} 型` : "不知道／不填"),
+          ),
         ),
       ),
     ),
-    section("藥物過敏", presets(DRUG_ALLERGIES, profile.health.drugAllergies, (ids) => ((profile.health.drugAllergies = ids), save()))),
-    section(
-      "食物過敏",
+    group(
+      "allergy",
+      h("h3", { class: SUB }, "藥物過敏"),
+      presets(DRUG_ALLERGIES, profile.health.drugAllergies, (ids) => ((profile.health.drugAllergies = ids), save())),
+      h("h3", { class: SUB }, "食物過敏"),
       presets(FOOD_ALLERGIES, profile.health.foodAllergies, (ids) => ((profile.health.foodAllergies = ids), save())),
-    ),
-    section("飲食習慣", presets(DIETS, profile.health.diets, (ids) => ((profile.health.diets = ids), save()))),
-    h(
-      "div",
-      { class: "mt-3" },
       field("其他過敏（請寫英文）", profile.health.allergyOther, (v) => ((profile.health.allergyOther = v), save()), {
         max: LIMITS.long,
         placeholder: "例：Latex",
       }),
-    ),
-    section(
-      "旅遊保險（可不填）",
+      h("h3", { class: SUB }, "飲食習慣"),
+      presets(DIETS, profile.health.diets, (ids) => ((profile.health.diets = ids), save())),
+      h("h3", { class: SUB }, "旅遊保險（可不填）"),
       h(
         "div",
         { class: CARD },
@@ -360,8 +408,6 @@ export function renderSetup(root: HTMLElement): void {
     h(
       "div",
       { class: "mt-8 space-y-3" },
-      h("a", { href: "#/share", class: BUTTON.primary }, icon("share"), "填好了，分享給旅客"),
-      h("a", { href: "#/", class: BUTTON.secondary }, icon("check"), "填好了，我自己要用"),
       h("a", { href: "#/print", class: BUTTON.secondary }, icon("print"), "列印護貝小卡"),
       h(
         "button",
@@ -378,5 +424,18 @@ export function renderSetup(root: HTMLElement): void {
         "清除所有資料",
       ),
     ),
+    // Room for the dock, so it never covers the last button.
+    h("div", { class: "h-24", "aria-hidden": "true" }),
+    h(
+      "nav",
+      { class: "pb-safe fixed inset-x-0 bottom-0 z-20 border-t-2 border-hair bg-paper/95 backdrop-blur", "aria-label": "完成" },
+      h(
+        "div",
+        { class: "mx-auto grid max-w-xl grid-cols-2 gap-2 px-4 pt-2" },
+        h("a", { href: "#/", class: `${BUTTON.secondary} min-h-14` }, icon("check"), "完成"),
+        h("a", { href: "#/share", class: `${BUTTON.primary} min-h-14` }, icon("share"), "分享"),
+      ),
+    ),
   ]);
+  refresh();
 }
