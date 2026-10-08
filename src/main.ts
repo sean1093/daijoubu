@@ -2,7 +2,9 @@ import "./style.css";
 import { onVoicesChanged } from "./lib/speech";
 import { applySettings } from "./state";
 import { focusHeading } from "./ui/dom";
+import { renderHelp } from "./ui/help";
 import { renderHome } from "./ui/home";
+import { renderHotel } from "./ui/hotel";
 import { renderImport, renderImported } from "./ui/import";
 import { hush } from "./ui/japanese";
 import { renderSettings } from "./ui/settings";
@@ -18,6 +20,8 @@ type Page = (root: HTMLElement, args: string[]) => void;
  */
 const PAGES: Record<string, Page> = {
   "": renderHome,
+  help: renderHelp,
+  hotel: renderHotel,
   settings: renderSettings,
   setup: renderSetup,
   share: renderShare,
