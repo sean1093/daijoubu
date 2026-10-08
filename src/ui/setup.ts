@@ -55,12 +55,15 @@ function field(label: string, value: string, set: (value: string) => void, optio
   );
 }
 
-/** Checkboxes for preset items, writing the checked ids through `set`. */
-function presets(list: Preset[], chosen: string[], set: (ids: string[]) => void): HTMLElement {
+/**
+ * Checkboxes for preset items, writing the checked ids through `set`. `wide`
+ * gives each a full row, for labels that explain themselves (diets).
+ */
+function presets(list: Preset[], chosen: string[], set: (ids: string[]) => void, wide = false): HTMLElement {
   const picked = new Set(chosen);
   return h(
     "div",
-    { class: "grid grid-cols-2 gap-2" },
+    { class: `grid gap-2 ${wide ? "grid-cols-1" : "grid-cols-2"}` },
     list.map((preset) =>
       h(
         "label",
@@ -75,7 +78,7 @@ function presets(list: Preset[], chosen: string[], set: (ids: string[]) => void)
             set(list.map((p) => p.id).filter((id) => picked.has(id)));
           },
         }),
-        h("span", null, preset.zh, h("span", { lang: "ja", class: "block text-sm text-muted" }, plain(preset.jp))),
+        h("span", { class: "min-w-0" }, preset.zh, h("span", { lang: "ja", class: "block truncate text-sm text-muted" }, plain(preset.jp))),
       ),
     ),
   );
@@ -392,7 +395,7 @@ export function renderSetup(root: HTMLElement): void {
         placeholder: "例：Latex",
       }),
       h("h3", { class: SUB }, "飲食習慣"),
-      presets(DIETS, profile.health.diets, (ids) => ((profile.health.diets = ids), save())),
+      presets(DIETS, profile.health.diets, (ids) => ((profile.health.diets = ids), save()), true),
       h("h3", { class: SUB }, "旅遊保險（可不填）"),
       h(
         "div",

@@ -114,6 +114,16 @@ describe("medical and allergy cards", () => {
     expect(blocks[1]?.extra).toEqual(["持病：なし", "服用中の薬：なし", "薬のアレルギー：なし"]);
   });
 
+  it("spells out vegetarian types the Japanese have no word for", () => {
+    const profile = emptyProfile();
+    profile.health.diets = ["vegan", "no-pungent", "no-seafood"];
+    const lines = allergyCard(profile)!.map((b) => plain(b.jp));
+    expect(lines[0]).toContain("卵・乳製品は食べられません");
+    expect(lines[0]).toContain("魚のだしや肉のエキスも食べられません");
+    expect(lines[1]).toContain("にんにく・ねぎ・たまねぎ・にら・らっきょうは食べられません");
+    expect(lines[2]).toBe("魚・えび・かに・貝・いかなど、魚介類は食べられません。");
+  });
+
   it("makes an allergy card only when there is something to say", () => {
     expect(allergyCard(emptyProfile())).toBeNull();
     const blocks = allergyCard(sampleProfile())!;
