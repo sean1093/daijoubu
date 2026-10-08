@@ -1,0 +1,113 @@
+import type { Jp, Preset, Symptom } from "./types";
+
+/**
+ * Checkboxes in the setup form, each with Japanese written in advance so the
+ * medical and allergy cards never depend on what someone typed.
+ */
+
+/** Chronic conditions, as nouns for 「持病：…」. */
+export const CONDITIONS: Preset[] = [
+  { id: "hypertension", zh: "高血壓", jp: "{高血圧|こうけつあつ}" },
+  { id: "diabetes", zh: "糖尿病", jp: "{糖尿病|とうにょうびょう}" },
+  { id: "heart-disease", zh: "心臟病", jp: "{心臓病|しんぞうびょう}" },
+  { id: "arrhythmia", zh: "心律不整", jp: "{不整脈|ふせいみゃく}" },
+  { id: "pacemaker", zh: "裝有心律調節器", jp: "ペースメーカー {使用中|しようちゅう}" },
+  { id: "anticoagulant", zh: "正在吃抗凝血劑", jp: "{抗凝固薬|こうぎょうこやく} {服用中|ふくようちゅう}" },
+  { id: "stroke", zh: "曾經中風", jp: "{脳卒中|のうそっちゅう} の {既往|きおう}" },
+  { id: "asthma", zh: "氣喘", jp: "{喘息|ぜんそく}" },
+  { id: "kidney", zh: "腎臟病", jp: "{腎臓病|じんぞうびょう}" },
+  { id: "liver", zh: "肝臟病", jp: "{肝臓病|かんぞうびょう}" },
+  { id: "epilepsy", zh: "癲癇", jp: "てんかん" },
+  { id: "hearing", zh: "聽力不好", jp: "{難聴|なんちょう}" },
+];
+
+/** Drug allergies, as nouns for 「…アレルギー」. */
+export const DRUG_ALLERGIES: Preset[] = [
+  { id: "penicillin", zh: "盤尼西林", jp: "ペニシリン" },
+  { id: "cephem", zh: "頭孢菌素類抗生素", jp: "セフェム{系|けい} {抗生物質|こうせいぶっしつ}" },
+  { id: "aspirin", zh: "阿斯匹靈", jp: "アスピリン" },
+  { id: "nsaids", zh: "消炎止痛藥（NSAIDs）", jp: "{解熱鎮痛薬|げねつちんつうやく}" },
+  { id: "contrast", zh: "顯影劑", jp: "{造影剤|ぞうえいざい}" },
+  { id: "anesthetic", zh: "麻醉藥", jp: "{麻酔薬|ますいやく}" },
+];
+
+/**
+ * Food allergies. The first nine are Japan's mandatory allergen labels
+ * (特定原材料), so packaged food in Japan names them on the label; the rest
+ * are from the recommended list (特定原材料に準ずるもの) or common in Taiwan.
+ *
+ * Source: Consumer Affairs Agency (消費者庁), food allergy labelling —
+ * https://www.caa.go.jp/policies/policy/food_labeling/food_sanitation/allergy/
+ * カシューナッツ became mandatory on 2026-04-01 (令和8年内閣府令第34号):
+ * https://www.caa.go.jp/policies/policy/food_labeling/food_labeling_act/assets/food_labeling_cms201_260401_10.pdf
+ * Checked 2026-10-08 (via search results of the official pages).
+ */
+export const FOOD_ALLERGIES: Preset[] = [
+  { id: "shrimp", zh: "蝦", jp: "えび" },
+  { id: "crab", zh: "蟹", jp: "かに" },
+  { id: "walnut", zh: "核桃", jp: "くるみ" },
+  { id: "wheat", zh: "小麥", jp: "{小麦|こむぎ}" },
+  { id: "buckwheat", zh: "蕎麥", jp: "そば" },
+  { id: "egg", zh: "蛋", jp: "{卵|たまご}" },
+  { id: "milk", zh: "牛奶・乳製品", jp: "{乳製品|にゅうせいひん}" },
+  { id: "peanut", zh: "花生", jp: "{落花生|らっかせい}（ピーナッツ）" },
+  { id: "cashew", zh: "腰果", jp: "カシューナッツ" },
+  { id: "soy", zh: "黃豆", jp: "{大豆|だいず}" },
+  { id: "sesame", zh: "芝麻", jp: "ごま" },
+  { id: "almond", zh: "杏仁果", jp: "アーモンド" },
+  { id: "fish", zh: "魚", jp: "{魚|さかな}" },
+  { id: "squid", zh: "魷魚・花枝", jp: "いか" },
+  { id: "shellfish", zh: "貝類", jp: "{貝類|かいるい}" },
+  { id: "salmon-roe", zh: "鮭魚卵", jp: "いくら" },
+  { id: "kiwi", zh: "奇異果", jp: "キウイフルーツ" },
+  { id: "peach", zh: "桃子", jp: "もも" },
+];
+
+/** Eating restrictions that are not allergies; each is a full sentence. */
+export const DIETS: Preset[] = [
+  {
+    id: "vegetarian",
+    zh: "吃素（不吃肉和海鮮）",
+    jp: "ベジタリアン です。{肉|にく} と {魚介類|ぎょかいるい} は {食|た}べられません。",
+  },
+  { id: "no-beef", zh: "不吃牛肉", jp: "{牛肉|ぎゅうにく} は {食|た}べられません。" },
+  { id: "no-pork", zh: "不吃豬肉", jp: "{豚肉|ぶたにく} は {食|た}べられません。" },
+  { id: "no-raw", zh: "不吃生的食物", jp: "{生|なま} の もの は {食|た}べられません。" },
+  { id: "no-spicy", zh: "不吃辣", jp: "{辛|から}い もの は {食|た}べられません。" },
+  { id: "no-alcohol", zh: "不能喝酒", jp: "お{酒|さけ} は {飲|の}めません。" },
+  { id: "low-salt", zh: "要少鹽", jp: "{塩分|えんぶん} を {控|ひか}えて います。" },
+  { id: "soft-food", zh: "要軟一點的食物", jp: "やわらかい {料理|りょうり} が いい です。" },
+];
+
+/** Symptoms for the pointing card; each is a full sentence a doctor or staff member reads. */
+export const SYMPTOMS: Symptom[] = [
+  { id: "headache", icon: "🤕", zh: "頭痛", jp: "{頭|あたま} が {痛|いた}い です。" },
+  { id: "fever", icon: "🤒", zh: "發燒", jp: "{熱|ねつ} が あります。" },
+  { id: "chills", icon: "🥶", zh: "發冷", jp: "{寒気|さむけ} が します。" },
+  { id: "dizzy", icon: "💫", zh: "頭暈", jp: "めまい が します。" },
+  { id: "chest-pain", icon: "💔", zh: "胸痛", jp: "{胸|むね} が {痛|いた}い です。" },
+  { id: "breathless", icon: "😮‍💨", zh: "呼吸困難", jp: "{息|いき} が {苦|くる}しい です。" },
+  { id: "numb", icon: "✋", zh: "手腳發麻", jp: "{手足|てあし} が しびれます。" },
+  { id: "stomachache", icon: "😣", zh: "肚子痛", jp: "お{腹|なか} が {痛|いた}い です。" },
+  { id: "nausea", icon: "🤢", zh: "想吐", jp: "{吐|は}き{気|け} が します。" },
+  { id: "vomited", icon: "🤮", zh: "吐了", jp: "{吐|は}きました。" },
+  { id: "diarrhea", icon: "🚽", zh: "拉肚子", jp: "{下痢|げり} を して います。" },
+  { id: "cough", icon: "😷", zh: "咳嗽", jp: "{咳|せき} が {出|で}ます。" },
+  { id: "sore-throat", icon: "🗣️", zh: "喉嚨痛", jp: "{喉|のど} が {痛|いた}い です。" },
+  { id: "toothache", icon: "🦷", zh: "牙痛", jp: "{歯|は}が {痛|いた}い です。" },
+  { id: "fell", icon: "🩹", zh: "跌倒受傷", jp: "{転|ころ}んで けが を しました。" },
+  { id: "sprain", icon: "🦶", zh: "扭到腳", jp: "{足|あし} を ひねりました。" },
+  { id: "bleeding", icon: "🩸", zh: "血止不住", jp: "{血|ち} が {止|と}まりません。" },
+  { id: "sting", icon: "🐝", zh: "被蟲咬・被蜂螫", jp: "{虫|むし} に {刺|さ}されました。" },
+  { id: "rash", icon: "🔴", zh: "皮膚起疹子、癢", jp: "{発疹|ほっしん} が {出|で}て、かゆい です。" },
+  { id: "heatstroke", icon: "☀️", zh: "可能中暑", jp: "{熱中症|ねっちゅうしょう} かも しれません。" },
+];
+
+/** 「次の症状があります。」: the line above the chosen symptoms. */
+export const SYMPTOMS_INTRO: Jp = "{次|つぎ} の {症状|しょうじょう} が あります。";
+
+export const PRESET_LISTS = { CONDITIONS, DRUG_ALLERGIES, FOOD_ALLERGIES, DIETS, SYMPTOMS } as const;
+
+export function presetsById<T extends Preset>(list: T[], ids: string[]): T[] {
+  return ids.flatMap((id) => list.find((p) => p.id === id) ?? []);
+}

@@ -3,8 +3,11 @@ import { onVoicesChanged } from "./lib/speech";
 import { applySettings } from "./state";
 import { focusHeading } from "./ui/dom";
 import { renderHome } from "./ui/home";
+import { renderImport, renderImported } from "./ui/import";
 import { hush } from "./ui/japanese";
 import { renderSettings } from "./ui/settings";
+import { renderSetup } from "./ui/setup";
+import { renderShare } from "./ui/share";
 
 /** `args` are the path segments after the page name: `#/scene/transport` → ["transport"]. */
 type Page = (root: HTMLElement, args: string[]) => void;
@@ -16,6 +19,10 @@ type Page = (root: HTMLElement, args: string[]) => void;
 const PAGES: Record<string, Page> = {
   "": renderHome,
   settings: renderSettings,
+  setup: renderSetup,
+  share: renderShare,
+  s: renderImport,
+  imported: renderImported,
 };
 
 const root = document.getElementById("app") as HTMLElement;
