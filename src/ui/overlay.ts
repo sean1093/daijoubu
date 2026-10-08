@@ -3,16 +3,27 @@ import { plain } from "../lib/jp";
 import { BUTTON, h, icon } from "./dom";
 import { hush, play, playAll, playButton } from "./japanese";
 
-/** Marks the history entries overlays push; the value is the overlay's depth. */
+/** Marks the history entries overlays push; the value is the overlay's own token. */
 const STATE_KEY = "daijoubuOverlay";
 
 /** Open overlays, bottom first. A phrase's detail can open 給對方看 on top of itself. */
-const stack: { depth: number; teardown: () => void }[] = [];
+const stack: { token: string; teardown: () => void }[] = [];
+let opened = 0;
 
-/** Depth recorded in the current history entry: 0 on a plain page. */
-function historyDepth(): number {
-  const value = (history.state as Record<string, unknown> | null)?.[STATE_KEY];
-  return typeof value === "number" ? value : 0;
+/** Token in the current history entry, if it was pushed by an overlay. */
+function historyToken(): unknown {
+  return (history.state as Record<string, unknown> | null)?.[STATE_KEY];
+}
+
+/**
+ * Back (or forward) landed somewhere: keep the overlay whose entry this is
+ * and the ones under it, close the rest. An entry left over from an overlay
+ * that is already gone (after a reload, or a link out of an overlay) matches
+ * none, so everything closes — never a layer that ignores the back button.
+ */
+function onPop(): void {
+  const keep = stack.findIndex((entry) => entry.token === historyToken());
+  for (const entry of stack.slice(keep + 1).reverse()) entry.teardown();
 }
 
 /**
@@ -21,16 +32,17 @@ function historyDepth(): number {
  * layer only, instead of leaving the page; leaving the page closes them all.
  */
 export function openOverlay(label: string, build: (close: () => void) => HTMLElement): () => void {
-  const depth = (stack.at(-1)?.depth ?? 0) + 1;
+  opened += 1;
+  const token = `${Date.now().toString(36)}-${opened}`;
   const overlay = h("div", {
     class: "fixed inset-0 flex flex-col bg-paper text-ink",
-    style: `z-index: ${50 + depth}`,
+    style: `z-index: ${50 + stack.length + 1}`,
     role: "dialog",
     "aria-modal": "true",
     "aria-label": label,
   });
   let open = true;
-  const entry = { depth, teardown };
+  const entry = { token, teardown };
 
   function teardown(): void {
     if (!open) return;
@@ -38,21 +50,19 @@ export function openOverlay(label: string, build: (close: () => void) => HTMLEle
     hush();
     overlay.remove();
     stack.splice(stack.indexOf(entry), 1);
-    if (stack.length === 0) document.body.classList.remove("overflow-hidden");
+    if (stack.length === 0) {
+      document.body.classList.remove("overflow-hidden");
+      window.removeEventListener("popstate", onPop);
+    }
     document.removeEventListener("keydown", onKey);
-    window.removeEventListener("popstate", onPop);
     window.removeEventListener("hashchange", teardown);
     returnFocus?.focus({ preventScroll: true });
   }
   /** Closed from inside: drop the history entry we pushed, which fires popstate → teardown. */
   function close(): void {
     if (!open) return;
-    if (historyDepth() === depth) history.back();
+    if (historyToken() === token) history.back();
     else teardown();
-  }
-  function onPop(): void {
-    // Back from a layer above this one lands on this layer's entry: stay open.
-    if (historyDepth() < depth) teardown();
   }
   function onKey(event: KeyboardEvent): void {
     // Only the top layer answers the keyboard.
@@ -73,9 +83,9 @@ export function openOverlay(label: string, build: (close: () => void) => HTMLEle
 
   const returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   overlay.append(build(close));
+  if (stack.length === 0) window.addEventListener("popstate", onPop);
   stack.push(entry);
-  history.pushState({ [STATE_KEY]: depth }, "");
-  window.addEventListener("popstate", onPop);
+  history.pushState({ [STATE_KEY]: token }, "");
   window.addEventListener("hashchange", teardown);
   document.addEventListener("keydown", onKey);
   document.body.classList.add("overflow-hidden");

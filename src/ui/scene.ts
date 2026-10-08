@@ -7,7 +7,7 @@ import { type Ready, ready } from "../profile/fill";
 import { loadProfile, type Place, placesForToday } from "../profile/profile";
 import { fill, h, icon } from "./dom";
 import { jpText, playButton } from "./japanese";
-import { page } from "./layout";
+import { dock, page } from "./layout";
 import { askOther, openOverlay, overlayBar, showToOther } from "./overlay";
 
 /** The destination picked on the scene page; kept while the app is open. */
@@ -98,12 +98,8 @@ function heardCard(heard: Heard): HTMLElement {
     "article",
     { class: "rounded-2xl bg-card p-3 shadow-sm ring-2 ring-hair" },
     h("h3", { class: "text-2xl font-bold leading-snug" }, heard.zh),
-    h(
-      "div",
-      { class: "mt-1 flex items-center gap-2" },
-      h("p", { lang: "ja", class: "min-w-0 flex-1 text-lg text-muted" }, plain(heard.jp)),
-      playButton(heard.jp, "normal", "sm", "shrink-0"),
-    ),
+    h("p", { lang: "ja", class: "mt-1 text-lg text-muted" }, plain(heard.jp)),
+    h("div", { class: "mt-1 flex gap-2" }, playButton(heard.jp, "normal", "sm"), playButton(heard.jp, "slow", "sm")),
     h(
       "div",
       { class: `mt-2 grid gap-2 ${heard.replies.length === 3 ? "grid-cols-3" : "grid-cols-2"}` },
@@ -150,23 +146,18 @@ export function openRescue(): void {
 }
 
 /** Docked at the bottom of every scene, so help with a stuck conversation is one tap from anywhere. */
-function rescueDock(): HTMLElement {
-  return h(
-    "div",
-    { class: "pb-safe fixed inset-x-0 bottom-0 z-20 border-t-2 border-hair bg-paper/95 backdrop-blur" },
+function rescueDock(): HTMLElement[] {
+  return dock(
+    "萬用句",
     h(
-      "div",
-      { class: "mx-auto max-w-xl px-4 pt-2" },
-      h(
-        "button",
-        {
-          type: "button",
-          class: "flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-warn-soft text-xl font-bold text-ink ring-2 ring-hair active:scale-[0.98]",
-          onclick: openRescue,
-        },
-        "🛟 萬用句",
-        h("span", { class: "text-base font-normal text-muted" }, "聽不懂・請說慢一點…"),
-      ),
+      "button",
+      {
+        type: "button",
+        class: "flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-warn-soft text-xl font-bold text-ink ring-2 ring-hair active:scale-[0.98]",
+        onclick: openRescue,
+      },
+      "🛟 萬用句",
+      h("span", { class: "text-base font-normal text-muted" }, "聽不懂・請說慢一點…"),
     ),
   );
 }
@@ -276,8 +267,6 @@ export function renderScene(root: HTMLElement, [id, view]: string[]): void {
       : pickerSlot,
     heard && h("p", { class: "mt-3 text-lg text-muted" }, "聽到對方這樣說時，點一個回答，手機會念給對方聽。"),
     list,
-    // Room for the dock, so it never covers the last row.
-    h("div", { class: "h-24", "aria-hidden": "true" }),
     rescueDock(),
   ]);
   if (heard) fill(list, scene.heard.map(heardCard));

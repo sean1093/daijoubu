@@ -1,6 +1,6 @@
 import { SCENES } from "../content/scenes";
 import { voiceStatus } from "../lib/speech";
-import { isEmpty, loadProfile, type Place, type Profile, today } from "../profile/profile";
+import { isEmpty, isPlannedFor, loadProfile, type Place, type Profile, today } from "../profile/profile";
 import { fill, h, icon } from "./dom";
 import { pickPlace } from "./scene";
 
@@ -16,7 +16,7 @@ export function greeting(profile: Profile): string {
 
 /** Places dated today, in itinerary order. */
 export function todaysPlaces(profile: Profile, day = today()): Place[] {
-  return profile.places.filter((place) => place.date === day);
+  return profile.places.filter((place) => isPlannedFor(place, day));
 }
 
 /** "今天要去": one tap opens transport with that place already picked. */

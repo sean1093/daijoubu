@@ -16,7 +16,7 @@ import {
 } from "../profile/profile";
 import { type SetupSectionId, sectionSummaries } from "../profile/summary";
 import { BUTTON, type Child, fill, h, icon } from "./dom";
-import { page } from "./layout";
+import { dock, page } from "./layout";
 
 const INPUT =
   "mt-1 block min-h-14 w-full rounded-xl bg-card px-3 py-2 text-xl text-ink ring-2 ring-hair placeholder:text-muted/80 focus:ring-ai";
@@ -247,8 +247,8 @@ export function renderSetup(root: HTMLElement): void {
   let savedTimer = 0;
 
   /** Rewrites the section headers and the progress line from the current data. */
-  function refresh(): void {
-    const summaries = sectionSummaries(parseProfile(profile));
+  function refresh(parsed: Profile): void {
+    const summaries = sectionSummaries(parsed);
     for (const summary of summaries) {
       const header = headers.get(summary.id);
       if (!header) continue;
@@ -259,8 +259,9 @@ export function renderSetup(root: HTMLElement): void {
   }
 
   function save(): void {
-    saveProfile(parseProfile(profile));
-    refresh();
+    const parsed = parseProfile(profile);
+    saveProfile(parsed);
+    refresh(parsed);
     saved.textContent = "✓ 已儲存";
     window.clearTimeout(savedTimer);
     savedTimer = window.setTimeout(() => (saved.textContent = ""), 1500);
@@ -424,18 +425,15 @@ export function renderSetup(root: HTMLElement): void {
         "清除所有資料",
       ),
     ),
-    // Room for the dock, so it never covers the last button.
-    h("div", { class: "h-24", "aria-hidden": "true" }),
-    h(
-      "nav",
-      { class: "pb-safe fixed inset-x-0 bottom-0 z-20 border-t-2 border-hair bg-paper/95 backdrop-blur", "aria-label": "完成" },
+    ...dock(
+      "完成",
       h(
         "div",
-        { class: "mx-auto grid max-w-xl grid-cols-2 gap-2 px-4 pt-2" },
+        { class: "grid grid-cols-2 gap-2" },
         h("a", { href: "#/", class: `${BUTTON.secondary} min-h-14` }, icon("check"), "完成"),
         h("a", { href: "#/share", class: `${BUTTON.primary} min-h-14` }, icon("share"), "分享"),
       ),
     ),
   ]);
-  refresh();
+  refresh(parseProfile(profile));
 }

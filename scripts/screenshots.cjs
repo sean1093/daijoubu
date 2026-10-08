@@ -8,7 +8,8 @@ const profile = fs.readFileSync(profileFile, "utf8");
 const PHONE = { width: 390, height: 844 };
 const LANDSCAPE = { width: 844, height: 390 };
 
-const openRow = (p, text) => p.getByRole("button", { name: new RegExp(`^${text}`) }).first().click();
+// Rows are named by their Chinese then their Japanese, so a substring match finds them.
+const openRow = (p, text) => p.getByRole("button", { name: text }).first().click();
 
 const SHOTS = [
   { name: "01-home", hash: "#/" },

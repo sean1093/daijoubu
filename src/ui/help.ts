@@ -4,6 +4,7 @@ import { dialable } from "../lib/phone";
 import { type CardBlock, helpCard, LINES } from "../profile/cards";
 import { loadProfile } from "../profile/profile";
 import { fill, h, icon } from "./dom";
+import { dock } from "./layout";
 import { playButton } from "./japanese";
 import { showToOther } from "./overlay";
 
@@ -121,7 +122,7 @@ export function renderHelp(root: HTMLElement): void {
         h(
           "details",
           { class: "rounded-2xl bg-card p-4 ring-2 ring-hair" },
-          h("summary", { class: "cursor-pointer text-xl font-bold text-ai" }, "更多電話（各地辦事處、外交部）"),
+          h("summary", { class: "cursor-pointer text-xl font-bold text-ai" }, "更多電話（各地辦事處）"),
           h(
             "div",
             { class: "mt-3 space-y-3" },
@@ -138,47 +139,43 @@ export function renderHelp(root: HTMLElement): void {
           "。來源為日本政府觀光局、日本消防廳、日本警察與中華民國外交部、駐日代表處官方網站。",
         ),
       ),
-      // Room for the dock, so it never covers the last line.
-      h("div", { class: "h-24", "aria-hidden": "true" }),
+      callDock(family?.relation || "家人", familyPhone?.tel ?? null),
     ),
-    callDock(family?.relation || "家人", familyPhone?.tel ?? null),
   );
 }
 
 /** 110 and 119 live in the dock; these two come first in the list below the card. */
 const DOCKED_NUMBERS = ["police", "ambulance"];
-const MAIN_NUMBERS = ["jnto-hotline", "tecro-tokyo"];
+const MAIN_NUMBERS = ["jnto-hotline", "tecro-tokyo", "mofa-taiwan"];
 
 /**
  * Calls that matter most, docked at the bottom so they are reachable from
- * anywhere on the page. 110 and 119 ask first: a pocket tap should not
- * summon the police.
+ * anywhere on the page. No extra confirmation: a tel: link never dials by
+ * itself (iOS asks, Android opens the dialer), and a second prompt only
+ * slows someone down in an emergency.
  */
-function callDock(familyLabel: string, familyTel: string | null): HTMLElement {
-  const dial = (top: string, bottom: string, tel: string, confirmText: string | null, tone: string) =>
+function callDock(familyLabel: string, familyTel: string | null): HTMLElement[] {
+  const dial = (top: string, bottom: string, tel: string, tone: string) =>
     h(
       "a",
       {
         href: `tel:${tel}`,
-        class: `flex min-h-16 flex-col items-center justify-center rounded-2xl px-1 text-center font-bold leading-tight active:scale-95 ${tone}`,
-        onclick: (event: Event) => {
-          if (confirmText && !confirm(confirmText)) event.preventDefault();
-        },
+        class: `flex min-h-16 min-w-0 flex-col items-center justify-center rounded-2xl px-1 text-center font-bold leading-tight active:scale-95 ${tone}`,
       },
-      h("span", { class: "block whitespace-nowrap text-xl" }, top),
-      h("span", { class: "block whitespace-nowrap text-base" }, bottom),
+      h("span", { class: "block max-w-full truncate text-xl" }, top),
+      h("span", { class: "block max-w-full truncate text-base" }, bottom),
     );
   const police = EMERGENCY_NUMBERS.find((e) => e.id === "police");
   const ambulance = EMERGENCY_NUMBERS.find((e) => e.id === "ambulance");
-  return h(
-    "nav",
-    { class: "pb-safe fixed inset-x-0 bottom-0 z-20 border-t-2 border-hair bg-paper/95 backdrop-blur", "aria-label": "撥打電話" },
+  return dock(
+    "撥打電話",
     h(
       "div",
-      { class: `mx-auto grid max-w-xl gap-2 px-4 pt-2 ${familyTel ? "grid-cols-3" : "grid-cols-2"}` },
-      familyTel && dial("📞 打給", familyLabel, familyTel, null, "bg-ai text-on-accent"),
-      police && dial("🚓 110", "警察", telOf(police.number), "要打 110 報警嗎？", "bg-shu text-on-accent"),
-      ambulance && dial("🚑 119", "救護車", telOf(ambulance.number), "要打 119 叫救護車嗎？", "bg-shu text-on-accent"),
+      { class: `grid gap-2 ${familyTel ? "grid-cols-3" : "grid-cols-2"}` },
+      // The family is abroad: say so, since the call is charged as international.
+      familyTel && dial(`📞 ${familyLabel}`, "國際電話", familyTel, "bg-ai text-on-accent"),
+      police && dial("🚓 110", "警察", telOf(police.number), "bg-shu text-on-accent"),
+      ambulance && dial("🚑 119", "救護車", telOf(ambulance.number), "bg-shu text-on-accent"),
     ),
   );
 }
