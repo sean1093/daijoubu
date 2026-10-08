@@ -3,7 +3,7 @@ import { EMERGENCY_NUMBERS } from "../src/content/emergency";
 import { SCENES } from "../src/content/scenes";
 import { checkJp } from "../src/content/validate";
 import { plain } from "../src/lib/jp";
-import { contactLines, helpCard, hotelCard, LINES, placeWord } from "../src/profile/cards";
+import { allergyCard, contactLines, helpCard, hotelCard, LINES, medicalCard, placeWord } from "../src/profile/cards";
 import { ready } from "../src/profile/fill";
 import { emptyProfile } from "../src/profile/profile";
 import { sampleProfile } from "./fixtures";
@@ -86,5 +86,40 @@ describe("filling phrase slots", () => {
         for (const place of [null, ...profile.places]) expect(checkJp(ready(p, profile, place).jp)).toEqual([]);
       }
     }
+  });
+});
+
+describe("medical and allergy cards", () => {
+  const now = new Date("2026-11-03T12:00:00");
+
+  it("lists health data in Japanese", () => {
+    const blocks = medicalCard(sampleProfile(), now);
+    expect(blocks[0]?.extra).toEqual(["名前：LIN MEI-HUA", "生年：1956年（70歳）", "国籍：台湾", "血液型：O型"]);
+    expect(blocks[1]?.extra).toEqual([
+      "持病：高血圧、糖尿病",
+      "服用中の薬：",
+      "・Amlodipine 5mg 1/day",
+      "・Metformin 500mg 2/day",
+      "・Aspirin 100mg 1/day",
+      "薬のアレルギー：ペニシリン",
+      "食物アレルギー：えび、かに",
+    ]);
+    expect(blocks.at(-1)?.extra).toEqual(["富邦產險", "証券番号：TRV-12345678", "TEL +886 2-2345-6789"]);
+    for (const block of blocks) expect(checkJp(block.jp)).toEqual([]);
+  });
+
+  it("says なし rather than leaving the doctor guessing", () => {
+    const blocks = medicalCard(emptyProfile(), now);
+    expect(blocks).toHaveLength(2);
+    expect(blocks[1]?.extra).toEqual(["持病：なし", "服用中の薬：なし", "薬のアレルギー：なし"]);
+  });
+
+  it("makes an allergy card only when there is something to say", () => {
+    expect(allergyCard(emptyProfile())).toBeNull();
+    const blocks = allergyCard(sampleProfile())!;
+    expect(blocks[0]?.extra).toEqual(["・えび", "・かに"]);
+    expect(blocks[0]?.zh).toContain("蝦、蟹");
+    expect(plain(blocks[1]!.jp)).toBe("牛肉は食べられません。");
+    for (const block of blocks) expect(checkJp(block.jp)).toEqual([]);
   });
 });

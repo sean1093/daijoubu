@@ -16,7 +16,7 @@ let pickedPlace: Place | null = null;
 const ACTION =
   "inline-flex min-h-14 items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-2 text-lg font-bold leading-tight transition active:scale-95";
 
-function phraseCard(phrase: Phrase, line: Ready): HTMLElement {
+export function phraseCard(phrase: Phrase, line: Ready): HTMLElement {
   return h(
     "article",
     { class: "rounded-2xl bg-card p-4 shadow-sm ring-2 ring-hair" },

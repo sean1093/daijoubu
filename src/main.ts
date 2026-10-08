@@ -8,6 +8,7 @@ import { renderHotel } from "./ui/hotel";
 import { renderImport, renderImported } from "./ui/import";
 import { hush } from "./ui/japanese";
 import { renderScene } from "./ui/scene";
+import { renderMedical } from "./ui/medical";
 import { renderSettings } from "./ui/settings";
 import { renderSetup } from "./ui/setup";
 import { renderShare } from "./ui/share";
@@ -23,6 +24,7 @@ const PAGES: Record<string, Page> = {
   "": renderHome,
   help: renderHelp,
   hotel: renderHotel,
+  medical: renderMedical,
   scene: renderScene,
   settings: renderSettings,
   setup: renderSetup,
