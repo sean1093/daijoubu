@@ -28,10 +28,15 @@ export function renderHome(root: HTMLElement): void {
         {
           href: "#/help",
           class:
-            "mt-4 flex min-h-36 items-center justify-center gap-4 rounded-3xl bg-shu px-4 py-5 text-on-accent shadow-md transition active:scale-[0.98]",
+            "mt-4 flex min-h-36 items-center justify-center gap-3 rounded-3xl bg-shu px-4 py-5 text-on-accent shadow-md transition active:scale-[0.98]",
         },
-        h("span", { class: "text-5xl", "aria-hidden": "true" }, "🆘"),
-        h("span", { class: "text-left" }, h("span", { class: "block text-4xl font-bold" }, "我需要幫忙"), h("span", { class: "block text-lg" }, "迷路・聯絡家人・緊急")),
+        h("span", { class: "text-4xl", "aria-hidden": "true" }, "🆘"),
+        h(
+          "span",
+          { class: "text-left" },
+          h("span", { class: "block whitespace-nowrap text-[min(2rem,9vw)] font-bold leading-tight" }, "我需要幫忙"),
+          h("span", { class: "block text-lg" }, "迷路・聯絡家人・緊急"),
+        ),
       ),
       h(
         "nav",

@@ -80,6 +80,17 @@ npm run build    # 型別檢查＋建置到 dist/
 
 `npm test` 會檢查所有內容：每個漢字都有讀音、沒有重複的 id、每句都有中文翻譯、每個情境至少 12 句、緊急電話都附上來源與查證日期。
 
+### 截圖檢查
+
+`docs/screenshots/` 是手機尺寸（390×844）的畫面截圖：首頁（淺色／深色／特大字／沒有資料）、求救卡、給對方看（橫拿）、給對方點選、對方說、醫療卡。重新產生：
+
+```bash
+npm run build && npx vite preview --port 4173 &
+CHROMIUM=/path/to/chrome NODE_PATH=$(npm root -g) node scripts/screenshots.cjs scripts/sample-profile.json docs/screenshots
+```
+
+腳本也會檢查頁面錯誤和手機寬度下的橫向捲動。
+
 ### 部署
 
 推到 `main` 時 GitHub Actions 會自動測試、建置並部署到 GitHub Pages。第一次需要在 repo 的 **Settings → Pages → Source** 選 **GitHub Actions**。

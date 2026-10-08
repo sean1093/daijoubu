@@ -65,14 +65,14 @@ export function renderHelp(root: HTMLElement): void {
       h("p", { class: "text-lg font-bold text-shu" }, "把手機拿給路人、車站人員或警察看 👇"),
       h(
         "div",
-        { class: "flex flex-wrap gap-3" },
-        playButton(lines, "normal", "flex-1"),
-        playButton(lines, "slow", "flex-1"),
+        { class: "grid grid-cols-3 gap-2" },
+        playButton(lines, "normal", "px-2 whitespace-nowrap"),
+        playButton(lines, "slow", "px-2 whitespace-nowrap"),
         h(
           "button",
           {
             type: "button",
-            class: "inline-flex min-h-14 flex-1 items-center justify-center gap-2 rounded-full bg-ai-soft px-5 text-lg font-bold text-ai active:scale-95",
+            class: "inline-flex min-h-14 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ai-soft px-2 text-lg font-bold text-ai active:scale-95",
             onclick: () => showToOther(blocks, "我需要幫忙"),
           },
           icon("expand"),

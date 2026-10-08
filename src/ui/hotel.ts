@@ -31,13 +31,13 @@ export function renderHotel(root: HTMLElement, [index]: string[]): void {
     h("div", { class: "mt-3" }, cardBlock(card)),
     h(
       "div",
-      { class: "mt-4 flex flex-wrap gap-3" },
-      playButton(LINES.taxiToHotel, "normal", "flex-1"),
+      { class: "mt-4 grid grid-cols-2 gap-2" },
+      playButton(LINES.taxiToHotel, "normal", "px-2 whitespace-nowrap"),
       h(
         "button",
         {
           type: "button",
-          class: "inline-flex min-h-14 flex-1 items-center justify-center gap-2 rounded-full bg-ai-soft px-5 text-lg font-bold text-ai active:scale-95",
+          class: "inline-flex min-h-14 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ai-soft px-2 text-lg font-bold text-ai active:scale-95",
           onclick: () => showToOther([card], "回飯店"),
         },
         icon("expand"),
