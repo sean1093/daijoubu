@@ -134,10 +134,6 @@ body {
 
 /* ---------- Print: wallet cards for laminating (see src/ui/print.ts) ---------- */
 
-.print-only {
-  display: none;
-}
-
 @media print {
   @page {
     size: A4;
@@ -159,30 +155,59 @@ body {
     display: none !important;
   }
 
-  .print-only {
-    display: block;
-  }
-
   #app {
     max-width: none;
   }
+}
 
-  .print-sheet {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4mm;
-  }
+/* Wallet cards: the same physical size on screen as on paper, so the preview is the print. */
+.print-sheet {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4mm;
+  justify-content: center;
+}
 
-  /* ISO/IEC 7810 ID-1, the size of a credit card: fits a wallet once laminated. */
-  .wallet-card {
-    width: 85.6mm;
-    height: 54mm;
-    overflow: hidden;
-    border: 0.3mm dashed #000;
-    border-radius: 3mm;
-    padding: 3mm;
-    break-inside: avoid;
-    font-size: 7.5pt;
-    line-height: 1.35;
+/* ISO/IEC 7810 ID-1, the size of a credit card: fits a wallet once laminated. */
+.wallet-card {
+  width: 85.6mm;
+  height: 54mm;
+  overflow: hidden;
+  border: 0.3mm dashed #000;
+  border-radius: 3mm;
+  padding: 2.5mm 3mm;
+  break-inside: avoid;
+  font-size: 7.5pt;
+  line-height: 1.35;
+  font-family: var(--font-page);
+}
+
+/* Read at arm's length, e.g. by a taxi driver. */
+.wallet-card-big {
+  font-size: 10pt;
+}
+
+/* Folded once before laminating. */
+.wallet-card-tall {
+  height: 108mm;
+}
+
+.wallet-title {
+  margin: -2.5mm -3mm 1.5mm;
+  padding: 1mm 3mm;
+  background: #eee;
+  font-weight: 700;
+  font-size: 8pt;
+}
+
+.wallet-block + .wallet-block {
+  margin-top: 1.2mm;
+}
+
+@media print {
+  .wallet-card,
+  .wallet-title {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 }
