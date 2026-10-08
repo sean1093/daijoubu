@@ -43,6 +43,19 @@ export default {
       jp: "この {料理|りょうり} に {肉|にく} は {入|はい}って います か。",
       answers: "yesNo",
     },
+    {
+      id: "restaurant-vegetarian-dish",
+      zh: "有素食的料理嗎？",
+      jp: "ベジタリアン {向|む}け の {料理|りょうり} は あります か。",
+      answers: "yesNo",
+    },
+    {
+      id: "restaurant-dashi",
+      zh: "湯頭（高湯）有用魚或肉熬的嗎？",
+      jp: "だし に {魚|さかな} や {肉|にく} は {使|つか}って います か。",
+      tip: "日本料理的湯和醬汁常用柴魚高湯（だし），吃素的人要特別問。",
+      answers: "yesNo",
+    },
     { id: "restaurant-not-spicy", zh: "請不要做辣的。", jp: "{辛|から}く しないで ください。" },
     {
       id: "restaurant-small",

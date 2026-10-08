@@ -63,12 +63,36 @@ export const FOOD_ALLERGIES: Preset[] = [
   { id: "peach", zh: "桃子", jp: "もも" },
 ];
 
-/** Eating restrictions that are not allergies; each is a full sentence. */
+/**
+ * Eating restrictions that are not allergies; each is a full sentence.
+ *
+ * Taiwanese vegetarian types have no everyday Japanese name (五辛素 least of
+ * all), so each sentence names the foods instead of the label. Japanese
+ * cooking hides fish stock (だし: bonito, dried sardines) and meat extract
+ * (エキス) in soups and sauces, so the vegetarian ones say so explicitly.
+ * The id "vegetarian" predates the split and keeps its meaning: no meat or
+ * seafood, which is 蛋奶素.
+ */
 export const DIETS: Preset[] = [
   {
+    id: "vegan",
+    zh: "全素（不吃任何動物性食物）",
+    jp: "ヴィーガン です。{肉|にく}・{魚介類|ぎょかいるい}・{卵|たまご}・{乳製品|にゅうせいひん} は {食|た}べられません。{魚|さかな} の だし や {肉|にく} の エキス も {食|た}べられません。",
+  },
+  {
     id: "vegetarian",
-    zh: "吃素（不吃肉和海鮮）",
-    jp: "ベジタリアン です。{肉|にく} と {魚介類|ぎょかいるい} は {食|た}べられません。",
+    zh: "蛋奶素（不吃肉和海鮮，可以吃蛋和奶）",
+    jp: "ベジタリアン です。{肉|にく} と {魚介類|ぎょかいるい} は {食|た}べられません が、{卵|たまご} と {乳製品|にゅうせいひん} は {大丈夫|だいじょうぶ} です。{魚|さかな} の だし や {肉|にく} の エキス も {食|た}べられません。",
+  },
+  {
+    id: "no-pungent",
+    zh: "五辛素（不吃蔥、蒜、洋蔥、韭菜、蕎頭）",
+    jp: "{宗教|しゅうきょう} の {理由|りゆう} で、にんにく・ねぎ・たまねぎ・にら・らっきょう は {食|た}べられません。ソース や スープ に {入|はい}って いる もの も {食|た}べられません。",
+  },
+  {
+    id: "no-seafood",
+    zh: "不吃海鮮",
+    jp: "{魚|さかな}・えび・かに・{貝|かい}・いか など、{魚介類|ぎょかいるい} は {食|た}べられません。",
   },
   { id: "no-beef", zh: "不吃牛肉", jp: "{牛肉|ぎゅうにく} は {食|た}べられません。" },
   { id: "no-pork", zh: "不吃豬肉", jp: "{豚肉|ぶたにく} は {食|た}べられません。" },
