@@ -34,7 +34,7 @@ describe("help card", () => {
 
   it("makes a taxi card", () => {
     const card = hotelCard(sampleProfile().hotels[0]!);
-    expect(card.extra).toEqual(["ホテルグレイスリー新宿", "〒 東京都新宿区歌舞伎町1-19-1", "TEL 03-6833-2489"]);
+    expect(card.extra).toEqual(["ホテルグレイスリー新宿", "住所：東京都新宿区歌舞伎町1-19-1", "TEL 03-6833-2489"]);
   });
 
   it("formats contacts without a phone", () => {

@@ -24,14 +24,12 @@ export function cardBlock(block: CardBlock, size = "text-3xl"): HTMLElement {
 }
 
 /** A big `tel:` button. */
-function callButton(label: string, sub: string, tel: string, tone: "danger" | "normal" = "normal"): HTMLElement {
+function callButton(label: string, sub: string, tel: string): HTMLElement {
   return h(
     "a",
     {
       href: `tel:${tel}`,
-      class: `flex min-h-16 items-center gap-3 rounded-2xl px-4 py-3 transition active:scale-[0.98] ${
-        tone === "danger" ? "bg-shu text-on-accent" : "bg-card text-ink ring-2 ring-hair"
-      }`,
+      class: "flex min-h-16 items-center gap-3 rounded-2xl bg-card px-4 py-3 text-ink ring-2 ring-hair transition active:scale-[0.98]",
     },
     icon("phone", "h-7 w-7 shrink-0"),
     h("span", { class: "min-w-0" }, h("span", { class: "block text-2xl font-bold" }, label), h("span", { class: "block text-base" }, sub)),
@@ -80,12 +78,6 @@ export function renderHelp(root: HTMLElement): void {
         ),
       ),
       blocks.map((block) => cardBlock(block)),
-      familyPhone &&
-        callButton(
-          `打電話給${family?.relation || "家人"}`,
-          `${familyPhone.display}（國際電話，會收費）`,
-          familyPhone.tel,
-        ),
       blocks.length <= 2 &&
         h(
           "a",
@@ -123,20 +115,17 @@ export function renderHelp(root: HTMLElement): void {
         "section",
         { class: "space-y-3 pt-4" },
         h("h2", { class: "text-2xl font-bold" }, "☎️ 緊急電話"),
-        EMERGENCY_NUMBERS.slice(0, 2).map((entry) =>
-          callButton(`${entry.number} ${entry.title}`, entry.when, telOf(entry.number), "danger"),
+        EMERGENCY_NUMBERS.filter((e) => MAIN_NUMBERS.includes(e.id)).map((entry) =>
+          callButton(entry.title, `${entry.number}・${entry.when}`, telOf(entry.number)),
         ),
-        EMERGENCY_NUMBERS.filter((e) => !e.id.startsWith("tecro-") || e.id === "tecro-tokyo")
-          .slice(2)
-          .map((entry) => callButton(entry.title, `${entry.number}・${entry.when}`, telOf(entry.number))),
         h(
           "details",
           { class: "rounded-2xl bg-card p-4 ring-2 ring-hair" },
-          h("summary", { class: "cursor-pointer text-xl font-bold text-ai" }, "各地辦事處的急難救助電話"),
+          h("summary", { class: "cursor-pointer text-xl font-bold text-ai" }, "更多電話（各地辦事處、外交部）"),
           h(
             "div",
             { class: "mt-3 space-y-3" },
-            EMERGENCY_NUMBERS.filter((e) => e.id.startsWith("tecro-") && e.id !== "tecro-tokyo").map((entry) =>
+            EMERGENCY_NUMBERS.filter((e) => !MAIN_NUMBERS.includes(e.id) && !DOCKED_NUMBERS.includes(e.id)).map((entry) =>
               callButton(entry.title, `${entry.number}・${entry.when}`, telOf(entry.number)),
             ),
           ),
@@ -149,6 +138,47 @@ export function renderHelp(root: HTMLElement): void {
           "。來源為日本政府觀光局、日本消防廳、日本警察與中華民國外交部、駐日代表處官方網站。",
         ),
       ),
+      // Room for the dock, so it never covers the last line.
+      h("div", { class: "h-24", "aria-hidden": "true" }),
+    ),
+    callDock(family?.relation || "家人", familyPhone?.tel ?? null),
+  );
+}
+
+/** 110 and 119 live in the dock; these two come first in the list below the card. */
+const DOCKED_NUMBERS = ["police", "ambulance"];
+const MAIN_NUMBERS = ["jnto-hotline", "tecro-tokyo"];
+
+/**
+ * Calls that matter most, docked at the bottom so they are reachable from
+ * anywhere on the page. 110 and 119 ask first: a pocket tap should not
+ * summon the police.
+ */
+function callDock(familyLabel: string, familyTel: string | null): HTMLElement {
+  const dial = (top: string, bottom: string, tel: string, confirmText: string | null, tone: string) =>
+    h(
+      "a",
+      {
+        href: `tel:${tel}`,
+        class: `flex min-h-16 flex-col items-center justify-center rounded-2xl px-1 text-center font-bold leading-tight active:scale-95 ${tone}`,
+        onclick: (event: Event) => {
+          if (confirmText && !confirm(confirmText)) event.preventDefault();
+        },
+      },
+      h("span", { class: "block whitespace-nowrap text-xl" }, top),
+      h("span", { class: "block whitespace-nowrap text-base" }, bottom),
+    );
+  const police = EMERGENCY_NUMBERS.find((e) => e.id === "police");
+  const ambulance = EMERGENCY_NUMBERS.find((e) => e.id === "ambulance");
+  return h(
+    "nav",
+    { class: "pb-safe fixed inset-x-0 bottom-0 z-20 border-t-2 border-hair bg-paper/95 backdrop-blur", "aria-label": "撥打電話" },
+    h(
+      "div",
+      { class: `mx-auto grid max-w-xl gap-2 px-4 pt-2 ${familyTel ? "grid-cols-3" : "grid-cols-2"}` },
+      familyTel && dial("📞 打給", familyLabel, familyTel, null, "bg-ai text-on-accent"),
+      police && dial("🚓 110", "警察", telOf(police.number), "要打 110 報警嗎？", "bg-shu text-on-accent"),
+      ambulance && dial("🚑 119", "救護車", telOf(ambulance.number), "要打 119 叫救護車嗎？", "bg-shu text-on-accent"),
     ),
   );
 }
