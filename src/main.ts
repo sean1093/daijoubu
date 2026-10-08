@@ -1,0 +1,50 @@
+import "./style.css";
+import { onVoicesChanged } from "./lib/speech";
+import { applySettings } from "./state";
+import { focusHeading } from "./ui/dom";
+import { renderHome } from "./ui/home";
+import { hush } from "./ui/japanese";
+import { renderSettings } from "./ui/settings";
+
+/** `args` are the path segments after the page name: `#/scene/transport` → ["transport"]. */
+type Page = (root: HTMLElement, args: string[]) => void;
+
+/**
+ * Every page, by the first path segment of the hash. Routing lives in the
+ * hash so the static build works from any GitHub Pages subpath.
+ */
+const PAGES: Record<string, Page> = {
+  "": renderHome,
+  settings: renderSettings,
+};
+
+const root = document.getElementById("app") as HTMLElement;
+/** The first render is the page that was opened: moving focus there would be noise. */
+let routed = false;
+
+function route(): void {
+  hush();
+  window.scrollTo(0, 0);
+  const [name = "", ...args] = location.hash.replace(/^#\/?/, "").split("/");
+  // hasOwn: the name comes from the URL, and "constructor" must not reach Object.prototype.
+  const render = Object.hasOwn(PAGES, name) ? PAGES[name]! : PAGES[""]!;
+  render(root, args);
+  if (routed) focusHeading(root);
+  routed = true;
+}
+
+applySettings();
+// The system theme can change while the app is open (e.g. at sunset).
+matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", applySettings);
+// The voice list arrives late on some browsers; the settings page shows it.
+onVoicesChanged(() => {
+  if (location.hash.startsWith("#/settings")) route();
+});
+window.addEventListener("hashchange", route);
+route();
+
+// Offline use: only the built site has a service worker to register, and the
+// URL stays relative so it also works from a GitHub Pages subpath.
+if (import.meta.env.PROD && "serviceWorker" in navigator) {
+  window.addEventListener("load", () => void navigator.serviceWorker.register("./sw.js"));
+}
