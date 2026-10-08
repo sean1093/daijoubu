@@ -7,7 +7,7 @@ import { pickPlace } from "./scene";
 const TILE =
   "flex min-h-28 flex-col items-center justify-center gap-1 rounded-3xl bg-card px-2 py-3 text-center text-2xl font-bold text-ink shadow-sm ring-2 ring-hair transition active:scale-95";
 const SHORTCUT =
-  "flex min-h-20 items-center justify-center gap-2 rounded-3xl bg-card px-2 py-2 text-xl font-bold leading-tight text-ink shadow-sm ring-2 ring-hair transition active:scale-95";
+  "flex min-h-20 flex-col items-center justify-center rounded-3xl bg-card px-2 py-2 text-xl font-bold leading-tight text-ink shadow-sm ring-2 ring-hair transition active:scale-95";
 
 /** One short line: the app greets by name when it has one. */
 export function greeting(profile: Profile): string {
