@@ -34,6 +34,8 @@ export interface Phrase {
   tip?: string;
   /** Enables "給對方點選": the other person answers by tapping. */
   answers?: ReplySet | Reply[];
+  /** A page that goes with the phrase, e.g. the allergy card. */
+  link?: { href: string; label: string };
 }
 
 /** Something staff commonly say. */

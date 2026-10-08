@@ -83,7 +83,7 @@ export function playButton(lines: Jp | Jp[], kind: "normal" | "slow" = "normal",
     "button",
     {
       type: "button",
-      class: `inline-flex min-h-14 items-center justify-center gap-2 rounded-full px-5 text-lg font-bold transition active:scale-95 ${
+      class: `inline-flex min-h-14 items-center justify-center gap-2 rounded-full px-4 text-lg font-bold transition active:scale-95 ${
         slow ? "bg-card text-ai ring-2 ring-ai/40" : "bg-ai-soft text-ai"
       } ${extra}`,
       "aria-label": `${slow ? "慢速播放" : "播放"}「${all.map(plain).join("")}」`,

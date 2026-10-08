@@ -1,7 +1,7 @@
 import type { Jp, Reply } from "../content/types";
 import { plain } from "../lib/jp";
 import { BUTTON, h, icon } from "./dom";
-import { hush, play, playButton } from "./japanese";
+import { hush, play, playAll, playButton } from "./japanese";
 
 /** Marks the history entry an overlay pushes, so the back button closes it. */
 const STATE_KEY = "daijoubuOverlay";
@@ -104,7 +104,8 @@ export interface ShowBlock {
  * 給對方看: plain Japanese as large as the screen allows, without ruby or
  * romaji — the person reading it is Japanese.
  */
-export function showToOther(blocks: ShowBlock[], label = "給對方看"): void {
+export function showToOther(blocks: ShowBlock[], label = "給對方看", speakNow = false): void {
+  if (speakNow) void playAll(blocks.map((b) => b.jp));
   openOverlay(label, (close) => {
     const many = blocks.length > 1;
     const total = blocks.map((b) => plain(b.jp)).join("");

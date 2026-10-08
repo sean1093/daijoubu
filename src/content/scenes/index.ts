@@ -1,13 +1,16 @@
-import type { Scene } from "../types";
+import type { Scene, SceneId } from "../types";
+import drugstore from "./drugstore";
+import emergency from "./emergency";
+import hotel from "./hotel";
+import konbini from "./konbini";
+import restaurant from "./restaurant";
+import shopping from "./shopping";
+import toilet from "./toilet";
+import transport from "./transport";
 
 /** Home screen order: most important first. */
-export const SCENES: Scene[] = [
-  { id: "transport", title: "交通", icon: "🚃", phrases: [], heard: [] },
-  { id: "hotel", title: "飯店", icon: "🏨", phrases: [], heard: [] },
-  { id: "restaurant", title: "餐廳", icon: "🍜", phrases: [], heard: [] },
-  { id: "konbini", title: "便利商店", icon: "🏪", phrases: [], heard: [] },
-  { id: "shopping", title: "購物", icon: "🛍️", phrases: [], heard: [] },
-  { id: "drugstore", title: "藥妝店", icon: "💊", phrases: [], heard: [] },
-  { id: "toilet", title: "廁所・問路", icon: "🚻", phrases: [], heard: [] },
-  { id: "emergency", title: "緊急・醫療", icon: "🚑", phrases: [], heard: [] },
-];
+export const SCENES: Scene[] = [transport, hotel, restaurant, konbini, shopping, drugstore, toilet, emergency];
+
+export function sceneById(id: string | undefined): Scene | undefined {
+  return SCENES.find((scene) => scene.id === (id as SceneId));
+}

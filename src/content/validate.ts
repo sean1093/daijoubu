@@ -9,7 +9,7 @@ const NEEDS_READING = /[\p{Script=Han}A-Za-z0-9０-９]/u;
 /** Ids appear in URLs and saved data, so they stay to a safe, stable shape. */
 const KEBAB = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 /** Polite endings: every sentence a traveller says ends in です／ます style (or a request). */
-const POLITE_END = /(です|ます|ません|ください|でしょうか|ですか|ますか|ませんか|ました)[。？！]?$/;
+const POLITE_END = /(です|ます|ません|ください|でしょうか|ですか|ますか|ませんか|ました|でした)[。？！]?$/;
 
 /** Problems with one piece of markup; empty when it is well-formed. */
 export function checkJp(markup: Jp): string[] {

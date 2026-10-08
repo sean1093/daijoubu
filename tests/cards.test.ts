@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { EMERGENCY_NUMBERS } from "../src/content/emergency";
+import { SCENES } from "../src/content/scenes";
 import { checkJp } from "../src/content/validate";
 import { plain } from "../src/lib/jp";
 import { contactLines, helpCard, hotelCard, LINES, placeWord } from "../src/profile/cards";
+import { ready } from "../src/profile/fill";
 import { emptyProfile } from "../src/profile/profile";
 import { sampleProfile } from "./fixtures";
 
@@ -53,5 +55,36 @@ describe("emergency numbers", () => {
   it.each(EMERGENCY_NUMBERS.map((e) => [e.id, e] as const))("%s names its source and check date", (_, entry) => {
     expect(entry.source).toMatch(/^https:\/\//);
     expect(entry.verified).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  });
+});
+
+describe("filling phrase slots", () => {
+  const profile = sampleProfile();
+  const shinjuku = profile.places[0]!;
+  const phrase = SCENES[0]!.phrases.find((p) => p.id === "transport-stops-at")!;
+
+  it("uses the picked station", () => {
+    const line = ready(phrase, profile, shinjuku);
+    expect(plain(line.jp)).toBe("この電車は新宿に止まりますか。");
+    expect(line.zh).toBe("這班車有停新宿嗎？");
+  });
+
+  it("adds 駅 where the phrase wants a destination", () => {
+    const want = SCENES[0]!.phrases.find((p) => p.id === "transport-want-to-go")!;
+    expect(plain(ready(want, profile, shinjuku).jp)).toBe("新宿駅に行きたいです。");
+  });
+
+  it("falls back without a place", () => {
+    const line = ready(phrase, emptyProfile(), null);
+    expect(plain(line.jp)).toBe("この電車はここに止まりますか。");
+    expect(line.zh).toContain("這裡");
+  });
+
+  it("produces valid markup for every phrase and place", () => {
+    for (const scene of SCENES) {
+      for (const p of scene.phrases) {
+        for (const place of [null, ...profile.places]) expect(checkJp(ready(p, profile, place).jp)).toEqual([]);
+      }
+    }
   });
 });
