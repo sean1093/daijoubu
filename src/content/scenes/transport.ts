@@ -5,9 +5,17 @@ export default {
   id: "transport",
   title: "交通",
   icon: "🚃",
+  groups: [
+    { id: "where", title: "問路・去哪裡" },
+    { id: "train", title: "月台・搭車" },
+    { id: "ticket", title: "車票・閘門・坐過站" },
+    { id: "bus-taxi", title: "公車・計程車" },
+    { id: "lost", title: "東西掉了" },
+  ],
   phrases: [
     {
       id: "transport-want-to-go",
+      group: "where",
       zh: "我想去〇〇。",
       jp: "$dest に {行|い}きたい です。",
       fallback: "ここ に {行|い}きたい です。",
@@ -16,6 +24,7 @@ export default {
     },
     {
       id: "transport-how-to-go",
+      group: "where",
       zh: "去〇〇要怎麼走？",
       jp: "$dest へ は どう {行|い}けば いい です か。",
       fallback: "ここ へ は どう {行|い}けば いい です か。",
@@ -24,6 +33,7 @@ export default {
     },
     {
       id: "transport-stops-at",
+      group: "train",
       zh: "這班車有停〇〇嗎？",
       jp: "この {電車|でんしゃ} は $stop に {止|と}まります か。",
       fallback: "この {電車|でんしゃ} は ここ に {止|と}まります か。",
@@ -33,6 +43,7 @@ export default {
     },
     {
       id: "transport-which-platform",
+      group: "train",
       zh: "去〇〇的車在幾號月台？",
       jp: "$stop へ {行|い}く {電車|でんしゃ} は {何番線|なんばんせん} です か。",
       fallback: "ここ へ {行|い}く {電車|でんしゃ} は {何番線|なんばんせん} です か。",
@@ -41,6 +52,7 @@ export default {
     },
     {
       id: "transport-which-line",
+      group: "train",
       zh: "去〇〇要搭哪一條線？",
       jp: "$stop へ は {何線|なにせん} に {乗|の}れば いい です か。",
       fallback: "ここ へ は {何線|なにせん} に {乗|の}れば いい です か。",
@@ -48,6 +60,7 @@ export default {
     },
     {
       id: "transport-transfer",
+      group: "train",
       zh: "去〇〇要在哪裡換車？",
       jp: "$stop へ は どこ で {乗|の}り{換|か}えます か。",
       fallback: "ここ へ は どこ で {乗|の}り{換|か}えます か。",
@@ -55,6 +68,7 @@ export default {
     },
     {
       id: "transport-how-long",
+      group: "train",
       zh: "到〇〇要多久？",
       jp: "$stop まで どのくらい かかります か。",
       fallback: "ここ まで どのくらい かかります か。",
@@ -63,6 +77,7 @@ export default {
     },
     {
       id: "transport-fare",
+      group: "ticket",
       zh: "到〇〇要多少錢？",
       jp: "$stop まで いくら です か。",
       fallback: "ここ まで いくら です か。",
@@ -70,6 +85,7 @@ export default {
     },
     {
       id: "transport-tell-me-when",
+      group: "train",
       zh: "到〇〇的時候請告訴我。",
       jp: "$stop に {着|つ}いたら {教|おし}えて ください。",
       fallback: "ここ に {着|つ}いたら {教|おし}えて ください。",
@@ -78,18 +94,21 @@ export default {
     },
     {
       id: "transport-rode-past",
+      group: "ticket",
       zh: "我坐過站了，該怎麼辦？",
       jp: "{乗|の}り{過|す}ごして しまいました。どう すれば いい です か。",
       tip: "在月台或出站閘門旁的站務員窗口問。",
     },
     {
       id: "transport-wrong-ticket",
+      group: "ticket",
       zh: "我買錯票了。",
       jp: "{切符|きっぷ} を {間違|まちが}えて {買|か}って しまいました。",
       tip: "拿著車票到閘門旁的站務員窗口。",
     },
     {
       id: "transport-ic-short",
+      group: "ticket",
       zh: "交通卡餘額不夠，補票機在哪裡？",
       jp: "{IC|アイシー}カード の {残高|ざんだか} が {足|た}りません。{精算機|せいさんき} は どこ です か。",
       tip: "出站閘門擋住、發出聲音時用。補票機（精算機）通常在閘門旁邊。",
@@ -97,22 +116,26 @@ export default {
     },
     {
       id: "transport-gate-stuck",
+      group: "ticket",
       zh: "我過不了閘門。",
       jp: "{改札|かいさつ} を {通|とお}れません。",
     },
     {
       id: "transport-where-charge",
+      group: "ticket",
       zh: "交通卡在哪裡加值？",
       jp: "チャージ は どこ で できます か。",
       answers: "direction",
     },
     {
       id: "transport-how-to-buy",
+      group: "ticket",
       zh: "請教我怎麼買票。",
       jp: "{切符|きっぷ} の {買|か}い{方|かた} を {教|おし}えて ください。",
     },
     {
       id: "transport-nearest-exit",
+      group: "where",
       zh: "離這個地址最近的出口是哪一個？",
       jp: "この {住所|じゅうしょ} に {一番|いちばん} {近|ちか}い {出口|でぐち} は どこ です か。",
       tip: "同時給對方看地址。",
@@ -120,12 +143,14 @@ export default {
     },
     {
       id: "transport-elevator",
+      group: "where",
       zh: "電梯在哪裡？",
       jp: "エレベーター は どこ です か。",
       answers: "direction",
     },
     {
       id: "transport-bus-stop",
+      group: "bus-taxi",
       zh: "去〇〇的公車在哪裡搭？",
       jp: "$stop {行|ゆ}き の バス {乗|の}り{場|ば} は どこ です か。",
       fallback: "バス {乗|の}り{場|ば} は どこ です か。",
@@ -134,12 +159,14 @@ export default {
     },
     {
       id: "transport-taxi-stand",
+      group: "bus-taxi",
       zh: "計程車招呼站在哪裡？",
       jp: "タクシー {乗|の}り{場|ば} は どこ です か。",
       answers: "direction",
     },
     {
       id: "transport-taxi-to",
+      group: "bus-taxi",
       zh: "（計程車）請載我到〇〇。",
       jp: "$dest まで お{願|ねが}い します。",
       fallback: "この {住所|じゅうしょ} まで お{願|ねが}い します。",
@@ -147,12 +174,14 @@ export default {
     },
     {
       id: "transport-lost-item",
+      group: "lost",
       zh: "我把東西忘在電車上了。",
       jp: "{電車|でんしゃ} に {忘|わす}れ{物|もの} を しました。",
       tip: "到站務員窗口說，並告訴對方幾點、從哪一站上車。",
     },
     {
       id: "transport-last-train",
+      group: "train",
       zh: "末班車是幾點？",
       jp: "{終電|しゅうでん} は {何時|なんじ} です か。",
     },

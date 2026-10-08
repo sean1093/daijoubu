@@ -66,8 +66,8 @@ export function renderHelp(root: HTMLElement): void {
       h(
         "div",
         { class: "grid grid-cols-3 gap-2" },
-        playButton(lines, "normal", "px-2 whitespace-nowrap"),
-        playButton(lines, "slow", "px-2 whitespace-nowrap"),
+        playButton(lines, "normal", "md", "whitespace-nowrap"),
+        playButton(lines, "slow", "md", "whitespace-nowrap"),
         h(
           "button",
           {

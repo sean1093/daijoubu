@@ -60,6 +60,25 @@ describe("content", () => {
   });
 });
 
+describe("phrase groups", () => {
+  it("puts every transport phrase under a heading", () => {
+    const transport = SCENES[0]!;
+    const ids = transport.groups!.map((g) => g.id);
+    for (const p of transport.phrases) expect(ids).toContain(p.group);
+  });
+
+  it("catches a phrase outside the scene's groups", () => {
+    const transport = SCENES[0]!;
+    const broken = {
+      ...content,
+      scenes: [{ ...transport, phrases: transport.phrases.map((p, i) => (i === 0 ? { ...p, group: "nope" } : p)) }],
+    };
+    expect(validateContent(broken).join("\n")).toContain("transport-want-to-go needs a group");
+    const stray = { ...content, scenes: [{ ...SCENES[1]!, phrases: SCENES[1]!.phrases.map((p) => ({ ...p, group: "x" })) }] };
+    expect(validateContent(stray).join("\n")).toContain("has a group but the scene has none");
+  });
+});
+
 describe("checkJp", () => {
   it.each([
     ["{私|わたし}は", "particle は must be its own word"],

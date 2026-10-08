@@ -119,6 +119,16 @@ export function validateContent(content: {
     need(scene.phrases.length >= min, where, `needs at least ${min} phrases, has ${scene.phrases.length}`);
     need(scene.heard.length >= MIN_HEARD, where, `needs at least ${MIN_HEARD} "店員可能會說", has ${scene.heard.length}`);
     scene.phrases.forEach((p, i) => phrase(p, `${where} phrase ${i} (${p.id})`, scene.id));
+    const groupIds = (scene.groups ?? []).map((g) => g.id);
+    need(new Set(groupIds).size === groupIds.length, where, "duplicate group ids");
+    for (const p of scene.phrases) {
+      if (scene.groups) need(p.group !== undefined && groupIds.includes(p.group), where, `${p.id} needs a group from ${groupIds.join("/")}`);
+      else need(p.group === undefined, where, `${p.id} has a group but the scene has none`);
+    }
+    for (const g of scene.groups ?? []) {
+      text(g.title, `${where} group ${g.id}`, "title");
+      need(scene.phrases.some((p) => p.group === g.id), where, `group ${g.id} is empty`);
+    }
     scene.heard.forEach((heard, i) => {
       const at = `${where} heard ${i} (${heard.id})`;
       id(heard.id, at);

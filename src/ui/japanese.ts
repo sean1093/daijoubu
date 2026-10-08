@@ -75,15 +75,26 @@ export function hush(): void {
   mark(undefined);
 }
 
+const PLAY_SIZES = {
+  sm: "min-h-12 px-3 text-base",
+  md: "min-h-14 px-3 text-lg",
+  lg: "min-h-16 px-4 text-xl",
+};
+
 /** Pill button: ▶ 播放 or 🐢 慢速. Plays every line of `lines` in turn. */
-export function playButton(lines: Jp | Jp[], kind: "normal" | "slow" = "normal", extra = ""): HTMLButtonElement {
+export function playButton(
+  lines: Jp | Jp[],
+  kind: "normal" | "slow" = "normal",
+  size: keyof typeof PLAY_SIZES = "md",
+  extra = "",
+): HTMLButtonElement {
   const all = Array.isArray(lines) ? lines : [lines];
   const slow = kind === "slow";
   const button = h(
     "button",
     {
       type: "button",
-      class: `inline-flex min-h-14 items-center justify-center gap-2 rounded-full px-4 text-lg font-bold transition active:scale-95 ${
+      class: `inline-flex items-center justify-center gap-2 rounded-full font-bold transition active:scale-95 ${PLAY_SIZES[size]} ${
         slow ? "bg-card text-ai ring-2 ring-ai/40" : "bg-ai-soft text-ai"
       } ${extra}`,
       "aria-label": `${slow ? "慢速播放" : "播放"}「${all.map(plain).join("")}」`,

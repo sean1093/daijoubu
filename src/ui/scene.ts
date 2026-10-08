@@ -2,70 +2,117 @@ import { repliesFor } from "../content/replies";
 import { RESCUE } from "../content/rescue";
 import { sceneById } from "../content/scenes";
 import type { Heard, Phrase, Scene } from "../content/types";
-import { slotsOf } from "../lib/jp";
+import { plain, slotsOf } from "../lib/jp";
 import { type Ready, ready } from "../profile/fill";
 import { loadProfile, type Place, placesForToday } from "../profile/profile";
-import { fill, h } from "./dom";
+import { fill, h, icon } from "./dom";
 import { jpText, playButton } from "./japanese";
 import { page } from "./layout";
-import { askOther, showToOther } from "./overlay";
+import { askOther, openOverlay, overlayBar, showToOther } from "./overlay";
 
 /** The destination picked on the scene page; kept while the app is open. */
 let pickedPlace: Place | null = null;
 
-const ACTION =
-  "inline-flex min-h-14 items-center justify-center gap-1.5 whitespace-nowrap rounded-full px-2 text-lg font-bold leading-tight transition active:scale-95";
+/** Picks the destination the transport phrases use, e.g. from the home screen's "today" row. */
+export function pickPlace(place: Place): void {
+  pickedPlace = place;
+}
 
-export function phraseCard(phrase: Phrase, line: Ready): HTMLElement {
+const ACTION =
+  "inline-flex min-h-16 items-center justify-center gap-2 whitespace-nowrap rounded-2xl px-2 text-xl font-bold leading-tight transition active:scale-95";
+
+/** The buttons that do something with a phrase: hear it, show it, let the other person answer. */
+function phraseActions(phrase: Phrase, line: Ready): HTMLElement {
   return h(
-    "article",
-    { class: "rounded-2xl bg-card p-4 shadow-sm ring-2 ring-hair" },
-    h("h3", { class: "text-2xl font-bold leading-snug" }, line.zh),
-    h("div", { class: "mt-2" }, jpText(line.jp, "md")),
-    phrase.tip && h("p", { class: "mt-2 text-base text-muted" }, `💡 ${phrase.tip}`),
+    "div",
+    { class: "grid grid-cols-2 gap-3" },
     h(
-      "div",
-      { class: "mt-3 grid grid-cols-2 gap-2" },
-      playButton(line.jp),
-      playButton(line.jp, "slow"),
+      "button",
+      {
+        type: "button",
+        class: `${ACTION} col-span-2 bg-ai text-on-accent`,
+        onclick: () => showToOther([{ jp: line.jp, zh: line.zh }]),
+      },
+      icon("expand"),
+      "給對方看",
+    ),
+    playButton(line.jp, "normal", "lg"),
+    playButton(line.jp, "slow", "lg"),
+    phrase.answers &&
       h(
         "button",
-        { type: "button", class: `${ACTION} bg-ai text-on-accent`, onclick: () => showToOther([{ jp: line.jp, zh: line.zh }]) },
-        "給對方看",
+        {
+          type: "button",
+          class: `${ACTION} col-span-2 bg-ok text-on-accent`,
+          onclick: () => askOther(line, repliesFor(phrase.answers!)),
+        },
+        icon("hand"),
+        "給對方點選答案",
       ),
-      phrase.answers &&
-        h(
-          "button",
-          {
-            type: "button",
-            class: `${ACTION} bg-ok text-on-accent`,
-            onclick: () => askOther(line, repliesFor(phrase.answers!)),
-          },
-          "給對方點選",
-        ),
-      phrase.link && h("a", { href: phrase.link.href, class: `${ACTION} col-span-2 bg-shu-soft text-shu` }, phrase.link.label),
+    phrase.link && h("a", { href: phrase.link.href, class: `${ACTION} col-span-2 bg-shu-soft text-shu` }, phrase.link.label),
+  );
+}
+
+/** One phrase, full screen: everything needed to say it, in one place. */
+export function openPhrase(phrase: Phrase, line: Ready): void {
+  openOverlay(line.zh, (close) =>
+    h(
+      "div",
+      { class: "flex min-h-0 flex-1 flex-col" },
+      overlayBar(close, "選一個方式 👇"),
+      h(
+        "div",
+        { class: "min-h-0 flex-1 overflow-y-auto px-5 pb-safe pt-4" },
+        h("h2", { class: "text-3xl font-bold leading-snug" }, line.zh),
+        h("div", { class: "mt-3 rounded-2xl bg-card p-4 ring-2 ring-hair" }, jpText(line.jp, "lg")),
+        phrase.tip && h("p", { class: "mt-3 text-lg text-ink/80" }, `💡 ${phrase.tip}`),
+        h("div", { class: "mt-5" }, phraseActions(phrase, line)),
+      ),
     ),
   );
 }
 
+/** A phrase as a list row: the Chinese to find it by, a hint of the Japanese, and a way in. */
+export function phraseRow(phrase: Phrase, line: Ready): HTMLElement {
+  return h(
+    "button",
+    {
+      type: "button",
+      class:
+        "flex min-h-16 w-full items-center gap-3 rounded-2xl bg-card px-4 py-2.5 text-left shadow-sm ring-2 ring-hair transition active:scale-[0.98] active:bg-ai-soft",
+      onclick: () => openPhrase(phrase, line),
+    },
+    h(
+      "span",
+      { class: "min-w-0 flex-1" },
+      h("span", { class: "block text-xl font-bold leading-snug" }, line.zh),
+      h("span", { lang: "ja", class: "mt-0.5 block truncate text-base text-muted" }, plain(line.jp)),
+    ),
+    icon("next", "h-7 w-7 shrink-0 text-ai"),
+  );
+}
+
+/** What staff say: the Chinese first and largest, the Japanese to check against, then the answers. */
 function heardCard(heard: Heard): HTMLElement {
   return h(
     "article",
-    { class: "rounded-2xl bg-card p-4 shadow-sm ring-2 ring-hair" },
-    h("p", { class: "text-base font-bold text-muted" }, "對方說："),
-    h("div", { class: "mt-1" }, jpText(heard.jp, "md")),
-    h("h3", { class: "mt-2 text-2xl font-bold leading-snug text-ai" }, `「${heard.zh}」`),
-    h("div", { class: "mt-3 grid grid-cols-2 gap-2" }, playButton(heard.jp), playButton(heard.jp, "slow")),
-    h("p", { class: "mt-4 text-base font-bold text-muted" }, "點一個回答，念給對方聽："),
+    { class: "rounded-2xl bg-card p-3 shadow-sm ring-2 ring-hair" },
+    h("h3", { class: "text-2xl font-bold leading-snug" }, heard.zh),
     h(
       "div",
-      { class: "mt-2 grid grid-cols-2 gap-2" },
+      { class: "mt-1 flex items-center gap-2" },
+      h("p", { lang: "ja", class: "min-w-0 flex-1 text-lg text-muted" }, plain(heard.jp)),
+      playButton(heard.jp, "normal", "sm", "shrink-0"),
+    ),
+    h(
+      "div",
+      { class: `mt-2 grid gap-2 ${heard.replies.length === 3 ? "grid-cols-3" : "grid-cols-2"}` },
       heard.replies.map((reply) =>
         h(
           "button",
           {
             type: "button",
-            class: "min-h-16 rounded-2xl bg-ok-soft px-3 py-2 text-xl font-bold text-ok ring-2 ring-ok/40 active:scale-95",
+            class: "min-h-14 rounded-xl bg-ok-soft px-2 py-2 text-lg font-bold leading-tight text-ok ring-2 ring-ok/40 active:scale-95",
             onclick: () => showToOther([{ jp: reply.jp, zh: reply.zh }], "我的回答", true),
           },
           reply.zh,
@@ -75,30 +122,50 @@ function heardCard(heard: Heard): HTMLElement {
   );
 }
 
-/** 萬用救援句: one tap shows the sentence to the other person and reads it out. */
-function rescueBar(): HTMLElement {
-  return h(
-    "details",
-    { class: "mt-3 rounded-2xl bg-warn-soft p-3" },
-    h(
-      "summary",
-      { class: "cursor-pointer text-xl font-bold" },
-      "🛟 萬用句",
-      h("span", { class: "ml-2 text-base font-normal text-muted" }, "請說慢一點、請寫下來…"),
-    ),
+/** 萬用救援句 in a sheet: one tap shows the sentence to the other person and reads it out. */
+export function openRescue(): void {
+  openOverlay("萬用句", (close) =>
     h(
       "div",
-      { class: "mt-3 flex flex-wrap gap-2" },
-      RESCUE.map((phrase) =>
-        h(
-          "button",
-          {
-            type: "button",
-            class: "min-h-14 rounded-full bg-card px-4 text-lg font-bold ring-2 ring-hair active:scale-95",
-            onclick: () => showToOther([{ jp: phrase.jp, zh: phrase.zh }], phrase.zh, true),
-          },
-          phrase.zh,
+      { class: "flex min-h-0 flex-1 flex-col" },
+      overlayBar(close, "點一句，念給對方聽"),
+      h(
+        "div",
+        { class: "min-h-0 flex-1 space-y-3 overflow-y-auto px-4 pb-safe pt-4" },
+        RESCUE.map((phrase) =>
+          h(
+            "button",
+            {
+              type: "button",
+              class: "block min-h-16 w-full rounded-2xl bg-card px-4 py-2 text-left ring-2 ring-hair active:scale-[0.98] active:bg-warn-soft",
+              onclick: () => showToOther([{ jp: phrase.jp, zh: phrase.zh }], phrase.zh, true),
+            },
+            h("span", { class: "block text-xl font-bold leading-snug" }, phrase.zh),
+            h("span", { lang: "ja", class: "mt-0.5 block text-base text-muted" }, plain(phrase.jp)),
+          ),
         ),
+      ),
+    ),
+  );
+}
+
+/** Docked at the bottom of every scene, so help with a stuck conversation is one tap from anywhere. */
+function rescueDock(): HTMLElement {
+  return h(
+    "div",
+    { class: "pb-safe fixed inset-x-0 bottom-0 z-20 border-t-2 border-hair bg-paper/95 backdrop-blur" },
+    h(
+      "div",
+      { class: "mx-auto max-w-xl px-4 pt-2" },
+      h(
+        "button",
+        {
+          type: "button",
+          class: "flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-warn-soft text-xl font-bold text-ink ring-2 ring-hair active:scale-[0.98]",
+          onclick: openRescue,
+        },
+        "🛟 萬用句",
+        h("span", { class: "text-base font-normal text-muted" }, "聽不懂・請說慢一點…"),
       ),
     ),
   );
@@ -109,7 +176,7 @@ function placePicker(places: Place[], picked: Place | null, pick: (place: Place)
   return h(
     "div",
     { class: "mt-3 rounded-2xl bg-ai-soft p-3" },
-    h("p", { class: "text-lg font-bold" }, "要去哪裡？點一下就會換進句子裡"),
+    h("p", { class: "text-lg font-bold" }, "要去哪裡？點一下換進句子"),
     h(
       "div",
       { class: "-mx-3 mt-2 flex gap-2 overflow-x-auto px-3 pb-1", role: "radiogroup", "aria-label": "目的地" },
@@ -151,6 +218,20 @@ function tabs(scene: Scene, heard: boolean): HTMLElement {
   );
 }
 
+/** The phrase rows, under the scene's headings when it has them. */
+function phraseList(scene: Scene, line: (phrase: Phrase) => Ready): HTMLElement[] {
+  const rows = (phrases: Phrase[]) => h("div", { class: "space-y-2" }, phrases.map((p) => phraseRow(p, line(p))));
+  if (!scene.groups) return [rows(scene.phrases)];
+  return scene.groups.map((group) =>
+    h(
+      "section",
+      { class: "space-y-2" },
+      h("h2", { class: "pt-2 text-lg font-bold text-muted" }, group.title),
+      rows(scene.phrases.filter((p) => p.group === group.id)),
+    ),
+  );
+}
+
 /** `#/scene/<id>` and `#/scene/<id>/heard`. */
 export function renderScene(root: HTMLElement, [id, view]: string[]): void {
   const scene = sceneById(id);
@@ -164,13 +245,10 @@ export function renderScene(root: HTMLElement, [id, view]: string[]): void {
   // Keep the pick across scenes, but only while it is still in the profile.
   const picked = places.find((p) => p === pickedPlace || JSON.stringify(p) === JSON.stringify(pickedPlace)) ?? places[0] ?? null;
   const usesPlace = scene.phrases.some((p) => slotsOf(p.jp).some((s) => s === "dest" || s === "stop"));
-  const list = h("div", { class: "mt-4 space-y-4" });
+  const list = h("div", { class: "mt-4 space-y-3" });
 
   function drawPhrases(place: Place | null): void {
-    fill(
-      list,
-      scene!.phrases.map((phrase) => phraseCard(phrase, ready(phrase, profile, place))),
-    );
+    fill(list, phraseList(scene!, (phrase) => ready(phrase, profile, place)));
   }
 
   // Picking redraws only the picker and the phrases, so the page does not jump.
@@ -189,7 +267,6 @@ export function renderScene(root: HTMLElement, [id, view]: string[]): void {
 
   page(root, `${scene.icon} ${scene.title}`, [
     tabs(scene, heard),
-    rescueBar(),
     !heard && usesPlace && places.length === 0
       ? h(
           "a",
@@ -197,7 +274,11 @@ export function renderScene(root: HTMLElement, [id, view]: string[]): void {
           "💡 先在「設定資料」填好要去的車站，句子裡的〇〇就會自動換成站名。",
         )
       : pickerSlot,
+    heard && h("p", { class: "mt-3 text-lg text-muted" }, "聽到對方這樣說時，點一個回答，手機會念給對方聽。"),
     list,
+    // Room for the dock, so it never covers the last row.
+    h("div", { class: "h-24", "aria-hidden": "true" }),
+    rescueDock(),
   ]);
   if (heard) fill(list, scene.heard.map(heardCard));
   else drawPhrases(picked);
