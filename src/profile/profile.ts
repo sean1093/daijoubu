@@ -217,9 +217,14 @@ export function currentHotel(profile: Profile, day = today()): Hotel | null {
   return covering ?? profile.hotels[0] ?? null;
 }
 
+/** The place is planned for `day`. */
+export function isPlannedFor(place: Place, day = today()): boolean {
+  return place.date === day;
+}
+
 /** Places with today's first, then undated ones, then the other days in date order. */
 export function placesForToday(profile: Profile, day = today()): Place[] {
-  const rank = (p: Place) => (p.date === day ? 0 : p.date === "" ? 1 : 2);
+  const rank = (p: Place) => (isPlannedFor(p, day) ? 0 : p.date === "" ? 1 : 2);
   return [...profile.places].sort((a, b) => rank(a) - rank(b) || a.date.localeCompare(b.date));
 }
 

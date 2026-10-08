@@ -3,44 +3,70 @@ import { plain } from "../lib/jp";
 import { BUTTON, h, icon } from "./dom";
 import { hush, play, playAll, playButton } from "./japanese";
 
-/** Marks the history entry an overlay pushes, so the back button closes it. */
+/** Marks the history entries overlays push; the value is the overlay's own token. */
 const STATE_KEY = "daijoubuOverlay";
 
+/** Open overlays, bottom first. A phrase's detail can open 給對方看 on top of itself. */
+const stack: { token: string; teardown: () => void }[] = [];
+let opened = 0;
+
+/** Token in the current history entry, if it was pushed by an overlay. */
+function historyToken(): unknown {
+  return (history.state as Record<string, unknown> | null)?.[STATE_KEY];
+}
+
 /**
- * A full-screen layer over the current page (from Ippo's showToClerk). It
- * pushes a history entry, so the phone's back button closes the layer
- * instead of leaving the page; leaving the page closes it too.
+ * Back (or forward) landed somewhere: keep the overlay whose entry this is
+ * and the ones under it, close the rest. An entry left over from an overlay
+ * that is already gone (after a reload, or a link out of an overlay) matches
+ * none, so everything closes — never a layer that ignores the back button.
+ */
+function onPop(): void {
+  const keep = stack.findIndex((entry) => entry.token === historyToken());
+  for (const entry of stack.slice(keep + 1).reverse()) entry.teardown();
+}
+
+/**
+ * A full-screen layer over the current page (from Ippo's showToClerk). Each
+ * layer pushes a history entry, so the phone's back button closes the top
+ * layer only, instead of leaving the page; leaving the page closes them all.
  */
 export function openOverlay(label: string, build: (close: () => void) => HTMLElement): () => void {
+  opened += 1;
+  const token = `${Date.now().toString(36)}-${opened}`;
   const overlay = h("div", {
-    class: "fixed inset-0 z-50 flex flex-col bg-paper text-ink",
+    class: "fixed inset-0 flex flex-col bg-paper text-ink",
+    style: `z-index: ${50 + stack.length + 1}`,
     role: "dialog",
     "aria-modal": "true",
     "aria-label": label,
   });
   let open = true;
+  const entry = { token, teardown };
 
   function teardown(): void {
     if (!open) return;
     open = false;
     hush();
     overlay.remove();
-    document.body.classList.remove("overflow-hidden");
+    stack.splice(stack.indexOf(entry), 1);
+    if (stack.length === 0) {
+      document.body.classList.remove("overflow-hidden");
+      window.removeEventListener("popstate", onPop);
+    }
     document.removeEventListener("keydown", onKey);
-    window.removeEventListener("popstate", onPop);
     window.removeEventListener("hashchange", teardown);
     returnFocus?.focus({ preventScroll: true });
   }
   /** Closed from inside: drop the history entry we pushed, which fires popstate → teardown. */
   function close(): void {
     if (!open) return;
-    if ((history.state as Record<string, unknown> | null)?.[STATE_KEY]) history.back();
+    if (historyToken() === token) history.back();
     else teardown();
   }
-  function onPop(): void {
-    teardown();
-  }
   function onKey(event: KeyboardEvent): void {
+    // Only the top layer answers the keyboard.
+    if (stack.at(-1) !== entry) return;
     if (event.key === "Escape") {
       close();
       return;
@@ -57,8 +83,9 @@ export function openOverlay(label: string, build: (close: () => void) => HTMLEle
 
   const returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   overlay.append(build(close));
-  history.pushState({ [STATE_KEY]: true }, "");
-  window.addEventListener("popstate", onPop);
+  if (stack.length === 0) window.addEventListener("popstate", onPop);
+  stack.push(entry);
+  history.pushState({ [STATE_KEY]: token }, "");
   window.addEventListener("hashchange", teardown);
   document.addEventListener("keydown", onKey);
   document.body.classList.add("overflow-hidden");
@@ -78,23 +105,32 @@ export function armsLength(text: string): string {
   return `font-size: clamp(1.5rem, min(${vw}vw, ${vw * 1.5}vh), 5rem)`;
 }
 
-function closeButton(close: () => void): HTMLElement {
+/**
+ * The bar on top of every layer: a close button anyone can find in a hurry,
+ * and one line telling the traveller what to do next.
+ */
+export function overlayBar(close: () => void, hint: string): HTMLElement {
   return h(
-    "button",
-    {
-      type: "button",
-      class: "inline-flex min-h-14 items-center gap-2 rounded-full px-4 text-lg font-bold text-muted active:bg-hair",
-      onclick: close,
-      "data-autofocus": "",
-    },
-    icon("close", "h-7 w-7"),
-    "關閉",
+    "div",
+    { class: "pt-safe flex items-center gap-3 border-b-2 border-hair bg-card px-3 pb-2" },
+    h(
+      "button",
+      {
+        type: "button",
+        class: "inline-flex min-h-14 shrink-0 items-center gap-1 rounded-full bg-paper px-4 text-xl font-bold text-ink ring-2 ring-hair active:scale-95",
+        onclick: close,
+        "data-autofocus": "",
+      },
+      icon("close", "h-6 w-6"),
+      "關閉",
+    ),
+    h("p", { class: "min-w-0 flex-1 text-right text-lg font-bold leading-snug text-ai" }, hint),
   );
 }
 
 export interface ShowBlock {
   jp: Jp;
-  /** Chinese in small print, for the traveller holding the phone. */
+  /** Chinese for the traveller holding the phone, to check before handing it over. */
   zh?: string;
   /** Extra lines shown as they are: an address, a phone number. */
   extra?: string[];
@@ -112,11 +148,11 @@ export function showToOther(blocks: ShowBlock[], label = "給對方看", speakNo
     return h(
       "div",
       { class: "flex min-h-0 flex-1 flex-col" },
-      h("div", { class: "pt-safe flex justify-end px-3" }, closeButton(close)),
+      overlayBar(close, "👉 把手機拿給對方看"),
       h(
         "div",
         {
-          class: `flex min-h-0 flex-1 flex-col ${many ? "justify-start" : "justify-center"} gap-6 overflow-y-auto px-5 py-2 text-center`,
+          class: `flex min-h-0 flex-1 flex-col ${many ? "justify-start" : "justify-center"} gap-6 overflow-y-auto px-5 py-4 text-center`,
         },
         blocks.map((block) =>
           h(
@@ -130,7 +166,7 @@ export function showToOther(blocks: ShowBlock[], label = "給對方看", speakNo
             block.extra?.map((line) =>
               h("p", { lang: "ja", class: "mt-2 break-words text-3xl font-bold leading-snug" }, line),
             ),
-            block.zh && h("p", { class: "mt-2 text-lg text-muted" }, block.zh),
+            block.zh && h("p", { class: "mt-3 text-xl font-bold text-ink/80" }, block.zh),
           ),
         ),
       ),
@@ -174,12 +210,12 @@ export function askOther(question: { jp: Jp; zh: string }, replies: Reply[]): vo
         ),
       );
       root.replaceChildren(
-        h("div", { class: "pt-safe flex justify-end px-3" }, closeButton(close)),
+        overlayBar(close, "👉 把手機交給對方，請對方點答案"),
         h(
           "div",
-          { class: "min-h-0 flex-1 overflow-y-auto px-5 pb-safe" },
+          { class: "min-h-0 flex-1 overflow-y-auto px-5 pb-safe pt-4" },
           h("p", { lang: "ja", class: "text-center font-bold leading-snug", style: armsLength(plain(question.jp)) }, plain(question.jp)),
-          h("p", { class: "mt-1 text-center text-base text-muted" }, `（${question.zh}）`),
+          h("p", { class: "mt-1 text-center text-lg text-ink/80" }, `（${question.zh}）`),
           h("p", { lang: "ja", class: "mt-4 rounded-xl bg-ai-soft px-3 py-2 text-center text-lg font-bold text-ai" }, plain(TAP_PLEASE)),
           h("div", { class: `mt-4 grid gap-3 ${replies.length > 4 ? "grid-cols-2" : "grid-cols-1"}` }, options),
         ),
@@ -189,8 +225,9 @@ export function askOther(question: { jp: Jp; zh: string }, replies: Reply[]): vo
 
     function answered(reply: Reply): void {
       hush();
+      const done = h("button", { type: "button", class: BUTTON.primary, onclick: close }, "知道了");
       root.replaceChildren(
-        h("div", { class: "pt-safe flex justify-end px-3" }, closeButton(close)),
+        overlayBar(close, "👀 對方回答了"),
         h(
           "div",
           { class: "flex min-h-0 flex-1 flex-col items-center justify-center gap-3 overflow-y-auto px-5 text-center" },
@@ -203,10 +240,10 @@ export function askOther(question: { jp: Jp; zh: string }, replies: Reply[]): vo
           "div",
           { class: "pb-safe grid grid-cols-2 gap-3 px-5 pt-3" },
           h("button", { type: "button", class: BUTTON.secondary, onclick: asking }, "再問一次"),
-          h("button", { type: "button", class: BUTTON.primary, onclick: close }, "知道了"),
+          done,
         ),
       );
-      root.querySelector<HTMLElement>("button.bg-ai")?.focus({ preventScroll: true });
+      done.focus({ preventScroll: true });
     }
 
     asking();

@@ -29,3 +29,19 @@ export function page(root: HTMLElement, title: string, body: Child[], options: {
 export function section(title: string | null, ...children: Child[]): HTMLElement {
   return h("section", { class: "mt-6" }, title && h("h2", { class: "mb-2 text-xl font-bold text-muted" }, title), children);
 }
+
+/**
+ * Actions docked at the bottom of the screen, reachable from anywhere on a
+ * long page, plus the spacer that keeps the dock from covering the last
+ * line. Put both at the end of the page body.
+ */
+export function dock(label: string, ...children: Child[]): HTMLElement[] {
+  return [
+    h("div", { class: "h-24", "aria-hidden": "true" }),
+    h(
+      "nav",
+      { class: "pb-safe fixed inset-x-0 bottom-0 z-20 border-t-2 border-hair bg-paper/95 backdrop-blur", "aria-label": label },
+      h("div", { class: "mx-auto max-w-xl px-4 pt-2" }, children),
+    ),
+  ];
+}

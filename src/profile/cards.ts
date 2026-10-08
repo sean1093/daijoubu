@@ -41,10 +41,10 @@ export function hotelWord(hotel: Hotel): Jp {
   return userWord(hotel.name, hotel.kana);
 }
 
-/** Address and phone of a hotel, as lines for the card. */
+/** Address and phone of a hotel, as lines for the card. (〒 marks a postal code, so the address gets 住所.) */
 export function hotelLines(hotel: Hotel): string[] {
   const phone = dialable(hotel.phone, "jp");
-  return [hotel.name, hotel.address ? `〒 ${hotel.address}` : "", phone ? `TEL ${phone.display}` : ""].filter(Boolean);
+  return [hotel.name, hotel.address ? `住所：${hotel.address}` : "", phone ? `TEL ${phone.display}` : ""].filter(Boolean);
 }
 
 /** A contact as lines a Japanese helper can dial from. */

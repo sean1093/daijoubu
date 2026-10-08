@@ -7,7 +7,7 @@ import { cardBlock } from "./help";
 import { playButton } from "./japanese";
 import { page, section } from "./layout";
 import { showToOther } from "./overlay";
-import { phraseCard } from "./scene";
+import { phraseRow } from "./scene";
 
 /** Phrases from the emergency scene that belong next to the cards. */
 const MEDICAL_PHRASES = ["emergency-ambulance", "emergency-to-hospital", "emergency-insurance", "emergency-documents"];
@@ -95,6 +95,6 @@ export function renderMedical(root: HTMLElement): void {
     section("🤒 哪裡不舒服？點選症狀", symptomPicker()),
     allergy && section("🍽️ 過敏卡（給餐廳看）", cardWithActions(allergy, "過敏卡")),
     section("🏥 醫療卡（給醫生、救護人員看）", cardWithActions(medicalCard(profile), "醫療卡")),
-    section("常用句", h("div", { class: "space-y-4" }, phrases.map((p) => phraseCard(p, { jp: p.jp, zh: p.zh })))),
+    section("常用句", h("div", { class: "space-y-2" }, phrases.map((p) => phraseRow(p, { jp: p.jp, zh: p.zh })))),
   ]);
 }

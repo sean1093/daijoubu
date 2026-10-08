@@ -36,6 +36,8 @@ export interface Phrase {
   answers?: ReplySet | Reply[];
   /** A page that goes with the phrase, e.g. the allergy card. */
   link?: { href: string; label: string };
+  /** Id of a heading in the scene's `groups`; required when the scene has groups. */
+  group?: string;
 }
 
 /** Something staff commonly say. */
@@ -54,6 +56,8 @@ export interface Scene {
   title: string;
   /** An emoji: drawn by the system font, so it works offline. */
   icon: string;
+  /** Headings that split a long phrase list for scanning; phrases are shown under them in this order. */
+  groups?: { id: string; title: string }[];
   phrases: Phrase[];
   heard: Heard[];
 }

@@ -8,6 +8,9 @@ const profile = fs.readFileSync(profileFile, "utf8");
 const PHONE = { width: 390, height: 844 };
 const LANDSCAPE = { width: 844, height: 390 };
 
+// Rows are named by their Chinese then their Japanese, so a substring match finds them.
+const openRow = (p, text) => p.getByRole("button", { name: text }).first().click();
+
 const SHOTS = [
   { name: "01-home", hash: "#/" },
   { name: "02-home-dark", hash: "#/", theme: "dark" },
@@ -17,28 +20,38 @@ const SHOTS = [
   { name: "06-help-dark", hash: "#/help", theme: "dark" },
   { name: "07-help-enlarged-landscape", hash: "#/help", viewport: LANDSCAPE, act: (p) => p.getByRole("button", { name: "放大" }).click() },
   { name: "08-scene-transport", hash: "#/scene/transport" },
+  { name: "09-phrase-detail", hash: "#/scene/transport", act: (p) => openRow(p, "這班車有停新宿嗎") },
   {
-    name: "09-ask-other",
-    hash: "#/scene/transport",
-    act: (p) => p.getByRole("button", { name: "給對方點選" }).nth(3).click(),
-  },
-  {
-    name: "10-ask-other-answered",
+    name: "10-ask-other",
     hash: "#/scene/transport",
     act: async (p) => {
-      await p.getByRole("button", { name: "給對方點選" }).nth(3).click();
+      await openRow(p, "去新宿的車在幾號月台");
+      await p.getByRole("button", { name: "給對方點選答案" }).click();
+    },
+  },
+  {
+    name: "11-ask-other-answered",
+    hash: "#/scene/transport",
+    act: async (p) => {
+      await openRow(p, "去新宿的車在幾號月台");
+      await p.getByRole("button", { name: "給對方點選答案" }).click();
       await p.getByRole("button", { name: "3番線", exact: true }).click();
     },
   },
-  { name: "11-ask-other-dark", hash: "#/scene/transport", theme: "dark", act: (p) => p.getByRole("button", { name: "給對方點選" }).nth(2).click() },
   { name: "12-heard-konbini", hash: "#/scene/konbini/heard" },
   {
     name: "13-show-to-other-landscape",
     hash: "#/scene/konbini",
     viewport: LANDSCAPE,
-    act: (p) => p.getByRole("button", { name: "給對方看" }).nth(2).click(),
+    act: async (p) => {
+      await openRow(p, "請幫我加熱");
+      await p.getByRole("button", { name: "給對方看", exact: true }).click();
+    },
   },
-  { name: "14-medical", hash: "#/medical", act: async (p) => { await p.getByText("頭痛").click(); await p.getByText("發燒").click(); } },
+  { name: "14-rescue-sheet", hash: "#/scene/konbini", act: (p) => p.getByRole("button", { name: /萬用句/ }).click() },
+  { name: "15-medical", hash: "#/medical", act: async (p) => { await p.getByText("頭痛").click(); await p.getByText("發燒").click(); } },
+  { name: "16-setup", hash: "#/setup" },
+  { name: "17-dark-detail", hash: "#/scene/transport", theme: "dark", act: (p) => openRow(p, "這班車有停新宿嗎") },
 ];
 
 (async () => {

@@ -32,7 +32,7 @@ export function renderHotel(root: HTMLElement, [index]: string[]): void {
     h(
       "div",
       { class: "mt-4 grid grid-cols-2 gap-2" },
-      playButton(LINES.taxiToHotel, "normal", "px-2 whitespace-nowrap"),
+      playButton(LINES.taxiToHotel, "normal", "md", "whitespace-nowrap"),
       h(
         "button",
         {
