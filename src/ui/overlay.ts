@@ -194,7 +194,8 @@ export function askOther(question: { jp: Jp; zh: string }, replies: Reply[]): vo
         h(
           "div",
           { class: "flex min-h-0 flex-1 flex-col items-center justify-center gap-3 overflow-y-auto px-5 text-center" },
-          h("p", { class: "text-lg text-muted" }, "對方的回答"),
+          h("p", { class: "text-lg text-muted" }, `你問：${question.zh}`),
+          h("p", { class: "text-lg font-bold text-muted" }, "對方的回答 👇"),
           h("p", { class: "font-bold leading-tight", style: armsLength(reply.zh) }, reply.zh),
           h("p", { lang: "ja", class: "text-2xl text-muted" }, plain(reply.jp)),
         ),
@@ -202,7 +203,7 @@ export function askOther(question: { jp: Jp; zh: string }, replies: Reply[]): vo
           "div",
           { class: "pb-safe grid grid-cols-2 gap-3 px-5 pt-3" },
           h("button", { type: "button", class: BUTTON.secondary, onclick: asking }, "再問一次"),
-          h("button", { type: "button", class: BUTTON.primary, onclick: close }, "好，知道了"),
+          h("button", { type: "button", class: BUTTON.primary, onclick: close }, "知道了"),
         ),
       );
       root.querySelector<HTMLElement>("button.bg-ai")?.focus({ preventScroll: true });

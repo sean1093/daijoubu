@@ -1,7 +1,7 @@
 import type { Reply, ReplySet } from "./types";
 
 /** Every set ends with わかりません, so the other person is never forced to guess. */
-const DONT_KNOW: Reply = { jp: "わかりません", zh: "對方說：不知道" };
+const DONT_KNOW: Reply = { jp: "わかりません", zh: "不知道" };
 
 /** 1番線 … 14番線, read as station announcements say them. */
 const PLATFORM_KANA = [
