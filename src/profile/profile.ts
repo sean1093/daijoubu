@@ -43,6 +43,12 @@ export interface Place {
   zh: string;
   /** YYYY-MM-DD or "". */
   date: string;
+  /**
+   * Elevator notes looked up before the trip, e.g. which exit has a lift and
+   * whether it is inside the gates. Best pasted in Japanese from the
+   * station's own page, so station staff can read it too.
+   */
+  note: string;
 }
 
 export interface Contact {
@@ -166,6 +172,7 @@ export function parseProfile(data: unknown): Profile {
       kana: str(p.kana),
       zh: str(p.zh),
       date: date(p.date),
+      note: str(p.note, LIMITS.long),
     };
     return place.name ? place : null;
   });

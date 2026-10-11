@@ -179,6 +179,34 @@ function hotelRow(hotel: Hotel, save: () => void): HTMLElement[] {
   ];
 }
 
+/**
+ * 電梯筆記: looked up before the trip, shown on the transport page when the
+ * station is picked, and enlarged for station staff.
+ */
+function noteField(place: Place, save: () => void): HTMLElement {
+  const area = h("textarea", {
+    class: `${INPUT} h-28 resize-y`,
+    maxlength: LIMITS.long,
+    placeholder: "例：エレベーターはA3出口（改札外）。ホームへは3番線中央のエレベーター。",
+    oninput: (event: Event) => {
+      place.note = (event.target as HTMLTextAreaElement).value;
+      save();
+    },
+  });
+  area.value = place.note;
+  return h(
+    "label",
+    { class: "block text-lg font-bold" },
+    "🛗 電梯筆記（可不填）",
+    area,
+    h(
+      "span",
+      { class: `${HINT} font-normal` },
+      "哪個出口有電梯、在剪票口內還是外。直接貼上官方網站的日文說明最好，站務員也看得懂。",
+    ),
+  );
+}
+
 function placeRow(place: Place, index: number, save: () => void): HTMLElement[] {
   const name = `place-kind-${index}`;
   const kind = (value: Place["kind"], label: string) =>
@@ -204,6 +232,7 @@ function placeRow(place: Place, index: number, save: () => void): HTMLElement[] 
     field("讀音（可不填）", place.kana, (v) => ((place.kana = v), save()), { lang: "ja", placeholder: "例：しんじゅく" }),
     field("中文名稱", place.zh, (v) => ((place.zh = v), save()), { placeholder: "例：新宿" }),
     field("哪一天去（可不填）", place.date, (v) => ((place.date = v), save()), { type: "date", hint: "當天會排在最前面。" }),
+    noteField(place, save),
   ];
 }
 
@@ -335,7 +364,20 @@ export function renderSetup(root: HTMLElement): void {
     group(
       "places",
       h("p", { class: "text-lg text-muted" }, "「我想去〇〇站」「這班車有停〇〇嗎」會直接用這些名稱，不用打字。"),
-      listEditor({ items: profile.places, noun: "目的地", make: (): Place => ({ kind: "station", name: "", kana: "", zh: "", date: "" }), row: (place, i) => placeRow(place, i, save), onChange: save }),
+      h(
+        "details",
+        { class: "rounded-xl bg-ai-soft p-3" },
+        h("summary", { class: "cursor-pointer text-lg font-bold text-ai" }, "🛗 怎麼查車站的電梯？"),
+        h(
+          "ul",
+          { class: "mt-2 list-disc space-y-1.5 pl-6 text-base leading-relaxed" },
+          h("li", null, "Google 地圖查大眾運輸路線時，在路線「選項」裡勾選輪椅可通行（Wheelchair accessible），會改走有電梯的路線。"),
+          h("li", null, "東京地下鐵（Tokyo Metro）官網每一站都有「Accessibility」頁面，列出電梯在哪個出口、在剪票口內還是外。"),
+          h("li", null, "其他車站可以在 Yahoo!乗換案内 的車站頁面看「バリアフリー」資訊，或到該鐵路公司官網查「駅構内図」。"),
+          h("li", null, "查到後把重點寫進下面每一站的「電梯筆記」；到了日本不用上網也看得到。"),
+        ),
+      ),
+      listEditor({ items: profile.places, noun: "目的地", make: (): Place => ({ kind: "station", name: "", kana: "", zh: "", date: "", note: "" }), row: (place, i) => placeRow(place, i, save), onChange: save }),
     ),
     group(
       "contacts",

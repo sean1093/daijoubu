@@ -7,6 +7,7 @@ export default {
   icon: "🚃",
   groups: [
     { id: "where", title: "問路・去哪裡" },
+    { id: "elevator", title: "電梯・不走樓梯" },
     { id: "train", title: "月台・搭車" },
     { id: "ticket", title: "車票・閘門・坐過站" },
     { id: "bus-taxi", title: "公車・計程車" },
@@ -151,10 +152,43 @@ export default {
     },
     {
       id: "transport-elevator",
-      group: "where",
+      group: "elevator",
       zh: "電梯在哪裡？",
       jp: "エレベーター は どこ です か。",
       answers: "direction",
+    },
+    {
+      id: "transport-elevator-exit",
+      group: "elevator",
+      zh: "哪個出口有電梯？",
+      jp: "エレベーター が ある {出口|でぐち} は どこ です か。",
+      answers: "exit",
+    },
+    {
+      id: "transport-elevator-platform",
+      group: "elevator",
+      zh: "到月台的電梯在哪裡？",
+      jp: "ホーム へ の エレベーター は どこ です か。",
+      answers: "direction",
+    },
+    {
+      id: "transport-elevator-gate",
+      group: "elevator",
+      zh: "電梯在剪票口裡面還是外面？",
+      jp: "エレベーター は {改札|かいさつ} の {中|なか} です か、{外|そと} です か。",
+      tip: "很多車站的電梯分成剪票口內、外兩段，出站前先問清楚。",
+      answers: [
+        { jp: "{改札|かいさつ} の {中|なか}", zh: "在剪票口裡面" },
+        { jp: "{改札|かいさつ} の {外|そと}", zh: "在剪票口外面" },
+        { jp: "わかりません", zh: "不知道" },
+      ],
+    },
+    {
+      id: "transport-elevator-escort",
+      group: "elevator",
+      zh: "可以請站務員帶我去搭電梯嗎？",
+      jp: "{駅員|えきいん} さん に エレベーター まで {案内|あんない} して いただけます か。",
+      answers: "yesNo",
     },
     {
       id: "transport-bus-stop",
@@ -224,6 +258,24 @@ export default {
     },
   ],
   heard: [
+    {
+      id: "transport-heard-elevator-outside",
+      jp: "エレベーター は {改札|かいさつ} の {外|そと} に あります。",
+      zh: "電梯在剪票口外面。",
+      replies: [
+        { jp: "わかりました。", zh: "知道了" },
+        { jp: "{一度|いちど} {改札|かいさつ} を {出|で}て も いい です か。", zh: "我可以先出站再進來嗎？" },
+      ],
+    },
+    {
+      id: "transport-heard-elevator-closed",
+      jp: "エレベーター は {今|いま} {使|つか}えません。",
+      zh: "電梯現在不能用（維修或施工中）。",
+      replies: [
+        { jp: "{他|ほか} の エレベーター は あります か。", zh: "有別的電梯嗎？" },
+        { jp: "エスカレーター は あります か。", zh: "有手扶梯嗎？" },
+      ],
+    },
     {
       id: "transport-heard-where-to",
       jp: "どちら まで です か。",

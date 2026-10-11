@@ -26,6 +26,7 @@ export const LINES = {
   callLocal: "{日本|にほん} に いる {知|し}り{合|あ}い です。{電話|でんわ} を して いただけません か。",
   koban: "{近|ちか}く の {交番|こうばん} は どこ です か。",
   callPolice: "{警察|けいさつ} を {呼|よ}んで ください。",
+  wantElevator: "エレベーター を {使|つか}いたい です。",
 } satisfies Record<string, Jp>;
 
 /** Japanese for the name a phrase slot shows: 新宿 → 新宿駅 for a station when `withEki`. */

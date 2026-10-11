@@ -18,7 +18,7 @@ export interface Reply {
 }
 
 /** Ready-made answer sets, so common questions need not repeat them. */
-export type ReplySet = "yesNo" | "platform" | "direction" | "time" | "place";
+export type ReplySet = "yesNo" | "platform" | "direction" | "time" | "place" | "exit";
 
 /** Something the traveller needs to say. */
 export interface Phrase {

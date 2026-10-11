@@ -3,6 +3,7 @@ import { RESCUE } from "../content/rescue";
 import { sceneById } from "../content/scenes";
 import type { Heard, Phrase, Scene } from "../content/types";
 import { plain, slotsOf } from "../lib/jp";
+import { LINES } from "../profile/cards";
 import { type Ready, ready } from "../profile/fill";
 import { loadProfile, type Place, placesForToday } from "../profile/profile";
 import { fill, h, icon } from "./dom";
@@ -163,6 +164,31 @@ function rescueDock(): HTMLElement[] {
 }
 
 /** Big buttons for the saved destinations; the picked one fills every 〇〇. */
+/** The picked station's 電梯筆記, ready to enlarge for station staff. */
+function elevatorNote(place: Place): HTMLElement {
+  return h(
+    "div",
+    { class: "mt-3 rounded-xl bg-card p-3 ring-2 ring-hair" },
+    h("p", { class: "text-lg font-bold" }, `🛗 ${place.zh || place.name} 的電梯筆記`),
+    h("p", { class: "mt-1 whitespace-pre-line break-words text-lg" }, place.note),
+    h(
+      "button",
+      {
+        type: "button",
+        class: "mt-2 inline-flex min-h-12 items-center gap-2 rounded-full bg-ai px-4 text-lg font-bold text-on-accent active:scale-95",
+        // The note is shown as typed (it may not be Japanese); the line above it is what gets read out.
+        onclick: () =>
+          showToOther(
+            [{ jp: LINES.wantElevator, zh: "我想搭電梯（下面是事先查好的電梯資訊）", extra: place.note.split(/\n+/).filter(Boolean) }],
+            "電梯筆記",
+          ),
+      },
+      icon("expand", "h-5 w-5"),
+      "放大給站務員看",
+    ),
+  );
+}
+
 function placePicker(places: Place[], picked: Place | null, pick: (place: Place) => void): HTMLElement {
   return h(
     "div",
@@ -183,10 +209,11 @@ function placePicker(places: Place[], picked: Place | null, pick: (place: Place)
             }`,
             onclick: () => pick(place),
           },
-          `${place.kind === "station" ? "🚉" : "📍"} ${place.zh || place.name}`,
+          `${place.kind === "station" ? "🚉" : "📍"} ${place.zh || place.name}${place.note ? " 🛗" : ""}`,
         ),
       ),
     ),
+    picked?.note && elevatorNote(picked),
   );
 }
 

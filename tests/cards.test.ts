@@ -44,7 +44,7 @@ describe("help card", () => {
 
 describe("place names in phrases", () => {
   it("adds 駅 to stations only when asked", () => {
-    const shinjuku = { kind: "station" as const, name: "新宿駅", kana: "しんじゅくえき", zh: "新宿", date: "" };
+    const shinjuku = { kind: "station" as const, name: "新宿駅", kana: "しんじゅくえき", zh: "新宿", date: "", note: "" };
     expect(placeWord(shinjuku, true)).toBe("{新宿|しんじゅく}{駅|えき}");
     expect(placeWord(shinjuku, false)).toBe("{新宿|しんじゅく}");
     expect(placeWord({ ...shinjuku, kind: "place", name: "浅草寺", kana: "" }, true)).toBe("浅草寺");

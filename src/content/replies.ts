@@ -57,6 +57,17 @@ export const REPLY_SETS: Record<ReplySet, Reply[]> = {
     { jp: "ありません", zh: "沒有" },
     DONT_KNOW,
   ],
+  // Exits are named by direction at most stations; numbered exits (A3…) vary too much to list,
+  // so the other person can write the name instead.
+  exit: [
+    { jp: "{東口|ひがしぐち}", zh: "東口" },
+    { jp: "{西口|にしぐち}", zh: "西口" },
+    { jp: "{南口|みなみぐち}", zh: "南口" },
+    { jp: "{北口|きたぐち}", zh: "北口" },
+    { jp: "{中央口|ちゅうおうぐち}", zh: "中央口" },
+    { jp: "{紙|かみ} に {書|か}きます", zh: "對方會寫給你看（請準備紙筆）" },
+    DONT_KNOW,
+  ],
 };
 
 

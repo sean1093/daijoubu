@@ -26,7 +26,14 @@ export function sampleProfile(): Profile {
     ],
     places: [
       { kind: "station", name: "新宿", kana: "しんじゅく", zh: "新宿", date: "2026-11-02" },
-      { kind: "station", name: "浅草", kana: "あさくさ", zh: "淺草", date: "2026-11-03" },
+      {
+        kind: "station",
+        name: "浅草",
+        kana: "あさくさ",
+        zh: "淺草",
+        date: "2026-11-03",
+        note: "エレベーターは4番出口（改札外）。銀座線ホームへは改札内のエレベーター。",
+      },
       { kind: "place", name: "浅草寺", kana: "せんそうじ", zh: "淺草寺", date: "2026-11-03" },
       { kind: "station", name: "上野", kana: "うえの", zh: "上野", date: "2026-11-04" },
       { kind: "station", name: "京都", kana: "きょうと", zh: "京都", date: "2026-11-05" },

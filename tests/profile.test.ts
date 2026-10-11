@@ -14,7 +14,7 @@ describe("parseProfile", () => {
       birthYear: 1800,
     });
     expect(profile.hotels).toEqual([{ name: "A", kana: "", address: "", phone: "", from: "", to: "" }]);
-    expect(profile.places).toEqual([{ kind: "station", name: "新宿", kana: "", zh: "", date: "" }]);
+    expect(profile.places).toEqual([{ kind: "station", name: "新宿", kana: "", zh: "", date: "", note: "" }]);
     expect(profile.birthYear).toBeNull();
   });
 
