@@ -21,6 +21,13 @@ export default {
       jp: "{多目的|たもくてき}トイレ は あります か。",
       answers: "place",
     },
+    {
+      id: "toilet-trash",
+      zh: "垃圾桶在哪裡？",
+      jp: "ゴミ{箱|ばこ} は どこ です か。",
+      tip: "日本街上幾乎沒有垃圾桶，通常在車站、便利商店裡。",
+      answers: "direction",
+    },
     { id: "toilet-where-am-i", zh: "這裡是哪裡？", jp: "ここ は どこ です か。", tip: "可以請對方在地圖上指給你看。" },
     { id: "toilet-show-map", zh: "請在地圖上指給我看。", jp: "{地図|ちず} で {教|おし}えて ください。" },
     {
@@ -43,6 +50,19 @@ export default {
       id: "toilet-take-me",
       zh: "可以帶我過去嗎？",
       jp: "そこ まで {連|つ}れて {行|い}って いただけます か。",
+      answers: "yesNo",
+    },
+    {
+      id: "toilet-no-stairs",
+      zh: "有不用走樓梯的路嗎？",
+      jp: "{階段|かいだん} を {使|つか}わない {行|い}き{方|かた} は あります か。",
+      answers: "yesNo",
+    },
+    {
+      id: "toilet-wheelchair",
+      zh: "可以借輪椅嗎？",
+      jp: "{車椅子|くるまいす} を {借|か}りられます か。",
+      tip: "大車站、機場、百貨公司常有輪椅可以借，問服務台。",
       answers: "yesNo",
     },
     { id: "toilet-locker", zh: "置物櫃在哪裡？", jp: "コインロッカー は どこ です か。", answers: "direction" },
