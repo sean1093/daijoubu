@@ -223,7 +223,7 @@ export function askOther(question: { jp: Jp; zh: string }, replies: Reply[]): vo
             type: "button",
             lang: "ja",
             class:
-              "min-h-16 rounded-xl bg-card px-3 py-3 text-2xl font-bold text-ink ring-2 ring-ai/50 transition active:scale-95 active:bg-ai-soft",
+              "min-h-16 rounded-xl bg-card px-3 py-3 text-2xl font-bold text-ink ring-1 ring-ai/40 transition active:scale-95 active:bg-ai-soft",
             onclick: () => answered(reply),
           },
           plain(reply.jp),
