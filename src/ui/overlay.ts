@@ -112,12 +112,12 @@ export function armsLength(text: string): string {
 export function overlayBar(close: () => void, hint: string): HTMLElement {
   return h(
     "div",
-    { class: "pt-safe flex items-center gap-3 border-b-2 border-hair bg-card px-3 pb-2" },
+    { class: "pt-safe flex items-center gap-3 border-b border-hair bg-card px-3 pb-2" },
     h(
       "button",
       {
         type: "button",
-        class: "inline-flex min-h-14 shrink-0 items-center gap-1 rounded-full bg-paper px-4 text-xl font-bold text-ink ring-2 ring-hair active:scale-95",
+        class: "inline-flex min-h-14 shrink-0 items-center gap-1 rounded-lg bg-paper px-4 text-xl font-bold text-ink ring-1 ring-hair active:scale-95",
         onclick: close,
         "data-autofocus": "",
       },
@@ -148,7 +148,7 @@ export function showToOther(blocks: ShowBlock[], label = "給對方看", speakNo
     return h(
       "div",
       { class: "flex min-h-0 flex-1 flex-col" },
-      overlayBar(close, "👉 把手機拿給對方看"),
+      overlayBar(close, "請把畫面拿給對方看"),
       h(
         "div",
         {
@@ -203,14 +203,14 @@ export function askOther(question: { jp: Jp; zh: string }, replies: Reply[]): vo
             type: "button",
             lang: "ja",
             class:
-              "min-h-16 rounded-2xl bg-card px-3 py-3 text-2xl font-bold text-ink ring-2 ring-ai/50 transition active:scale-95 active:bg-ai-soft",
+              "min-h-16 rounded-xl bg-card px-3 py-3 text-2xl font-bold text-ink ring-2 ring-ai/50 transition active:scale-95 active:bg-ai-soft",
             onclick: () => answered(reply),
           },
           plain(reply.jp),
         ),
       );
       root.replaceChildren(
-        overlayBar(close, "👉 把手機交給對方，請對方點答案"),
+        overlayBar(close, "把手機交給對方，請對方點答案"),
         h(
           "div",
           { class: "min-h-0 flex-1 overflow-y-auto px-5 pb-safe pt-4" },
@@ -227,12 +227,12 @@ export function askOther(question: { jp: Jp; zh: string }, replies: Reply[]): vo
       hush();
       const done = h("button", { type: "button", class: BUTTON.primary, onclick: close }, "知道了");
       root.replaceChildren(
-        overlayBar(close, "👀 對方回答了"),
+        overlayBar(close, "對方的回答"),
         h(
           "div",
           { class: "flex min-h-0 flex-1 flex-col items-center justify-center gap-3 overflow-y-auto px-5 text-center" },
           h("p", { class: "text-lg text-muted" }, `你問：${question.zh}`),
-          h("p", { class: "text-lg font-bold text-muted" }, "對方的回答 👇"),
+          h("p", { class: "text-lg font-bold text-muted" }, "對方的回答是"),
           h("p", { class: "font-bold leading-tight", style: armsLength(reply.zh) }, reply.zh),
           h("p", { lang: "ja", class: "text-2xl text-muted" }, plain(reply.jp)),
         ),

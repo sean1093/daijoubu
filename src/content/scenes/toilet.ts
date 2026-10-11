@@ -9,7 +9,7 @@ const UNDERSTOOD: Reply[] = [
 export default {
   id: "toilet",
   title: "廁所・問路",
-  icon: "🚻",
+  icon: "restroom",
   phrases: [
     { id: "toilet-where", zh: "廁所在哪裡？", jp: "トイレ は どこ です か。", answers: "direction" },
     { id: "toilet-borrow", zh: "可以借廁所嗎？", jp: "トイレ を {借|か}りて も いい です か。", answers: "yesNo" },

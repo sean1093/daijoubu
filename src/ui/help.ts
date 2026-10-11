@@ -3,8 +3,8 @@ import { plain } from "../lib/jp";
 import { dialable } from "../lib/phone";
 import { type CardBlock, helpCard, LINES } from "../profile/cards";
 import { loadProfile } from "../profile/profile";
-import { fill, h, icon } from "./dom";
-import { dock } from "./layout";
+import { fill, h, icon, type IconName } from "./dom";
+import { dock, heading } from "./layout";
 import { playButton } from "./japanese";
 import { showToOther } from "./overlay";
 
@@ -12,7 +12,7 @@ import { showToOther } from "./overlay";
 export function cardBlock(block: CardBlock, size = "text-3xl"): HTMLElement {
   return h(
     "div",
-    { class: "rounded-2xl bg-card p-4 ring-2 ring-hair" },
+    { class: "rounded-xl bg-card p-4 ring-1 ring-hair" },
     h("p", { lang: "ja", class: `${size} font-bold leading-snug` }, plain(block.jp)),
     block.extra.length > 0 &&
       h(
@@ -30,7 +30,7 @@ function callButton(label: string, sub: string, tel: string): HTMLElement {
     "a",
     {
       href: `tel:${tel}`,
-      class: "flex min-h-16 items-center gap-3 rounded-2xl bg-card px-4 py-3 text-ink ring-2 ring-hair transition active:scale-[0.98]",
+      class: "flex min-h-16 items-center gap-3 rounded-xl bg-card px-4 py-3 text-ink ring-1 ring-hair transition active:scale-[0.98]",
     },
     icon("phone", "h-7 w-7 shrink-0"),
     h("span", { class: "min-w-0" }, h("span", { class: "block text-2xl font-bold" }, label), h("span", { class: "block text-base" }, sub)),
@@ -52,16 +52,16 @@ export function renderHelp(root: HTMLElement): void {
       { class: "pt-safe sticky top-0 z-10 flex items-center justify-between gap-2 bg-shu px-3 pb-2 text-on-accent" },
       h(
         "a",
-        { href: "#/", class: "inline-flex min-h-14 items-center gap-1 rounded-full px-3 text-lg font-bold active:bg-black/10" },
+        { href: "#/", class: "inline-flex min-h-14 items-center gap-1 rounded-lg px-3 text-lg font-bold active:bg-black/10" },
         icon("back", "h-6 w-6"),
         "回首頁",
       ),
-      h("h1", { class: "text-2xl font-bold" }, "🆘 我需要幫忙"),
+      h("h1", { class: "flex items-center gap-2 text-2xl font-bold" }, icon("help", "h-7 w-7"), "我需要幫忙"),
     ),
     h(
       "main",
       { class: "space-y-4 px-4 pb-16 pt-4" },
-      h("p", { class: "text-lg font-bold text-shu" }, "把手機拿給路人、車站人員或警察看 👇"),
+      h("p", { class: "text-lg font-bold text-shu" }, "把下面的畫面拿給路人、車站人員或警察看"),
       h(
         "div",
         { class: "grid grid-cols-3 gap-2" },
@@ -71,7 +71,7 @@ export function renderHelp(root: HTMLElement): void {
           "button",
           {
             type: "button",
-            class: "inline-flex min-h-14 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ai-soft px-2 text-lg font-bold text-ai active:scale-95",
+            class: "inline-flex min-h-14 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-ai-soft px-2 text-lg font-bold text-ai active:scale-95",
             onclick: () => showToOther(blocks, "我需要幫忙"),
           },
           icon("expand"),
@@ -82,13 +82,13 @@ export function renderHelp(root: HTMLElement): void {
       blocks.length <= 2 &&
         h(
           "a",
-          { href: "#/setup", class: "block rounded-2xl bg-ai-soft p-4 text-lg" },
+          { href: "#/setup", class: "block rounded-xl bg-ai-soft p-4 text-lg" },
           "還沒有填飯店和家人電話。按這裡填好，卡片就會自動帶入地址和電話。",
         ),
       h(
         "section",
         { class: "space-y-3 pt-4" },
-        h("h2", { class: "text-2xl font-bold" }, "👮 找警察（交番）"),
+        heading("找警察（交番）", "shu"),
         h(
           "p",
           { class: "text-lg leading-relaxed" },
@@ -98,7 +98,7 @@ export function renderHelp(root: HTMLElement): void {
           "button",
           {
             type: "button",
-            class: "flex min-h-16 w-full items-center gap-3 rounded-2xl bg-card px-4 text-left text-xl font-bold ring-2 ring-hair active:scale-[0.98]",
+            class: "flex min-h-16 w-full items-center gap-3 rounded-xl bg-card px-4 text-left text-xl font-bold ring-1 ring-hair active:scale-[0.98]",
             onclick: () =>
               showToOther(
                 [
@@ -115,13 +115,13 @@ export function renderHelp(root: HTMLElement): void {
       h(
         "section",
         { class: "space-y-3 pt-4" },
-        h("h2", { class: "text-2xl font-bold" }, "☎️ 緊急電話"),
+        heading("緊急電話", "shu"),
         EMERGENCY_NUMBERS.filter((e) => MAIN_NUMBERS.includes(e.id)).map((entry) =>
           callButton(entry.title, `${entry.number}・${entry.when}`, telOf(entry.number)),
         ),
         h(
           "details",
-          { class: "rounded-2xl bg-card p-4 ring-2 ring-hair" },
+          { class: "rounded-xl bg-card p-4 ring-1 ring-hair" },
           h("summary", { class: "cursor-pointer text-xl font-bold text-ai" }, "更多電話（各地辦事處）"),
           h(
             "div",
@@ -155,15 +155,15 @@ const MAIN_NUMBERS = ["jnto-hotline", "tecro-tokyo", "mofa-taiwan"];
  * slows someone down in an emergency.
  */
 function callDock(familyLabel: string, familyTel: string | null): HTMLElement[] {
-  const dial = (top: string, bottom: string, tel: string, tone: string) =>
+  const dial = (glyph: IconName, top: string, bottom: string, tel: string, tone: string) =>
     h(
       "a",
       {
         href: `tel:${tel}`,
-        class: `flex min-h-16 min-w-0 flex-col items-center justify-center rounded-2xl px-1 text-center font-bold leading-tight active:scale-95 ${tone}`,
+        class: `flex min-h-16 min-w-0 flex-col items-center justify-center rounded-lg px-1 text-center font-bold leading-tight active:scale-95 ${tone}`,
       },
-      h("span", { class: "block max-w-full truncate text-xl" }, top),
-      h("span", { class: "block max-w-full truncate text-base" }, bottom),
+      h("span", { class: "flex max-w-full items-center gap-1 text-xl" }, icon(glyph, "h-5 w-5 shrink-0"), h("span", { class: "truncate" }, top)),
+      h("span", { class: "block max-w-full truncate text-sm" }, bottom),
     );
   const police = EMERGENCY_NUMBERS.find((e) => e.id === "police");
   const ambulance = EMERGENCY_NUMBERS.find((e) => e.id === "ambulance");
@@ -173,9 +173,9 @@ function callDock(familyLabel: string, familyTel: string | null): HTMLElement[] 
       "div",
       { class: `grid gap-2 ${familyTel ? "grid-cols-3" : "grid-cols-2"}` },
       // The family is abroad: say so, since the call is charged as international.
-      familyTel && dial(`📞 ${familyLabel}`, "國際電話", familyTel, "bg-ai text-on-accent"),
-      police && dial("🚓 110", "警察", telOf(police.number), "bg-shu text-on-accent"),
-      ambulance && dial("🚑 119", "救護車", telOf(ambulance.number), "bg-shu text-on-accent"),
+      familyTel && dial("phone", familyLabel, "國際電話", familyTel, "bg-ai text-on-accent"),
+      police && dial("shield", "110", "警察", telOf(police.number), "bg-shu text-on-accent"),
+      ambulance && dial("firstaid", "119", "救護車", telOf(ambulance.number), "bg-shu text-on-accent"),
     ),
   );
 }

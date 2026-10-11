@@ -6,7 +6,7 @@ const SEE_CARD = { jp: "この カード を {見|み}て ください。", zh: 
 export default {
   id: "emergency",
   title: "緊急・醫療",
-  icon: "🚑",
+  icon: "firstaid",
   groups: [
     { id: "body", title: "身體不舒服・看醫生" },
     { id: "lost", title: "東西掉了・被偷・找警察" },

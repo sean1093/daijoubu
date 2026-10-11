@@ -5,7 +5,7 @@ const OK = { jp: "はい。", zh: "好" };
 export default {
   id: "restaurant",
   title: "餐廳",
-  icon: "🍜",
+  icon: "bowl",
   groups: [
     { id: "diet", title: "過敏・素食・口味" },
     { id: "enter", title: "進門・等位子" },

@@ -25,7 +25,7 @@ function cardWithActions(blocks: CardBlock[], label: string): HTMLElement {
         "button",
         {
           type: "button",
-          class: "inline-flex min-h-14 items-center justify-center gap-2 rounded-full bg-ai text-lg font-bold text-on-accent active:scale-95",
+          class: "inline-flex min-h-14 items-center justify-center gap-2 rounded-lg bg-ai text-lg font-bold text-on-accent active:scale-95",
           onclick: () => showToOther(blocks, label),
         },
         icon("expand"),
@@ -61,9 +61,18 @@ function symptomPicker(): HTMLElement {
             type: "button",
             "aria-pressed": "false",
             class:
-              "flex min-h-16 items-center gap-2 rounded-2xl bg-card px-3 py-2 text-left text-xl font-bold ring-2 ring-hair active:scale-95 aria-pressed:bg-shu-soft aria-pressed:ring-shu",
+              "group flex min-h-16 items-center gap-3 rounded-lg bg-card px-3 py-2 text-left text-xl font-bold ring-1 ring-hair active:scale-95 aria-pressed:bg-shu-soft aria-pressed:ring-2 aria-pressed:ring-shu",
           },
-          h("span", { class: "text-3xl", "aria-hidden": "true" }, symptom.icon),
+          // A check box that fills in, like ticking a form at a clinic's reception.
+          h(
+            "span",
+            {
+              class:
+                "flex h-6 w-6 shrink-0 items-center justify-center rounded border-2 border-muted text-on-accent group-aria-pressed:border-shu group-aria-pressed:bg-shu",
+              "aria-hidden": "true",
+            },
+            icon("check", "h-4 w-4 opacity-0 group-aria-pressed:opacity-100"),
+          ),
           symptom.zh,
         );
         button.addEventListener("click", () => {
@@ -85,16 +94,16 @@ export function renderMedical(root: HTMLElement): void {
   const allergy = allergyCard(profile);
   const emergency = sceneById("emergency");
   const phrases = MEDICAL_PHRASES.flatMap((id) => emergency?.phrases.find((p) => p.id === id) ?? []);
-  page(root, "🩺 醫療・過敏", [
+  page(root, "醫療・過敏", [
     isEmpty(profile) &&
       h(
         "a",
-        { href: "#/setup", class: "mt-2 block rounded-2xl bg-ai-soft p-4 text-lg" },
+        { href: "#/setup", class: "mt-2 block rounded-xl bg-ai-soft p-4 text-lg" },
         "還沒有填健康資料。按這裡填慢性病、常吃的藥和過敏，醫療卡和過敏卡就會自動產生。症狀卡現在就能用。",
       ),
-    section("🤒 哪裡不舒服？點選症狀", symptomPicker()),
-    allergy && section("🍽️ 過敏卡（給餐廳看）", cardWithActions(allergy, "過敏卡")),
-    section("🏥 醫療卡（給醫生、救護人員看）", cardWithActions(medicalCard(profile), "醫療卡")),
+    section("哪裡不舒服？點選症狀", symptomPicker()),
+    allergy && section("過敏卡（給餐廳看）", cardWithActions(allergy, "過敏卡")),
+    section("醫療卡（給醫生、救護人員看）", cardWithActions(medicalCard(profile), "醫療卡")),
     section("常用句", h("div", { class: "space-y-2" }, phrases.map((p) => phraseRow(p, { jp: p.jp, zh: p.zh })))),
   ]);
 }

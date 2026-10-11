@@ -12,7 +12,7 @@
   --card: 255 255 255;
   --ink: 31 36 48;
   --muted: 96 91 84;
-  --hair: 222 214 201;
+  --hair: 214 205 190;
   --ai: 47 75 143;
   --ai-soft: 233 238 248;
   --shu: 180 40 30;
@@ -20,6 +20,9 @@
   --ok: 40 105 60;
   --ok-soft: 229 243 233;
   --warn-soft: 253 243 210;
+  /* Exit-sign yellow, as on station signage: black on yellow in both themes. */
+  --exit: 247 200 30;
+  --on-exit: 24 24 24;
   --on-accent: 255 255 255;
   --font-page: "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
   color-scheme: light;
@@ -38,6 +41,8 @@
   --ok: 120 205 145;
   --ok-soft: 30 54 40;
   --warn-soft: 66 54 20;
+  --exit: 240 195 40;
+  --on-exit: 24 24 24;
   --on-accent: 17 18 22;
   color-scheme: dark;
 }

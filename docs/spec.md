@@ -92,18 +92,18 @@
 
 情境（首頁大按鈕，順序即重要性）：
 
-| id | 名稱 | 圖示 | 句數目標 |
+| id | 名稱 | 圖示（`src/ui/dom.ts` 的圖示名稱） | 句數目標 |
 |---|---|---|---|
-| `transport` | 交通 | 🚃 | 20（做最深） |
-| `hotel` | 飯店 | 🏨 | 12～16 |
-| `restaurant` | 餐廳 | 🍜 | 12～16 |
-| `konbini` | 便利商店 | 🏪 | 12～16 |
-| `shopping` | 購物 | 🛍️ | 12～16 |
-| `drugstore` | 藥妝店 | 💊 | 12～16 |
-| `toilet` | 廁所・問路 | 🚻 | 12～16 |
-| `emergency` | 緊急・醫療 | 🚑 | 12～16（另有 §2.5 醫療卡） |
+| `transport` | 交通 | `train` | 20（做最深） |
+| `hotel` | 飯店 | `bed` | 12～16 |
+| `restaurant` | 餐廳 | `bowl` | 12～16 |
+| `konbini` | 便利商店 | `store` | 12～16 |
+| `shopping` | 購物 | `bag` | 12～16 |
+| `drugstore` | 藥妝店 | `pill` | 12～16 |
+| `toilet` | 廁所・問路 | `restroom` | 12～16 |
+| `emergency` | 緊急・醫療 | `firstaid` | 12～16（另有 §2.5 醫療卡） |
 
-每一句都有：中文（大字，給自己看的）、日文（附振假名）、拼音、▶ 播放、🐢 慢速、⤢「給對方看」全螢幕。
+每一句都有：中文（大字，給自己看的）、日文（附振假名）、拼音、播放、慢速、「給對方看」全螢幕。
 有 `answers` 的句子另外多一顆「給對方點選」（§2.4）。
 
 **交通必備句**（用預先填好的站名，不用打字）：
@@ -196,25 +196,7 @@
 
 首頁版面（直向手機）：
 
-```
-┌─────────────────────────┐
-│ 媽媽，有需要就按下面的按鈕 │
-│ ┌─────────────────────┐ │
-│ │ 🆘 我需要幫忙         │ │  ← 紅色，最大
-│ └─────────────────────┘ │
-│ ┌──────────┐┌──────────┐│
-│ │🚃 交通    ││🏨 飯店    ││  ← 兩欄大方塊
-│ ├──────────┤├──────────┤│
-│ │🍜 餐廳    ││🏪 便利商店 ││
-│ │🛍️ 購物    ││💊 藥妝店   ││
-│ │🚻 廁所問路 ││🚑 看醫生   ││
-│ └──────────┘└──────────┘│
-│ ┌─────────────────────┐ │
-│ │ 🏨 回飯店（給司機看）  │ │  ← 有飯店資料才出現
-│ └─────────────────────┘ │
-│  字體大小｜深色｜設定資料   │  ← 小字連結
-└─────────────────────────┘
-```
+> 這是第一版的線框。改版後的實際版面請看 §12（UX 改版）與 [`design.md`](design.md)（車站標示設計語言）；圖示一律是 SVG 線條圖示，不用 emoji。
 
 ---
 
@@ -292,12 +274,12 @@ interface Heard {
 interface Scene {
   id: SceneId;
   title: string;      // 交通
-  icon: string;       // 🚃
+  icon: IconName;     // "train": a pictogram in src/ui/dom.ts
   phrases: Phrase[];
   heard: Heard[];
 }
 
-interface Symptom { id: string; zh: string; jp: Jp; icon: string }
+// Symptoms use Preset too: { id, zh, jp }
 
 /** Preset checkboxes in the family form; the Japanese is pre-written and verified. */
 interface Preset { id: string; zh: string; jp: Jp }

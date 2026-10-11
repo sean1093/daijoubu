@@ -27,7 +27,7 @@ export function renderHotel(root: HTMLElement, [index]: string[]): void {
   const phone = dialable(hotel.phone, "jp");
   const others = profile.hotels.map((h, i) => ({ h, i })).filter(({ h: other }) => other !== hotel);
   page(root, "回飯店", [
-    h("p", { class: "mt-2 text-lg font-bold text-ai" }, "🚕 給計程車司機或路人看"),
+    h("p", { class: "mt-2 flex items-center gap-2 text-lg font-bold text-ai" }, icon("taxi", "h-6 w-6"), "給計程車司機或路人看"),
     h("div", { class: "mt-3" }, cardBlock(card)),
     h(
       "div",
@@ -37,7 +37,7 @@ export function renderHotel(root: HTMLElement, [index]: string[]): void {
         "button",
         {
           type: "button",
-          class: "inline-flex min-h-14 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-ai-soft px-2 text-lg font-bold text-ai active:scale-95",
+          class: "inline-flex min-h-14 items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-ai-soft px-2 text-lg font-bold text-ai active:scale-95",
           onclick: () => showToOther([card], "回飯店"),
         },
         icon("expand"),
@@ -60,7 +60,7 @@ export function renderHotel(root: HTMLElement, [index]: string[]): void {
           others.map(({ h: other, i }) =>
             h(
               "a",
-              { href: `#/hotel/${i}`, class: "block min-h-14 rounded-2xl bg-card px-4 py-3 text-xl font-bold ring-2 ring-hair" },
+              { href: `#/hotel/${i}`, class: "block min-h-14 rounded-xl bg-card px-4 py-3 text-xl font-bold ring-1 ring-hair" },
               h("span", { lang: "ja" }, other.name || other.address),
               (other.from || other.to) && h("span", { class: "block text-base font-normal text-muted" }, `${other.from} ～ ${other.to}`),
             ),

@@ -21,6 +21,8 @@ export default {
         shu: { DEFAULT: token("shu"), soft: token("shu-soft") },
         ok: { DEFAULT: token("ok"), soft: token("ok-soft") },
         warn: { soft: token("warn-soft") },
+        // Exit-sign yellow, for exits and elevators.
+        exit: { DEFAULT: token("exit"), on: token("on-exit") },
       },
     },
   },

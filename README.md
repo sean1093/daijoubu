@@ -12,7 +12,7 @@
 
 > 語言：UI 文字為繁體中文（台灣用語）；程式碼與註解為英文。
 
-> 完整規格見 [`docs/spec.md`](docs/spec.md)；旅客痛點調查與對應改善見 [`docs/research.md`](docs/research.md)。
+> 完整規格見 [`docs/spec.md`](docs/spec.md)；旅客痛點調查與對應改善見 [`docs/research.md`](docs/research.md)；視覺設計原則見 [`docs/design.md`](docs/design.md)。
 
 ---
 

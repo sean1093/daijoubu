@@ -14,7 +14,7 @@ export function page(root: HTMLElement, title: string, body: Child[], options: {
         "a",
         {
           href: options.back ?? "#/",
-          class: "inline-flex min-h-14 shrink-0 items-center gap-1 rounded-full bg-card px-4 text-lg font-bold text-ai ring-2 ring-hair active:scale-95",
+          class: "inline-flex min-h-14 shrink-0 items-center gap-1 rounded-lg bg-card px-4 text-lg font-bold text-ai ring-1 ring-hair active:scale-95",
         },
         icon("back", "h-6 w-6"),
         options.backLabel ?? "回首頁",
@@ -25,9 +25,22 @@ export function page(root: HTMLElement, title: string, body: Child[], options: {
   );
 }
 
+/**
+ * A section title in the style of a platform sign: a short bar of the
+ * accent colour, then the words. Plain enough to read at a glance.
+ */
+export function heading(text: string, tone: "ai" | "shu" = "ai"): HTMLElement {
+  return h(
+    "h2",
+    { class: "mb-2 flex items-center gap-2 text-lg font-bold text-ink" },
+    h("span", { class: `h-5 w-1.5 rounded-full ${tone === "shu" ? "bg-shu" : "bg-ai"}`, "aria-hidden": "true" }),
+    text,
+  );
+}
+
 /** A titled group of content. */
 export function section(title: string | null, ...children: Child[]): HTMLElement {
-  return h("section", { class: "mt-6" }, title && h("h2", { class: "mb-2 text-xl font-bold text-muted" }, title), children);
+  return h("section", { class: "mt-6" }, title && heading(title), children);
 }
 
 /**

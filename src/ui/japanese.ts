@@ -81,7 +81,7 @@ const PLAY_SIZES = {
   lg: "min-h-16 px-4 text-xl",
 };
 
-/** Pill button: ▶ 播放 or 🐢 慢速. Plays every line of `lines` in turn. */
+/** Play button (normal or slow). Plays every line of `lines` in turn. */
 export function playButton(
   lines: Jp | Jp[],
   kind: "normal" | "slow" = "normal",
@@ -94,7 +94,7 @@ export function playButton(
     "button",
     {
       type: "button",
-      class: `inline-flex items-center justify-center gap-2 rounded-full font-bold transition active:scale-95 ${PLAY_SIZES[size]} ${
+      class: `inline-flex items-center justify-center gap-2 rounded-lg font-bold transition active:scale-95 ${PLAY_SIZES[size]} ${
         slow ? "bg-card text-ai ring-2 ring-ai/40" : "bg-ai-soft text-ai"
       } ${extra}`,
       "aria-label": `${slow ? "慢速播放" : "播放"}「${all.map(plain).join("")}」`,

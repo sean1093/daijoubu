@@ -6,7 +6,7 @@ const NO = { jp: "いいえ、{大丈夫|だいじょうぶ} です。", zh: "�
 export default {
   id: "konbini",
   title: "便利商店",
-  icon: "🏪",
+  icon: "store",
   phrases: [
     { id: "konbini-no-bag", zh: "不用袋子。", jp: "{袋|ふくろ} は いりません。" },
     { id: "konbini-bag", zh: "請給我袋子。", jp: "{袋|ふくろ} を ください。" },

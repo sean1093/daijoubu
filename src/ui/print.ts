@@ -45,11 +45,11 @@ export function renderPrint(root: HTMLElement): void {
     extra: numbers.map((n) => `${n.number}　${n.title}`),
   };
   const cards = [
-    walletCard("求救卡 🆘", help, { accent: "#fde2de" }),
-    ...profile.hotels.map((hotel) => walletCard("飯店卡 🏨（給計程車司機看）", [hotelCard(hotel)], { big: true })),
-    walletCard("醫療卡 🏥", medicalCard(profile), { accent: "#e3e9f8" }),
-    allergy && walletCard("過敏卡 🍽️（給餐廳看）", allergy, { accent: "#fdf3d2" }),
-    walletCard("緊急電話 ☎️", [emergencyBlock], { big: true }),
+    walletCard("求救卡", help, { accent: "#fde2de" }),
+    ...profile.hotels.map((hotel) => walletCard("飯店卡（給計程車司機看）", [hotelCard(hotel)], { big: true })),
+    walletCard("醫療卡", medicalCard(profile), { accent: "#e3e9f8" }),
+    allergy && walletCard("過敏卡（給餐廳看）", allergy, { accent: "#fdf3d2" }),
+    walletCard("緊急電話", [emergencyBlock], { big: true }),
   ];
   page(
     root,
@@ -66,7 +66,7 @@ export function renderPrint(root: HTMLElement): void {
         isEmpty(profile) &&
           h(
             "a",
-            { href: "#/setup", class: "block rounded-2xl bg-ai-soft p-4 text-lg" },
+            { href: "#/setup", class: "block rounded-xl bg-ai-soft p-4 text-lg" },
             "還沒有填資料，卡片上不會有飯店、電話和健康資料。按這裡先填好。",
           ),
         h("button", { type: "button", class: BUTTON.primary, onclick: () => window.print() }, icon("print"), "列印"),
