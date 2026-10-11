@@ -13,7 +13,7 @@ const SHORTCUT =
 
 /** One short line: the app greets by name when it has one. */
 export function greeting(profile: Profile): string {
-  return profile.callName ? `${profile.callName}，旅途平安` : "日本旅遊小幫手";
+  return profile.callName ? `${profile.callName}，旅途平安` : "隨身旅伴";
 }
 
 /** Places dated today, in itinerary order. */

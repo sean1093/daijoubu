@@ -43,7 +43,7 @@ export function renderShare(root: HTMLElement): void {
 
   async function share(): Promise<void> {
     try {
-      await navigator.share({ title: "日本旅遊小幫手", text: "點開這個連結，旅遊小幫手就會帶入你的資料：", url });
+      await navigator.share({ title: "隨身旅伴", text: "點開這個連結，隨身旅伴就會帶入你的資料：", url });
     } catch {
       // Cancelled, or not allowed here: copying still works.
     }

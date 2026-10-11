@@ -13,6 +13,10 @@ export interface Store<T> {
  * Defines the store `daijoubu.<name>`. `parse` receives whatever was saved (or
  * `undefined`) with the version it was saved under, and must always return a
  * well-formed value: storage is user-editable and may hold anything.
+ *
+ * The prefix is the product's old name and stays on purpose: the site moved
+ * from /daijoubu/ to /travel-buddy/ on the same origin, and keeping the keys
+ * carries every saved profile and setting over.
  */
 export function defineStore<T>(
   name: string,

@@ -106,7 +106,7 @@ export function renderSettings(root: HTMLElement): void {
       h(
         "p",
         { class: "text-base text-muted" },
-        "日本旅遊小幫手 (Daijoubu)。所有資料只存在這支手機裡，不會上傳。",
+        "隨身旅伴 TravelBuddy・日本版。所有資料只存在這支手機裡，不會上傳。",
       ),
     ),
   ]);

@@ -6,7 +6,7 @@ import { sampleProfile } from "./fixtures";
 describe("home", () => {
   it("greets in one short line", () => {
     expect(greeting(sampleProfile())).toBe("媽媽，旅途平安");
-    expect(greeting(emptyProfile())).toBe("日本旅遊小幫手");
+    expect(greeting(emptyProfile())).toBe("隨身旅伴");
   });
 
   it("lists only today's places", () => {

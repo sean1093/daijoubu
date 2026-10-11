@@ -6,7 +6,7 @@ import { hush, play, playAll, playButton } from "./japanese";
 import { lineNode } from "./lines";
 
 /** Marks the history entries overlays push; the value is the overlay's own token. */
-const STATE_KEY = "daijoubuOverlay";
+const STATE_KEY = "travelBuddyOverlay";
 
 /** Open overlays, bottom first. A phrase's detail can open 給對方看 on top of itself. */
 const stack: { token: string; element: HTMLElement; teardown: () => void }[] = [];

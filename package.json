@@ -1,9 +1,9 @@
 {
-  "name": "daijoubu",
+  "name": "travel-buddy",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "日本旅遊小幫手：不會日文也能在日本 10 秒內把事情辦完。替你念出日文，或放大給對方看。",
+  "description": "隨身旅伴 TravelBuddy（日本版）：不會日文也能在日本 10 秒內把事情辦完。替你念出日文，或放大給對方看。",
   "license": "MIT",
   "engines": {
     "node": "^20.19.0 || ^22.12.0 || >=24.0.0"

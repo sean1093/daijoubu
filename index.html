@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#f4efe6" />
-    <title>日本旅遊小幫手 (Daijoubu)</title>
+    <title>隨身旅伴・日本 (TravelBuddy)</title>
     <meta
       name="description"
       content="不會日文也能在日本 10 秒內把事情辦完：替你念出日文，或放大給對方看。求救卡、交通與購物情境句、指指卡、醫療與過敏卡，離線也能用。"
@@ -17,11 +17,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="旅遊小幫手" />
+    <meta name="apple-mobile-web-app-title" content="隨身旅伴" />
     <script>
       // Mirrors applySettings() in src/state.ts. It has to run before the first
       // paint, or opening the app in dark mode flashes the light paper.
       try {
+        // Storage keys keep the old prefix (see src/lib/store.ts).
         const saved = JSON.parse(localStorage.getItem("daijoubu.settings") || "null");
         const s = (saved && saved.data) || {};
         const theme =
@@ -39,7 +40,7 @@
   </head>
   <body>
     <div id="app" class="mx-auto min-h-dvh max-w-xl"></div>
-    <noscript>請開啟 JavaScript 才能使用日本旅遊小幫手。</noscript>
+    <noscript>請開啟 JavaScript 才能使用隨身旅伴。</noscript>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
