@@ -2,6 +2,7 @@ import { SCENES } from "../content/scenes";
 import { voiceStatus } from "../lib/speech";
 import { isEmpty, isPlannedFor, loadProfile, type Place, type Profile, today } from "../profile/profile";
 import { fill, h, icon, pictogram } from "./dom";
+import { guideRows } from "./guide";
 import { heading } from "./layout";
 import { pickPlace } from "./scene";
 
@@ -128,6 +129,7 @@ export function renderHome(root: HTMLElement): void {
           ),
         ),
       ),
+      h("section", { class: "mt-6" }, heading("旅遊小抄"), guideRows()),
       h(
         "nav",
         { class: "mt-8 flex flex-wrap justify-center gap-x-2 gap-y-1 text-lg", "aria-label": "其他" },

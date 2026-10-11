@@ -1,6 +1,7 @@
 import { KANA, parse, plain, SLOT_WORD, slotsOf } from "../lib/jp";
 import { TRAILING_PUNCT, WA_FINAL } from "../lib/romaji";
 import type { EmergencyNumber } from "./emergency";
+import type { Guide } from "./guides";
 import { REPLY_SETS } from "./replies";
 import { type Jp, type Phrase, type Preset, type Reply, type Scene, SLOTS } from "./types";
 
@@ -68,6 +69,7 @@ export function validateContent(content: {
   rescue: Phrase[];
   presets: Record<string, Preset[]>;
   emergency: EmergencyNumber[];
+  guides: Guide[];
   extra: Record<string, Jp>;
 }): string[] {
   const problems: string[] = [];
@@ -164,6 +166,20 @@ export function validateContent(content: {
     need(/^\+?[\d-]+$/.test(entry.number), where, "number must be digits and hyphens");
     text(entry.title, where, "title");
     text(entry.when, where, "when to call");
+  }
+
+  for (const guide of content.guides) {
+    const where = `guide ${guide.id}`;
+    id(guide.id, where);
+    text(guide.title, where, "title");
+    text(guide.summary, where, "summary");
+    need(guide.steps.length > 0, where, "needs steps");
+    guide.steps.forEach((step, i) => {
+      text(step.title, `${where} step ${i}`, "title");
+      text(step.body, `${where} step ${i}`, "body");
+    });
+    need(guide.sources.length > 0 && guide.sources.every((url) => /^https:\/\//.test(url)), where, "needs https sources");
+    need(/^\d{4}-\d{2}-\d{2}$/.test(guide.verified), where, "needs a verified date");
   }
 
   for (const [name, markup] of Object.entries(content.extra)) jp(markup, name);
