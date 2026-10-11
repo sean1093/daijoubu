@@ -51,9 +51,9 @@ const SHOTS = [
   { name: "14-rescue-sheet", hash: "#/scene/konbini", act: (p) => p.getByRole("button", { name: /萬用句/ }).click() },
   { name: "15-medical", hash: "#/medical", act: async (p) => { await p.getByText("頭痛").click(); await p.getByText("發燒").click(); } },
   { name: "16-setup", hash: "#/setup" },
+  { name: "17-dark-detail", hash: "#/scene/transport", theme: "dark", act: (p) => openRow(p, "這班車有停新宿嗎") },
   { name: "18-scene-family", hash: "#/scene/family" },
   { name: "19-home-bottom", hash: "#/", act: (p) => p.evaluate(() => window.scrollTo(0, document.body.scrollHeight)) },
-  { name: "17-dark-detail", hash: "#/scene/transport", theme: "dark", act: (p) => openRow(p, "這班車有停新宿嗎") },
 ];
 
 (async () => {
