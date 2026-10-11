@@ -1,7 +1,7 @@
 import { SCENES } from "../content/scenes";
 import { voiceStatus } from "../lib/speech";
 import { isEmpty, isPlannedFor, loadProfile, type Place, type Profile, today } from "../profile/profile";
-import { fill, h, icon, type IconName, pictogram } from "./dom";
+import { fill, h, icon, pictogram } from "./dom";
 import { heading } from "./layout";
 import { pickPlace } from "./scene";
 
@@ -118,7 +118,7 @@ export function renderHome(root: HTMLElement): void {
             h(
               "a",
               { href: `#/scene/${scene.id}`, class: TILE },
-              pictogram(scene.icon as IconName, scene.id === "emergency" ? "shu" : "ai", "lg"),
+              pictogram(scene.icon, scene.id === "emergency" ? "shu" : "ai", "lg"),
               scene.title,
             ),
           ),

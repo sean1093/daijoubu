@@ -212,7 +212,7 @@ function placeRow(place: Place, index: number, save: () => void): HTMLElement[] 
   const kind = (value: Place["kind"], glyph: IconName, label: string) =>
     h(
       "label",
-      { class: "flex min-h-14 items-center justify-center gap-2 rounded-lg bg-card text-lg font-bold ring-1 ring-hair has-[:checked]:bg-ai-soft has-[:checked]:ring-2 has-[:checked]:ring-ai" },
+      { class: "flex min-h-14 items-center justify-center gap-2 rounded-lg bg-card text-lg font-bold ring-1 ring-hair has-[:checked]:bg-ai-soft has-[:checked]:ring-2 has-[:checked]:ring-ai has-[:focus-visible]:outline has-[:focus-visible]:outline-[3px] has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ai" },
       h("input", {
         type: "radio",
         name,
@@ -295,7 +295,7 @@ export function renderSetup(root: HTMLElement): void {
     const parsed = parseProfile(profile);
     saveProfile(parsed);
     refresh(parsed);
-    saved.textContent = "✓ 已儲存";
+    saved.replaceChildren(icon("check", "mr-1 inline h-4 w-4 align-[-2px]"), "已儲存");
     window.clearTimeout(savedTimer);
     savedTimer = window.setTimeout(() => (saved.textContent = ""), 1500);
   }

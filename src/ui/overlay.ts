@@ -210,7 +210,7 @@ export function askOther(question: { jp: Jp; zh: string }, replies: Reply[]): vo
         ),
       );
       root.replaceChildren(
-        overlayBar(close, "請把手機交給對方，請對方點答案"),
+        overlayBar(close, "把手機交給對方，請對方點答案"),
         h(
           "div",
           { class: "min-h-0 flex-1 overflow-y-auto px-5 pb-safe pt-4" },

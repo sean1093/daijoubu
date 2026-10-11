@@ -1,3 +1,5 @@
+import type { IconName } from "../ui/dom";
+
 /** Japanese in markup — see src/lib/jp.ts. May contain `$slot` words. */
 export type Jp = string;
 
@@ -54,8 +56,8 @@ export type SceneId = "transport" | "hotel" | "restaurant" | "konbini" | "shoppi
 export interface Scene {
   id: SceneId;
   title: string;
-  /** Name of a pictogram in src/ui/dom.ts (tests check it exists): drawn as SVG, same on every phone. */
-  icon: string;
+  /** A pictogram from src/ui/dom.ts: drawn as SVG, the same on every phone. */
+  icon: IconName;
   /** Headings that split a long phrase list for scanning; phrases are shown under them in this order. */
   groups?: { id: string; title: string }[];
   phrases: Phrase[];
@@ -69,4 +71,3 @@ export interface Preset {
   jp: Jp;
 }
 
-export type Symptom = Preset;

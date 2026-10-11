@@ -119,11 +119,8 @@ const ICONS = {
   user: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
   swap: '<path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',
   checkcircle: '<circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.5 2.5L16 9.5"/>',
-  ear: '<path d="M6 8.5a6 6 0 1 1 12 0c0 6-6 6-6 10a3 3 0 0 1-6 0"/><path d="M15 8.5a3 3 0 0 0-6 0"/>',
 } satisfies Record<string, string>;
 
-/** Every icon name, so content (which names its pictograms as strings) can be checked in tests. */
-export const ICON_NAMES: readonly string[] = Object.keys(ICONS);
 
 export type IconName = keyof typeof ICONS;
 
@@ -137,7 +134,6 @@ const PLATE_TONES = {
   ai: "bg-ai text-on-accent",
   shu: "bg-shu text-on-accent",
   exit: "bg-exit text-exit-on",
-  ok: "bg-ok text-on-accent",
 };
 
 /**

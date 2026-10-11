@@ -1,4 +1,4 @@
-import type { Jp, Preset, Symptom } from "./types";
+import type { Jp, Preset } from "./types";
 
 /**
  * Checkboxes in the setup form, each with Japanese written in advance so the
@@ -104,7 +104,7 @@ export const DIETS: Preset[] = [
 ];
 
 /** Symptoms for the pointing card; each is a full sentence a doctor or staff member reads. */
-export const SYMPTOMS: Symptom[] = [
+export const SYMPTOMS: Preset[] = [
   { id: "headache", zh: "頭痛", jp: "{頭|あたま} が {痛|いた}い です。" },
   { id: "fever", zh: "發燒", jp: "{熱|ねつ} が あります。" },
   { id: "chills", zh: "發冷", jp: "{寒気|さむけ} が します。" },
