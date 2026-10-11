@@ -4,7 +4,7 @@ import type { Scene } from "../types";
 export default {
   id: "transport",
   title: "交通",
-  icon: "🚃",
+  icon: "train",
   groups: [
     { id: "where", title: "問路・去哪裡" },
     { id: "elevator", title: "電梯・不走樓梯" },

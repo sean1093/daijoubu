@@ -1,13 +1,14 @@
 import { SCENES } from "../content/scenes";
 import { voiceStatus } from "../lib/speech";
 import { isEmpty, isPlannedFor, loadProfile, type Place, type Profile, today } from "../profile/profile";
-import { fill, h, icon } from "./dom";
+import { fill, h, icon, type IconName, pictogram } from "./dom";
+import { heading } from "./layout";
 import { pickPlace } from "./scene";
 
 const TILE =
-  "flex min-h-28 flex-col items-center justify-center gap-1 rounded-3xl bg-card px-2 py-3 text-center text-2xl font-bold text-ink shadow-sm ring-2 ring-hair transition active:scale-95";
+  "flex min-h-28 flex-col items-center justify-center gap-2 rounded-xl bg-card px-2 py-3 text-center text-xl font-bold text-ink ring-1 ring-hair transition active:scale-[0.97] active:bg-ai-soft";
 const SHORTCUT =
-  "flex min-h-20 flex-col items-center justify-center rounded-3xl bg-card px-2 py-2 text-xl font-bold leading-tight text-ink shadow-sm ring-2 ring-hair transition active:scale-95";
+  "flex min-h-16 items-center gap-3 rounded-xl bg-card px-3 py-2 text-xl font-bold leading-tight text-ink ring-1 ring-hair transition active:scale-[0.97] active:bg-ai-soft";
 
 /** One short line: the app greets by name when it has one. */
 export function greeting(profile: Profile): string {
@@ -23,8 +24,8 @@ export function todaysPlaces(profile: Profile, day = today()): Place[] {
 function todayRow(places: Place[]): HTMLElement {
   return h(
     "section",
-    { class: "mt-4 rounded-2xl bg-ai-soft p-3" },
-    h("h2", { class: "text-lg font-bold" }, "今天要去"),
+    { class: "mt-5" },
+    heading("今天要去"),
     h(
       "div",
       { class: "-mx-3 mt-2 flex gap-2 overflow-x-auto px-3 pb-1" },
@@ -33,14 +34,15 @@ function todayRow(places: Place[]): HTMLElement {
           "button",
           {
             type: "button",
-            class: "inline-flex min-h-14 shrink-0 items-center gap-1 whitespace-nowrap rounded-full bg-card px-4 text-xl font-bold ring-2 ring-hair active:scale-95",
+            class: "inline-flex min-h-14 shrink-0 items-center gap-2 whitespace-nowrap rounded-lg bg-card px-3 text-xl font-bold ring-1 ring-hair active:scale-95 active:bg-ai-soft",
             onclick: () => {
               pickPlace(place);
               location.hash = "#/scene/transport";
             },
           },
-          `${place.kind === "station" ? "🚉" : "📍"} ${place.zh || place.name}`,
-          icon("next", "h-5 w-5 text-ai"),
+          icon(place.kind === "station" ? "train" : "pin", "h-6 w-6 text-ai"),
+          place.zh || place.name,
+          icon("next", "h-5 w-5 text-muted"),
         ),
       ),
     ),
@@ -60,7 +62,7 @@ export function renderHome(root: HTMLElement): void {
       voiceStatus() === "missing" &&
         h(
           "a",
-          { href: "#/settings", class: "mt-3 flex items-center gap-2 rounded-2xl bg-warn-soft p-3 text-lg font-bold" },
+          { href: "#/settings", class: "mt-3 flex items-center gap-2 rounded-xl bg-warn-soft p-3 text-lg font-bold" },
           icon("alert", "h-6 w-6 shrink-0"),
           "這支手機還不會念日文 → 怎麼安裝",
         ),
@@ -68,22 +70,21 @@ export function renderHome(root: HTMLElement): void {
         "a",
         {
           href: "#/help",
-          class:
-            "mt-3 flex min-h-32 items-center justify-center gap-3 rounded-3xl bg-shu px-4 py-4 text-on-accent shadow-md transition active:scale-[0.98]",
+          class: "mt-3 flex min-h-28 items-center gap-4 rounded-xl bg-shu px-5 py-4 text-on-accent transition active:scale-[0.98]",
         },
-        h("span", { class: "text-4xl", "aria-hidden": "true" }, "🆘"),
+        icon("help", "h-11 w-11 shrink-0"),
         h(
           "span",
           { class: "text-left" },
           h("span", { class: "block whitespace-nowrap text-[min(2rem,9vw)] font-bold leading-tight" }, "我需要幫忙"),
-          h("span", { class: "block text-lg" }, "迷路・聯絡家人・緊急"),
+          h("span", { class: "block text-lg" }, "迷路・找家人・急病"),
         ),
       ),
       empty &&
         h(
           "section",
-          { class: "mt-3 rounded-2xl bg-ai-soft p-4" },
-          h("h2", { class: "text-xl font-bold text-ai" }, "👋 第一次使用？"),
+          { class: "mt-3 rounded-xl bg-ai-soft p-4" },
+          h("h2", { class: "text-xl font-bold text-ai" }, "第一次使用"),
           h(
             "p",
             { class: "mt-1 text-lg leading-relaxed" },
@@ -93,7 +94,7 @@ export function renderHome(root: HTMLElement): void {
             "a",
             {
               href: "#/setup",
-              class: "mt-3 flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-ai text-xl font-bold text-on-accent active:scale-[0.98]",
+              class: "mt-3 flex min-h-14 items-center justify-center gap-2 rounded-lg bg-ai text-xl font-bold text-on-accent active:scale-[0.98]",
             },
             icon("edit"),
             "開始填資料",
@@ -102,19 +103,24 @@ export function renderHome(root: HTMLElement): void {
       h(
         "div",
         { class: "mt-3 grid grid-cols-2 gap-3" },
-        h("a", { href: "#/hotel", class: SHORTCUT }, h("span", { class: "text-3xl", "aria-hidden": "true" }, "🚕"), "回飯店"),
-        h("a", { href: "#/medical", class: SHORTCUT }, h("span", { class: "text-3xl", "aria-hidden": "true" }, "🩺"), "醫療卡"),
+        h("a", { href: "#/hotel", class: SHORTCUT }, pictogram("taxi", "ai", "sm"), "回飯店"),
+        h("a", { href: "#/medical", class: SHORTCUT }, pictogram("medcard", "shu", "sm"), "醫療卡"),
       ),
       places.length > 0 && todayRow(places),
       h(
         "nav",
-        { class: "mt-4 grid grid-cols-2 gap-3", "aria-label": "情境" },
-        SCENES.map((scene) =>
-          h(
-            "a",
-            { href: `#/scene/${scene.id}`, class: TILE },
-            h("span", { class: "text-5xl leading-none", "aria-hidden": "true" }, scene.icon),
-            scene.title,
+        { class: "mt-5", "aria-label": "情境" },
+        heading("情境"),
+        h(
+          "div",
+          { class: "grid grid-cols-2 gap-3" },
+          SCENES.map((scene) =>
+            h(
+              "a",
+              { href: `#/scene/${scene.id}`, class: TILE },
+              pictogram(scene.icon as IconName, scene.id === "emergency" ? "shu" : "ai", "lg"),
+              scene.title,
+            ),
           ),
         ),
       ),
@@ -126,7 +132,7 @@ export function renderHome(root: HTMLElement): void {
           ["#/setup", "設定資料"],
           ["#/print", "列印小卡"],
         ].map(([href, label]) =>
-          h("a", { href, class: "inline-flex min-h-12 items-center rounded-full px-3 font-bold text-ai underline underline-offset-4" }, label),
+          h("a", { href, class: "inline-flex min-h-12 items-center rounded-lg px-3 font-bold text-ai underline underline-offset-4" }, label),
         ),
       ),
     ),

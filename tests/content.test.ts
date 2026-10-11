@@ -5,6 +5,7 @@ import { RESCUE } from "../src/content/rescue";
 import { SCENES } from "../src/content/scenes";
 import { checkJp, MIN_PHRASES, validateContent } from "../src/content/validate";
 import { LINES } from "../src/profile/cards";
+import { ICON_NAMES } from "../src/ui/dom";
 
 const content = {
   scenes: SCENES,
@@ -94,5 +95,11 @@ describe("checkJp", () => {
     ["{新宿|しんじゅく}$dest", "a slot must be a whole word"],
   ])("rejects %j", (markup, problem) => {
     expect(checkJp(markup).join("\n")).toContain(problem);
+  });
+});
+
+describe("pictograms", () => {
+  it("names an existing pictogram for every scene", () => {
+    for (const scene of SCENES) expect(ICON_NAMES, scene.id).toContain(scene.icon);
   });
 });

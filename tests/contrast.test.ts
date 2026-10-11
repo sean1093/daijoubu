@@ -48,6 +48,7 @@ const PAIRS: [string, string][] = [
   ["on-accent", "ai"],
   ["on-accent", "shu"],
   ["on-accent", "ok"],
+  ["on-exit", "exit"],
 ];
 
 describe.each([

@@ -54,7 +54,7 @@ export type SceneId = "transport" | "hotel" | "restaurant" | "konbini" | "shoppi
 export interface Scene {
   id: SceneId;
   title: string;
-  /** An emoji: drawn by the system font, so it works offline. */
+  /** Name of a pictogram in src/ui/dom.ts (tests check it exists): drawn as SVG, same on every phone. */
   icon: string;
   /** Headings that split a long phrase list for scanning; phrases are shown under them in this order. */
   groups?: { id: string; title: string }[];
@@ -69,6 +69,4 @@ export interface Preset {
   jp: Jp;
 }
 
-export interface Symptom extends Preset {
-  icon: string;
-}
+export type Symptom = Preset;

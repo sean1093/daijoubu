@@ -5,7 +5,7 @@ const OK = { jp: "わかりました。", zh: "知道了" };
 export default {
   id: "shopping",
   title: "購物",
-  icon: "🛍️",
+  icon: "bag",
   phrases: [
     { id: "shopping-how-much", zh: "這個多少錢？", jp: "これ は いくら です か。" },
     { id: "shopping-this", zh: "我要這個。", jp: "これ を ください。" },

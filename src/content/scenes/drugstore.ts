@@ -5,7 +5,7 @@ const SEE_CARD = { jp: "あります。この カード を {見|み}て くだ�
 export default {
   id: "drugstore",
   title: "藥妝店",
-  icon: "💊",
+  icon: "pill",
   phrases: [
     { id: "drugstore-cold", zh: "我想買感冒藥。", jp: "{風邪薬|かぜぐすり} が ほしい です。" },
     { id: "drugstore-fever", zh: "我想買退燒藥。", jp: "{解熱剤|げねつざい} が ほしい です。" },

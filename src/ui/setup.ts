@@ -15,13 +15,13 @@ import {
   saveProfile,
 } from "../profile/profile";
 import { type SetupSectionId, sectionSummaries } from "../profile/summary";
-import { BUTTON, type Child, fill, h, icon } from "./dom";
+import { BUTTON, type Child, fill, h, icon, type IconName, pictogram } from "./dom";
 import { dock, page } from "./layout";
 
 const INPUT =
-  "mt-1 block min-h-14 w-full rounded-xl bg-card px-3 py-2 text-xl text-ink ring-2 ring-hair placeholder:text-muted/80 focus:ring-ai";
+  "mt-1 block min-h-14 w-full rounded-xl bg-card px-3 py-2 text-xl text-ink ring-1 ring-hair placeholder:text-muted/80 focus:ring-ai";
 const HINT = "mt-1 block text-base text-muted";
-const CARD = "space-y-4 rounded-2xl bg-card/60 p-4 ring-2 ring-hair";
+const CARD = "space-y-4 rounded-xl bg-card/60 p-4 ring-1 ring-hair";
 
 interface FieldOptions {
   hint?: string;
@@ -67,7 +67,7 @@ function presets(list: Preset[], chosen: string[], set: (ids: string[]) => void,
     list.map((preset) =>
       h(
         "label",
-        { class: "flex min-h-14 items-center gap-3 rounded-xl bg-card px-3 py-2 text-lg ring-2 ring-hair has-[:checked]:bg-ai-soft has-[:checked]:ring-ai" },
+        { class: "flex min-h-14 items-center gap-3 rounded-xl bg-card px-3 py-2 text-lg ring-1 ring-hair has-[:checked]:bg-ai-soft has-[:checked]:ring-ai" },
         h("input", {
           type: "checkbox",
           class: "h-6 w-6 shrink-0 accent-[rgb(var(--ai))]",
@@ -112,7 +112,7 @@ function listEditor<T>(options: {
               "button",
               {
                 type: "button",
-                class: "inline-flex min-h-12 items-center gap-1 rounded-full px-3 text-base font-bold text-shu active:bg-shu-soft",
+                class: "inline-flex min-h-12 items-center gap-1 rounded-lg px-3 text-base font-bold text-shu active:bg-shu-soft",
                 onclick: () => {
                   options.items.splice(i, 1);
                   options.onChange();
@@ -197,7 +197,7 @@ function noteField(place: Place, save: () => void): HTMLElement {
   return h(
     "label",
     { class: "block text-lg font-bold" },
-    "🛗 電梯筆記（可不填）",
+    "電梯筆記（可不填）",
     area,
     h(
       "span",
@@ -209,21 +209,22 @@ function noteField(place: Place, save: () => void): HTMLElement {
 
 function placeRow(place: Place, index: number, save: () => void): HTMLElement[] {
   const name = `place-kind-${index}`;
-  const kind = (value: Place["kind"], label: string) =>
+  const kind = (value: Place["kind"], glyph: IconName, label: string) =>
     h(
       "label",
-      { class: "flex min-h-14 items-center justify-center gap-2 rounded-xl bg-card text-lg font-bold ring-2 ring-hair has-[:checked]:bg-ai-soft has-[:checked]:ring-ai" },
+      { class: "flex min-h-14 items-center justify-center gap-2 rounded-lg bg-card text-lg font-bold ring-1 ring-hair has-[:checked]:bg-ai-soft has-[:checked]:ring-2 has-[:checked]:ring-ai" },
       h("input", {
         type: "radio",
         name,
-        class: "h-5 w-5 accent-[rgb(var(--ai))]",
+        class: "sr-only",
         checked: place.kind === value,
         onchange: () => ((place.kind = value), save()),
       }),
+      icon(glyph, "h-6 w-6 text-ai"),
       label,
     );
   return [
-    h("div", { class: "grid grid-cols-2 gap-3", role: "radiogroup", "aria-label": "類型" }, kind("station", "🚉 車站"), kind("place", "📍 地點")),
+    h("div", { class: "grid grid-cols-2 gap-3", role: "radiogroup", "aria-label": "類型" }, kind("station", "train", "車站"), kind("place", "pin", "地點")),
     field("日文名稱", place.name, (v) => ((place.name = v), save()), {
       lang: "ja",
       placeholder: "例：新宿、浅草寺",
@@ -259,13 +260,13 @@ function medRow(med: Med, save: () => void): HTMLElement[] {
 }
 
 /** The form's six parts, each a collapsible card whose header says what it holds. */
-const GROUPS: { id: SetupSectionId; icon: string; title: string }[] = [
-  { id: "traveller", icon: "🙂", title: "旅客" },
-  { id: "hotels", icon: "🏨", title: "飯店" },
-  { id: "places", icon: "🚉", title: "每天的行程" },
-  { id: "contacts", icon: "📞", title: "聯絡人" },
-  { id: "health", icon: "💊", title: "健康" },
-  { id: "allergy", icon: "🍽️", title: "過敏・飲食・保險" },
+const GROUPS: { id: SetupSectionId; icon: IconName; title: string }[] = [
+  { id: "traveller", icon: "user", title: "旅客" },
+  { id: "hotels", icon: "bed", title: "飯店" },
+  { id: "places", icon: "train", title: "每天的行程" },
+  { id: "contacts", icon: "phone", title: "聯絡人" },
+  { id: "health", icon: "firstaid", title: "健康" },
+  { id: "allergy", icon: "bowl", title: "過敏・飲食・保險" },
 ];
 
 export function renderSetup(root: HTMLElement): void {
@@ -285,7 +286,7 @@ export function renderSetup(root: HTMLElement): void {
       const header = headers.get(summary.id);
       if (!header) continue;
       header.text.textContent = summary.text;
-      header.mark.textContent = summary.done ? "✓" : "";
+      header.mark.replaceChildren(summary.done ? icon("checkcircle", "h-7 w-7") : "");
     }
     progress.textContent = `已填 ${summaries.filter((s) => s.done).length}／${summaries.length} 段・會自動儲存`;
   }
@@ -302,15 +303,15 @@ export function renderSetup(root: HTMLElement): void {
   function group(id: SetupSectionId, ...children: Child[]): HTMLElement {
     const meta = GROUPS.find((g) => g.id === id)!;
     const text = h("span", { class: "block truncate text-base font-normal text-muted" });
-    const mark = h("span", { class: "w-6 shrink-0 text-center text-2xl text-ok", "aria-hidden": "true" });
+    const mark = h("span", { class: "w-7 shrink-0 text-ok", "aria-hidden": "true" });
     headers.set(id, { text, mark });
     const details = h(
       "details",
-      { class: "group mt-4 rounded-2xl bg-card ring-2 ring-hair open:ring-ai/50" },
+      { class: "group mt-4 rounded-xl bg-card ring-1 ring-hair open:ring-ai/50" },
       h(
         "summary",
         { class: "flex min-h-16 cursor-pointer list-none items-center gap-3 px-4 py-2 [&::-webkit-details-marker]:hidden" },
-        h("span", { class: "text-3xl", "aria-hidden": "true" }, meta.icon),
+        pictogram(meta.icon, "ai", "sm"),
         h("span", { class: "min-w-0 flex-1" }, h("span", { class: "block text-xl font-bold" }, meta.title), text),
         mark,
         icon("next", "h-6 w-6 shrink-0 text-ai transition group-open:rotate-90"),
@@ -327,7 +328,7 @@ export function renderSetup(root: HTMLElement): void {
   page(root, "設定資料", [
     h(
       "div",
-      { class: "mt-2 rounded-2xl bg-ai-soft p-4" },
+      { class: "mt-2 rounded-xl bg-ai-soft p-4" },
       h("p", { class: "flex items-baseline justify-between gap-2" }, progress, saved),
       h("p", { class: "mt-1 text-base leading-relaxed" }, "全部都可以不填，填越多越好用。資料只存在這支手機，", h("b", null, "不會上傳"), "。"),
     ),
@@ -367,7 +368,7 @@ export function renderSetup(root: HTMLElement): void {
       h(
         "details",
         { class: "rounded-xl bg-ai-soft p-3" },
-        h("summary", { class: "cursor-pointer text-lg font-bold text-ai" }, "🛗 怎麼查車站的電梯？"),
+        h("summary", { class: "cursor-pointer text-lg font-bold text-ai" }, "怎麼查車站的電梯？"),
         h(
           "ul",
           { class: "mt-2 list-disc space-y-1.5 pl-6 text-base leading-relaxed" },
@@ -459,7 +460,7 @@ export function renderSetup(root: HTMLElement): void {
         "button",
         {
           type: "button",
-          class: "mt-6 w-full min-h-14 rounded-2xl text-lg font-bold text-shu active:bg-shu-soft",
+          class: "mt-6 w-full min-h-14 rounded-xl text-lg font-bold text-shu active:bg-shu-soft",
           onclick: () => {
             if (!confirm("確定要清除這支手機上的所有資料嗎？")) return;
             clearProfile();

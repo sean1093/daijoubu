@@ -5,7 +5,7 @@ const OK = { jp: "わかりました。", zh: "知道了" };
 export default {
   id: "hotel",
   title: "飯店",
-  icon: "🏨",
+  icon: "bed",
   phrases: [
     { id: "hotel-check-in", zh: "我要辦入住。", jp: "チェックイン を お{願|ねが}い します。" },
     {
