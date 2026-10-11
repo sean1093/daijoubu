@@ -76,6 +76,21 @@ export default {
       fallbackZh: "去這裡要在哪裡換車？",
     },
     {
+      id: "transport-transfer-gate",
+      group: "train",
+      zh: "轉車要先出剪票口嗎？",
+      jp: "{乗|の}り{換|か}え は {改札|かいさつ} を {出|で}ます か。",
+      answers: "yesNo",
+    },
+    {
+      id: "transport-transfer-where",
+      group: "train",
+      zh: "轉乘口在哪裡？",
+      jp: "{乗|の}り{換|か}え{口|ぐち} は どこ です か。",
+      tip: "轉乘口是不用出站就能換車的閘門，通常有轉乘路線的顏色標示。",
+      answers: "direction",
+    },
+    {
       id: "transport-how-long",
       group: "train",
       zh: "到〇〇要多久？",
@@ -141,6 +156,16 @@ export default {
       group: "ticket",
       zh: "請教我怎麼買票。",
       jp: "{切符|きっぷ} の {買|か}い{方|かた} を {教|おし}えて ください。",
+    },
+    {
+      id: "transport-exit-for",
+      group: "where",
+      zh: "去〇〇要從哪個出口出去？",
+      jp: "$dest に {行|い}く には どの {出口|でぐち} が {近|ちか}い です か。",
+      fallback: "ここ に {行|い}く には どの {出口|でぐち} が {近|ちか}い です か。",
+      fallbackZh: "去這裡要從哪個出口出去？（同時給對方看地址或地圖）",
+      tip: "大車站的出口很多，先問好出口再走，比較不會繞路。",
+      answers: "exit",
     },
     {
       id: "transport-nearest-exit",

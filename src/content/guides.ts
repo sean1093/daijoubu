@@ -76,6 +76,41 @@ export const GUIDES: Guide[] = [
     ],
     verified: "2026-10-11",
   },
+  {
+    id: "shinkansen-luggage",
+    title: "新幹線大型行李",
+    summary: "東海道、山陽、九州新幹線：三邊加起來超過 160 公分的行李要先訂位。",
+    steps: [
+      {
+        title: "量行李",
+        body: "長、寬、高加起來。160 公分以下放座位上方的架子就好；160～250 公分算特大行李；超過 250 公分不能帶上車。",
+      },
+      {
+        title: "買票時一起訂位",
+        body: "訂指定席時選「特大行李放置處座位」（特大荷物スペースつき座席），行李放在座位後方。不另外收費。",
+      },
+      {
+        title: "沒訂到這種座位",
+        body: "部分車廂連接處有「特大荷物コーナー」。2025 年 7 月起試辦免預約，先到先用。",
+      },
+      {
+        title: "沒預約就帶上車",
+        body: "要付 1,000 日圓手續費，並照車掌的指示放行李。",
+      },
+    ],
+    notes: [
+      "這個規定只適用東海道、山陽、九州、西九州新幹線。其他新幹線的規定不同，問站務員。",
+      "不想自己扛，可以用宅配把行李寄到下一間飯店：見「行李」情境。",
+    ],
+    sources: [
+      // JR Central: 160–250 cm needs a seat with oversized baggage space, reserved in advance at no extra
+      // charge; ¥1,000 fee without one; deck corners reservation-free on trial since 2025-07-01.
+      "https://railway.jr-central.co.jp/oversized-baggage/",
+      // JR West (JR Odekake): the same rule for the Sanyo Shinkansen.
+      "https://www.jr-odekake.net/railroad/service/baggage/",
+    ],
+    verified: "2026-10-11",
+  },
 ];
 
 export function guideById(id: string | undefined): Guide | undefined {
