@@ -21,10 +21,11 @@ describe("content", () => {
     expect(validateContent(content)).toEqual([]);
   });
 
-  it("has all nine scenes, each with enough phrases", () => {
+  it("has all ten scenes, each with enough phrases", () => {
     expect(SCENES.map((s) => s.id)).toEqual([
       "transport",
       "hotel",
+      "luggage",
       "restaurant",
       "konbini",
       "shopping",

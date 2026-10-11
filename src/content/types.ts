@@ -54,6 +54,7 @@ export interface Heard {
 export type SceneId =
   | "transport"
   | "hotel"
+  | "luggage"
   | "restaurant"
   | "konbini"
   | "shopping"

@@ -55,6 +55,7 @@ const SHOTS = [
   { name: "18-scene-family", hash: "#/scene/family" },
   { name: "19-home-bottom", hash: "#/", act: (p) => p.evaluate(() => window.scrollTo(0, document.body.scrollHeight)) },
   { name: "20-guide-tax-refund", hash: "#/guide/tax-refund" },
+  { name: "21-scene-luggage", hash: "#/scene/luggage" },
 ];
 
 (async () => {
