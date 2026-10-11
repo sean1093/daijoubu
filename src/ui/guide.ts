@@ -37,7 +37,7 @@ export function renderTools(root: HTMLElement): void {
     h(
       "p",
       { class: "mt-2 text-lg leading-relaxed text-muted" },
-      "這些事已經有好用的 App，出發前在 App Store 或 Google Play 搜尋名稱下載。",
+      "這些事已經有好用的 App。出發前在台灣先下載好，點下面的按鈕就會開啟下載頁。",
     ),
     h(
       "ul",
@@ -49,6 +49,23 @@ export function renderTools(root: HTMLElement): void {
           h("h3", { class: "text-xl font-semibold" }, tool.name),
           h("p", { class: "mt-1 text-lg leading-relaxed" }, tool.use),
           tool.note && h("p", { class: "mt-1 text-base text-muted" }, tool.note),
+          h(
+            "div",
+            { class: "mt-3 grid grid-cols-2 gap-2" },
+            tool.links.map((link) =>
+              h(
+                "a",
+                {
+                  href: link.url,
+                  target: "_blank",
+                  rel: "noopener",
+                  "aria-label": `${tool.name}：${link.label}`,
+                  class: "inline-flex min-h-12 items-center justify-center rounded-lg bg-ai-soft px-2 py-1 text-center text-lg font-bold leading-tight text-ai active:scale-95",
+                },
+                link.label,
+              ),
+            ),
+          ),
         ),
       ),
     ),
