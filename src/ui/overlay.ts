@@ -9,12 +9,29 @@ import { lineNode } from "./lines";
 const STATE_KEY = "daijoubuOverlay";
 
 /** Open overlays, bottom first. A phrase's detail can open 給對方看 on top of itself. */
-const stack: { token: string; teardown: () => void }[] = [];
+const stack: { token: string; element: HTMLElement; teardown: () => void }[] = [];
 let opened = 0;
 
 /** Token in the current history entry, if it was pushed by an overlay. */
 function historyToken(): unknown {
   return (history.state as Record<string, unknown> | null)?.[STATE_KEY];
+}
+
+/** Inert and hidden from screen readers; aria-hidden covers browsers without `inert`. */
+function cover(element: HTMLElement, covered: boolean): void {
+  element.inert = covered;
+  if (covered) element.setAttribute("aria-hidden", "true");
+  else element.removeAttribute("aria-hidden");
+}
+
+/**
+ * Only the top layer can be reached: the page and any layer under the top
+ * are covered, so screen readers and taps cannot wander into them.
+ */
+function syncInert(): void {
+  const app = document.getElementById("app");
+  if (app) cover(app, stack.length > 0);
+  for (const [i, entry] of stack.entries()) cover(entry.element, i < stack.length - 1);
 }
 
 /**
@@ -44,7 +61,7 @@ export function openOverlay(label: string, build: (close: () => void) => HTMLEle
     "aria-label": label,
   });
   let open = true;
-  const entry = { token, teardown };
+  const entry = { token, element: overlay, teardown };
 
   function teardown(): void {
     if (!open) return;
@@ -52,6 +69,7 @@ export function openOverlay(label: string, build: (close: () => void) => HTMLEle
     hush();
     overlay.remove();
     stack.splice(stack.indexOf(entry), 1);
+    syncInert();
     if (stack.length === 0) {
       document.body.classList.remove("overflow-hidden");
       window.removeEventListener("popstate", onPop);
@@ -74,7 +92,8 @@ export function openOverlay(label: string, build: (close: () => void) => HTMLEle
       return;
     }
     if (event.key !== "Tab") return;
-    // The page underneath is only covered: keep the focus ring inside the layer.
+    // The page underneath is inert, but browsers without `inert` still tab into it:
+    // keep the focus ring inside the layer.
     const stops = [...overlay.querySelectorAll<HTMLElement>("button, a[href]")];
     const edge = event.shiftKey ? stops[0] : stops.at(-1);
     if (document.activeElement === edge || !overlay.contains(document.activeElement)) {
@@ -92,6 +111,7 @@ export function openOverlay(label: string, build: (close: () => void) => HTMLEle
   document.addEventListener("keydown", onKey);
   document.body.classList.add("overflow-hidden");
   document.body.append(overlay);
+  syncInert();
   overlay.querySelector<HTMLElement>("[data-autofocus]")?.focus({ preventScroll: true });
   return close;
 }
