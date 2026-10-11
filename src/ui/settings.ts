@@ -17,7 +17,7 @@ function choice<T extends string>(options: [T, string][], current: T, pick: (val
           type: "button",
           role: "radio",
           "aria-checked": String(value === current),
-          class: `min-h-16 rounded-xl px-2 text-xl font-bold ring-2 transition active:scale-95 ${
+          class: `min-h-16 rounded-2xl px-2 text-xl font-bold ring-2 transition active:scale-95 ${
             value === current ? "bg-ai text-on-accent ring-ai" : "bg-card text-ink ring-hair"
           }`,
           onclick: () => pick(value),
@@ -78,7 +78,7 @@ export function renderSettings(root: HTMLElement): void {
                 h(
                   "select",
                   {
-                    class: "mt-1 block min-h-14 w-full rounded-xl bg-card px-3 text-lg ring-1 ring-hair",
+                    class: "mt-1 block min-h-14 w-full rounded-2xl bg-card px-3 text-lg ring-1 ring-muted/60",
                     onchange: (event: Event) => {
                       const value = (event.target as HTMLSelectElement).value;
                       settings.voice = value || null;
@@ -95,7 +95,7 @@ export function renderSettings(root: HTMLElement): void {
           )
         : h(
             "p",
-            { class: "rounded-xl bg-warn-soft p-4 text-lg" },
+            { class: "rounded-2xl bg-warn-soft p-4 text-lg" },
             status === "unsupported" ? "這個瀏覽器不能念日文。" : "這支手機還沒有日文語音。",
             "「給對方看」一樣可以用。",
           ),

@@ -19,9 +19,9 @@ import { BUTTON, type Child, fill, h, icon, type IconName, pictogram } from "./d
 import { dock, page } from "./layout";
 
 const INPUT =
-  "mt-1 block min-h-14 w-full rounded-xl bg-card px-3 py-2 text-xl text-ink ring-1 ring-hair placeholder:text-muted/80 focus:ring-ai";
+  "mt-1 block min-h-14 w-full rounded-2xl bg-card px-3 py-2 text-xl text-ink ring-1 ring-muted/60 placeholder:text-muted/80 focus:ring-ai";
 const HINT = "mt-1 block text-base text-muted";
-const CARD = "space-y-4 rounded-xl bg-card/60 p-4 ring-1 ring-hair";
+const CARD = "space-y-4 rounded-2xl bg-card/60 p-4";
 
 interface FieldOptions {
   hint?: string;
@@ -67,7 +67,7 @@ function presets(list: Preset[], chosen: string[], set: (ids: string[]) => void,
     list.map((preset) =>
       h(
         "label",
-        { class: "flex min-h-14 items-center gap-3 rounded-xl bg-card px-3 py-2 text-lg ring-1 ring-hair has-[:checked]:bg-ai-soft has-[:checked]:ring-ai" },
+        { class: "flex min-h-14 items-center gap-3 rounded-2xl bg-card px-3 py-2 text-lg ring-1 ring-hair has-[:checked]:bg-ai-soft has-[:checked]:ring-ai" },
         h("input", {
           type: "checkbox",
           class: "h-6 w-6 shrink-0 accent-[rgb(var(--ai))]",
@@ -307,7 +307,7 @@ export function renderSetup(root: HTMLElement): void {
     headers.set(id, { text, mark });
     const details = h(
       "details",
-      { class: "group mt-4 rounded-xl bg-card ring-1 ring-hair open:ring-ai/50" },
+      { class: "group mt-4 rounded-2xl bg-card" },
       h(
         "summary",
         { class: "flex min-h-16 cursor-pointer list-none items-center gap-3 px-4 py-2 [&::-webkit-details-marker]:hidden" },
@@ -328,7 +328,7 @@ export function renderSetup(root: HTMLElement): void {
   page(root, "設定資料", [
     h(
       "div",
-      { class: "mt-2 rounded-xl bg-ai-soft p-4" },
+      { class: "mt-2 rounded-2xl bg-ai-soft p-4" },
       h("p", { class: "flex items-baseline justify-between gap-2" }, progress, saved),
       h("p", { class: "mt-1 text-base leading-relaxed" }, "全部都可以不填，填越多越好用。資料只存在這支手機，", h("b", null, "不會上傳"), "。"),
     ),
@@ -367,7 +367,7 @@ export function renderSetup(root: HTMLElement): void {
       h("p", { class: "text-lg text-muted" }, "「我想去〇〇站」「這班車有停〇〇嗎」會直接用這些名稱，不用打字。"),
       h(
         "details",
-        { class: "rounded-xl bg-ai-soft p-3" },
+        { class: "rounded-2xl bg-ai-soft p-3" },
         h("summary", { class: "cursor-pointer text-lg font-bold text-ai" }, "怎麼查車站的電梯？"),
         h(
           "ul",
@@ -460,7 +460,7 @@ export function renderSetup(root: HTMLElement): void {
         "button",
         {
           type: "button",
-          class: "mt-6 w-full min-h-14 rounded-xl text-lg font-bold text-shu active:bg-shu-soft",
+          class: "mt-6 w-full min-h-14 rounded-2xl text-lg font-bold text-shu active:bg-shu-soft",
           onclick: () => {
             if (!confirm("確定要清除這支手機上的所有資料嗎？")) return;
             clearProfile();

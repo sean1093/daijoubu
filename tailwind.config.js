@@ -12,6 +12,8 @@ export default {
       colors: {
         paper: token("paper"),
         card: token("card"),
+        // Washi sand: secondary buttons and quiet surfaces.
+        sand: token("sand"),
         ink: token("ink"),
         muted: token("muted"),
         hair: token("hair"),

@@ -54,7 +54,7 @@ export function renderHotel(root: HTMLElement, [index]: string[]): void {
           others.map(({ h: other, i }) =>
             h(
               "a",
-              { href: `#/hotel/${i}`, class: "block min-h-14 rounded-xl bg-card px-4 py-3 text-xl font-bold ring-1 ring-hair" },
+              { href: `#/hotel/${i}`, class: "block min-h-14 rounded-2xl bg-card px-4 py-3 text-xl font-bold" },
               h("span", { lang: "ja" }, other.name || other.address),
               (other.from || other.to) && h("span", { class: "block text-base font-normal text-muted" }, `${other.from} ～ ${other.to}`),
             ),

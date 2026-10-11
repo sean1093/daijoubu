@@ -6,9 +6,9 @@ import { heading } from "./layout";
 import { pickPlace } from "./scene";
 
 const TILE =
-  "flex min-h-24 flex-col items-center justify-center gap-2 rounded-xl bg-card px-2 py-3 text-center text-xl font-bold text-ink ring-1 ring-hair transition active:scale-[0.97] active:bg-ai-soft";
+  "flex min-h-28 flex-col items-start justify-between gap-3 rounded-2xl bg-card px-4 py-4 text-left text-xl font-bold text-ink transition active:scale-[0.97] active:bg-ai-soft";
 const SHORTCUT =
-  "flex min-h-16 items-center gap-3 rounded-xl bg-card px-3 py-2 text-xl font-bold leading-tight text-ink ring-1 ring-hair transition active:scale-[0.97] active:bg-ai-soft";
+  "flex min-h-16 items-center gap-3 rounded-2xl bg-sand px-3 py-2 text-xl font-bold leading-tight text-ink transition active:scale-[0.97] active:bg-ai-soft";
 
 /** One short line: the app greets by name when it has one. */
 export function greeting(profile: Profile): string {
@@ -34,7 +34,7 @@ function todayRow(places: Place[]): HTMLElement {
           "button",
           {
             type: "button",
-            class: "inline-flex min-h-14 shrink-0 items-center gap-2 whitespace-nowrap rounded-lg bg-card px-3 text-xl font-bold ring-1 ring-hair active:scale-95 active:bg-ai-soft",
+            class: "inline-flex min-h-14 shrink-0 items-center gap-2 whitespace-nowrap rounded-lg bg-card px-3 text-xl font-bold active:scale-95 active:bg-ai-soft",
             onclick: () => {
               pickPlace(place);
               location.hash = "#/scene/transport";
@@ -62,7 +62,7 @@ export function renderHome(root: HTMLElement): void {
       voiceStatus() === "missing" &&
         h(
           "a",
-          { href: "#/settings", class: "mt-3 flex items-center gap-2 rounded-xl bg-warn-soft p-3 text-lg font-bold" },
+          { href: "#/settings", class: "mt-3 flex items-center gap-2 rounded-2xl bg-warn-soft p-3 text-lg font-bold" },
           icon("alert", "h-6 w-6 shrink-0"),
           "這支手機還不會念日文 → 怎麼安裝",
         ),
@@ -70,7 +70,7 @@ export function renderHome(root: HTMLElement): void {
         "a",
         {
           href: "#/help",
-          class: "mt-3 flex min-h-28 items-center gap-4 rounded-xl bg-shu px-5 py-4 text-on-accent transition active:scale-[0.98]",
+          class: "mt-3 flex min-h-28 items-center gap-4 rounded-2xl bg-shu px-5 py-4 text-on-accent transition active:scale-[0.98]",
         },
         icon("help", "h-11 w-11 shrink-0"),
         h(
@@ -83,7 +83,7 @@ export function renderHome(root: HTMLElement): void {
       empty &&
         h(
           "section",
-          { class: "mt-3 rounded-xl bg-ai-soft p-4" },
+          { class: "mt-3 rounded-2xl bg-ai-soft p-4" },
           h("h2", { class: "text-xl font-bold text-ai" }, "第一次使用"),
           h(
             "p",
