@@ -95,7 +95,11 @@ CHROMIUM=/path/to/chrome NODE_PATH=$(npm root -g) node scripts/screenshots.cjs s
 
 ### 部署
 
-推到 `main` 時 GitHub Actions 會自動測試、建置並部署到 GitHub Pages。第一次需要在 repo 的 **Settings → Pages → Source** 選 **GitHub Actions**。
+推到 `main` 時 GitHub Actions 會自動測試、建置並部署到 GitHub Pages。
+
+網址依國家區分：日本版在 `…/japan/`（建置到 `dist/japan/`）。網站根目錄的 `site/index.html` 會帶著 `#` 後面的內容轉到日本版，所以舊的分享連結和主畫面捷徑都還能用；之後有其他國家時，這一頁會改成選擇國家。
+
+第一次需要在 repo 的 **Settings → Pages → Source** 選 **GitHub Actions**。
 
 路由都在網址的 `#` 後面、資源用相對路徑，所以放在任何子路徑都能運作。
 
