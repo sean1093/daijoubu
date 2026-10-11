@@ -82,6 +82,8 @@ describe("phrase groups", () => {
     for (const tool of TOOLS) {
       expect(tool.name.trim(), tool.id).not.toBe("");
       expect(tool.use.trim(), tool.id).not.toBe("");
+      expect(tool.links.length, tool.id).toBeGreaterThan(0);
+      for (const link of tool.links) expect(link.url, tool.id).toMatch(/^https:\/\//);
     }
   });
 
