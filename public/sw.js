@@ -1,5 +1,5 @@
 /**
- * Offline cache for Daijoubu. The whole app is static, so the rules are simple:
+ * Offline cache for 隨身旅伴 TravelBuddy. The whole app is static, so the rules are simple:
  * a page load prefers the network and falls back to the cached shell, and
  * every other same-origin GET is served from the cache first. Bump CACHE to
  * ship a new build; the old cache is dropped on activate.
@@ -7,7 +7,9 @@
  * All URLs are relative to the service worker's own scope, so the site works
  * from a GitHub Pages subpath as well as from the domain root.
  */
-const CACHE = "daijoubu-v1";
+const CACHE = "travel-buddy-v1";
+/** Cache names this app has used, including from before the rename (Daijoubu). */
+const OWN_CACHE = /^(travel-buddy|daijoubu)-/;
 const SHELL = ["./", "./index.html"];
 /** Hashed assets referenced by index.html; see `precache`. */
 const ASSET_HREF = /(?:src|href)="(\.\/assets\/[^"]+)"/g;
@@ -32,7 +34,7 @@ self.addEventListener("activate", (event) => {
       .keys()
       // Cache storage is per origin, and a GitHub Pages account serves every
       // project from one: only ever drop this app's own caches.
-      .then((keys) => Promise.all(keys.filter((key) => key.startsWith("daijoubu-") && key !== CACHE).map((key) => caches.delete(key))))
+      .then((keys) => Promise.all(keys.filter((key) => OWN_CACHE.test(key) && key !== CACHE).map((key) => caches.delete(key))))
       .then(() => self.clients.claim()),
   );
 });

@@ -1,4 +1,4 @@
-# 日本旅遊小幫手 (Daijoubu) — 產品規格（v0.2）
+# 隨身旅伴 TravelBuddy（舊名：日本旅遊小幫手 Daijoubu）— 產品規格（v0.2）
 
 > 給不會日文的台灣旅客，去日本時帶在手機裡的小幫手。
 > 不用學日文、也不用開口：App 替你**念出來**，或把日文**放大給對方看**，10 秒內把事情辦完。
@@ -353,7 +353,7 @@ interface Contact {
 ## 6. 分享連結編碼
 
 ```
-https://<user>.github.io/daijoubu/#/s/1.<payload>
+https://<user>.github.io/travel-buddy/#/s/1.<payload>
                                     │ └─ base64url( deflate-raw( UTF-8( JSON( wire ) ) ) )
                                     └─── 格式版本
 ```
@@ -479,7 +479,7 @@ docs/spec.md
 
 | 項目 | 決定 |
 |---|---|
-| 名稱 | 日本旅遊小幫手 (Daijoubu) |
+| 名稱 | 隨身旅伴 TravelBuddy（2026-10 由「日本旅遊小幫手 (Daijoubu)」改名，為之後加入其他國家做準備；儲存鍵沿用 `daijoubu.`） |
 | 用詞 | 給所有人用的服務，UI 與文件不使用針對特定年齡層的稱呼 |
 | 「請寫在這裡」手寫板 | MVP 不做 |
 | iOS 主畫面 App 與 Safari 不共用儲存 | 先不處理 |
