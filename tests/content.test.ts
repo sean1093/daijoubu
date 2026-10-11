@@ -19,7 +19,7 @@ describe("content", () => {
     expect(validateContent(content)).toEqual([]);
   });
 
-  it("has all eight scenes, each with enough phrases", () => {
+  it("has all nine scenes, each with enough phrases", () => {
     expect(SCENES.map((s) => s.id)).toEqual([
       "transport",
       "hotel",
@@ -28,6 +28,7 @@ describe("content", () => {
       "shopping",
       "drugstore",
       "toilet",
+      "family",
       "emergency",
     ]);
     for (const scene of SCENES) expect(scene.phrases.length).toBeGreaterThanOrEqual(MIN_PHRASES);

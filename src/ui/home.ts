@@ -114,10 +114,14 @@ export function renderHome(root: HTMLElement): void {
         h(
           "div",
           { class: "grid grid-cols-2 gap-3" },
-          SCENES.map((scene) =>
+          SCENES.map((scene, i) =>
             h(
               "a",
-              { href: `#/scene/${scene.id}`, class: TILE },
+              {
+                href: `#/scene/${scene.id}`,
+                // With an odd number of scenes the last tile spans the row, so the grid has no gap.
+                class: i === SCENES.length - 1 && SCENES.length % 2 === 1 ? `${TILE} col-span-2` : TILE,
+              },
               pictogram(scene.icon, scene.id === "emergency" ? "shu" : "ai", "lg"),
               scene.title,
             ),

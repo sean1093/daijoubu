@@ -118,6 +118,8 @@ const ICONS = {
   info: '<circle cx="12" cy="12" r="10"/><path d="M12 16.5v-5"/><path d="M12 7.5h.01"/>',
   user: '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
   swap: '<path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',
+  stroller:
+    '<path d="M2.5 4.5h2.5l2 7"/><path d="M7 11.5h13a6.5 6.5 0 0 0-6.5-6.5v6.5"/><path d="M7 11.5a6.5 4.5 0 0 0 13 0"/><circle cx="8.5" cy="19.5" r="1.75"/><circle cx="17.5" cy="19.5" r="1.75"/><path d="M10 16l-1 2M16 16l1 2"/>',
   checkcircle: '<circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.5 2.5L16 9.5"/>',
 } satisfies Record<string, string>;
 
