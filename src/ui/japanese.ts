@@ -94,9 +94,8 @@ export function playButton(
     "button",
     {
       type: "button",
-      class: `inline-flex items-center justify-center gap-2 rounded-lg font-bold transition active:scale-95 ${PLAY_SIZES[size]} ${
-        slow ? "bg-card text-ai ring-2 ring-ai/40" : "bg-ai-soft text-ai"
-      } ${extra}`,
+      // Normal and slow look the same: the icon and the label tell them apart.
+      class: `inline-flex items-center justify-center gap-2 rounded-lg bg-ai-soft font-bold text-ai transition active:scale-95 ${PLAY_SIZES[size]} ${extra}`,
       "aria-label": `${slow ? "慢速播放" : "播放"}「${all.map(plain).join("")}」`,
     },
     icon(slow ? "slow" : "speaker", "h-6 w-6"),

@@ -44,7 +44,8 @@ function phraseActions(phrase: Phrase, line: Ready): HTMLElement {
         "button",
         {
           type: "button",
-          class: `${ACTION} col-span-2 bg-ok text-on-accent`,
+          // Soft, so 給對方看 stays the one solid action; green still means "answers".
+          class: `${ACTION} col-span-2 bg-ok-soft text-ok ring-1 ring-ok/40`,
           onclick: () => askOther(line, repliesFor(phrase.answers!)),
         },
         icon("hand"),
@@ -90,17 +91,24 @@ export function phraseRow(phrase: Phrase, line: Ready): HTMLElement {
     {
       type: "button",
       class:
-        "flex min-h-16 w-full items-center gap-3 rounded-xl bg-card px-4 py-2.5 text-left ring-1 ring-hair transition active:scale-[0.98] active:bg-ai-soft",
+        // Rows sit in a shared card (rowGroup), so they draw no box of their own; the
+        // focus ring is drawn inside, where the card's rounded corners cannot clip it.
+        "flex min-h-16 w-full items-center gap-3 px-4 py-3 text-left transition-colors active:bg-ai-soft focus-visible:[outline-offset:-3px]",
       onclick: () => openPhrase(phrase, line),
     },
     h(
       "span",
       { class: "min-w-0 flex-1" },
-      h("span", { class: "block text-xl font-bold leading-snug" }, line.zh),
+      h("span", { class: "block text-xl font-semibold leading-snug" }, line.zh),
       h("span", { lang: "ja", class: "mt-0.5 block truncate text-base text-muted" }, plain(line.jp)),
     ),
-    icon("next", "h-7 w-7 shrink-0 text-ai"),
+    icon("next", "h-6 w-6 shrink-0 text-ai"),
   );
+}
+
+/** Rows of one group in one card, split by hairlines: a list, not a stack of boxes. */
+export function rowGroup(rows: HTMLElement[]): HTMLElement {
+  return h("div", { class: "divide-y divide-hair overflow-hidden rounded-xl bg-card ring-1 ring-hair" }, rows);
 }
 
 /** What staff say: the Chinese first and largest, the Japanese to check against, then the answers. */
@@ -119,7 +127,7 @@ function heardCard(heard: Heard): HTMLElement {
           "button",
           {
             type: "button",
-            class: "min-h-14 rounded-xl bg-ok-soft px-2 py-2 text-lg font-bold leading-tight text-ok ring-2 ring-ok/40 active:scale-95",
+            class: "min-h-14 rounded-xl bg-ok-soft px-2 py-2 text-lg font-bold leading-tight text-ok ring-1 ring-ok/40 active:scale-95",
             onclick: () => showToOther([{ jp: reply.jp, zh: reply.zh }], "我的回答", true),
           },
           reply.zh,
@@ -252,7 +260,7 @@ function tabs(scene: Scene, heard: boolean): HTMLElement {
 
 /** The phrase rows, under the scene's headings when it has them. */
 function phraseList(scene: Scene, line: (phrase: Phrase) => Ready): HTMLElement[] {
-  const rows = (phrases: Phrase[]) => h("div", { class: "space-y-2" }, phrases.map((p) => phraseRow(p, line(p))));
+  const rows = (phrases: Phrase[]) => rowGroup(phrases.map((p) => phraseRow(p, line(p))));
   if (!scene.groups) return [rows(scene.phrases)];
   return scene.groups.map((group) =>
     h(

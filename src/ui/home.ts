@@ -6,7 +6,7 @@ import { heading } from "./layout";
 import { pickPlace } from "./scene";
 
 const TILE =
-  "flex min-h-28 flex-col items-center justify-center gap-2 rounded-xl bg-card px-2 py-3 text-center text-xl font-bold text-ink ring-1 ring-hair transition active:scale-[0.97] active:bg-ai-soft";
+  "flex min-h-24 flex-col items-center justify-center gap-2 rounded-xl bg-card px-2 py-3 text-center text-xl font-bold text-ink ring-1 ring-hair transition active:scale-[0.97] active:bg-ai-soft";
 const SHORTCUT =
   "flex min-h-16 items-center gap-3 rounded-xl bg-card px-3 py-2 text-xl font-bold leading-tight text-ink ring-1 ring-hair transition active:scale-[0.97] active:bg-ai-soft";
 
@@ -122,7 +122,7 @@ export function renderHome(root: HTMLElement): void {
                 // With an odd number of scenes the last tile spans the row, so the grid has no gap.
                 class: i === SCENES.length - 1 && SCENES.length % 2 === 1 ? `${TILE} col-span-2` : TILE,
               },
-              pictogram(scene.icon, scene.id === "emergency" ? "shu" : "ai", "lg"),
+              pictogram(scene.icon, scene.id === "emergency" ? "shu" : "ai"),
               scene.title,
             ),
           ),
