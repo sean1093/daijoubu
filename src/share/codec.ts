@@ -29,7 +29,7 @@ const KEYS: KeyMap = {
   passportName: "p",
   birthYear: "y",
   hotels: ["h", { name: "n", kana: "k", address: "a", phone: "t", from: "f", to: "o" }],
-  places: ["d", { kind: "s", name: "n", kana: "k", zh: "z", date: "d" }],
+  places: ["d", { kind: "s", name: "n", kana: "k", zh: "z", date: "d", note: "e" }],
   contacts: ["c", CONTACT],
   localContact: ["l", CONTACT],
   health: [
