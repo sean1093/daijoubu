@@ -139,7 +139,7 @@ export function overlayBar(close: () => void, hint: string): HTMLElement {
       "button",
       {
         type: "button",
-        class: "inline-flex min-h-14 shrink-0 items-center gap-1 rounded-lg bg-paper px-4 text-xl font-bold text-ink ring-1 ring-hair active:scale-95",
+        class: "inline-flex min-h-14 shrink-0 items-center gap-1 rounded-2xl bg-sand px-4 text-xl font-bold text-ink active:scale-95",
         onclick: close,
         "data-autofocus": "",
       },
@@ -223,7 +223,7 @@ export function askOther(question: { jp: Jp; zh: string }, replies: Reply[]): vo
             type: "button",
             lang: "ja",
             class:
-              "min-h-16 rounded-xl bg-card px-3 py-3 text-2xl font-bold text-ink ring-1 ring-ai/40 transition active:scale-95 active:bg-ai-soft",
+              "min-h-16 rounded-2xl bg-card px-3 py-3 text-2xl font-bold text-ink ring-1 ring-ai/40 transition active:scale-95 active:bg-ai-soft",
             onclick: () => answered(reply),
           },
           plain(reply.jp),
@@ -236,7 +236,7 @@ export function askOther(question: { jp: Jp; zh: string }, replies: Reply[]): vo
           { class: "min-h-0 flex-1 overflow-y-auto px-5 pb-safe pt-4" },
           h("p", { lang: "ja", class: "text-center font-bold leading-snug", style: armsLength(plain(question.jp)) }, plain(question.jp)),
           h("p", { class: "mt-1 text-center text-lg text-ink/80" }, `（${question.zh}）`),
-          h("p", { lang: "ja", class: "mt-4 rounded-xl bg-ai-soft px-3 py-2 text-center text-lg font-bold text-ai" }, plain(TAP_PLEASE)),
+          h("p", { lang: "ja", class: "mt-4 rounded-2xl bg-ai-soft px-3 py-2 text-center text-lg font-bold text-ai" }, plain(TAP_PLEASE)),
           h("div", { class: `mt-4 grid gap-3 ${replies.length > 4 ? "grid-cols-2" : "grid-cols-1"}` }, options),
         ),
       );

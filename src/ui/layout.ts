@@ -33,8 +33,8 @@ export function page(root: HTMLElement, title: string, body: Child[], options: {
 export function heading(text: string, tone: "ai" | "shu" = "ai"): HTMLElement {
   return h(
     "h2",
-    { class: "mb-2 flex items-center gap-2 text-lg font-bold text-ink" },
-    h("span", { class: `h-5 w-1.5 rounded-full ${tone === "shu" ? "bg-shu" : "bg-ai"}`, "aria-hidden": "true" }),
+    // A quiet label, like the small print above a list in a printed guide.
+    { class: `mb-2 px-1 text-lg font-medium tracking-widest ${tone === "shu" ? "text-shu" : "text-muted"}` },
     text,
   );
 }

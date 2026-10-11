@@ -20,7 +20,7 @@ export function pickPlace(place: Place): void {
 }
 
 const ACTION =
-  "inline-flex min-h-16 items-center justify-center gap-2 whitespace-nowrap rounded-xl px-2 text-xl font-bold leading-tight transition active:scale-95";
+  "inline-flex min-h-16 items-center justify-center gap-2 whitespace-nowrap rounded-2xl px-2 text-xl font-bold leading-tight transition active:scale-95";
 
 /** The buttons that do something with a phrase: hear it, show it, let the other person answer. */
 function phraseActions(phrase: Phrase, line: Ready): HTMLElement {
@@ -76,7 +76,7 @@ export function openPhrase(phrase: Phrase, line: Ready): void {
         "div",
         { class: "min-h-0 flex-1 overflow-y-auto px-5 pb-safe pt-4" },
         h("h2", { class: "text-3xl font-bold leading-snug" }, line.zh),
-        h("div", { class: "mt-3 rounded-xl bg-card p-4 ring-1 ring-hair" }, jpText(line.jp, "lg")),
+        h("div", { class: "mt-3 rounded-2xl bg-card p-4" }, jpText(line.jp, "lg")),
         phrase.tip && tip(phrase.tip),
         h("div", { class: "mt-5" }, phraseActions(phrase, line)),
       ),
@@ -108,14 +108,14 @@ export function phraseRow(phrase: Phrase, line: Ready): HTMLElement {
 
 /** Rows of one group in one card, split by hairlines: a list, not a stack of boxes. */
 export function rowGroup(rows: HTMLElement[]): HTMLElement {
-  return h("div", { class: "divide-y divide-hair overflow-hidden rounded-xl bg-card ring-1 ring-hair" }, rows);
+  return h("div", { class: "divide-y divide-dashed divide-hair overflow-hidden rounded-2xl bg-card" }, rows);
 }
 
 /** What staff say: the Chinese first and largest, the Japanese to check against, then the answers. */
 function heardCard(heard: Heard): HTMLElement {
   return h(
     "article",
-    { class: "rounded-xl bg-card p-3 ring-1 ring-hair" },
+    { class: "rounded-2xl bg-card p-3" },
     h("h3", { class: "text-2xl font-bold leading-snug" }, heard.zh),
     h("p", { lang: "ja", class: "mt-1 text-lg text-muted" }, plain(heard.jp)),
     h("div", { class: "mt-1 flex gap-2" }, playButton(heard.jp, "normal", "sm"), playButton(heard.jp, "slow", "sm")),
@@ -127,7 +127,7 @@ function heardCard(heard: Heard): HTMLElement {
           "button",
           {
             type: "button",
-            class: "min-h-14 rounded-xl bg-ok-soft px-2 py-2 text-lg font-bold leading-tight text-ok ring-1 ring-ok/40 active:scale-95",
+            class: "min-h-14 rounded-2xl bg-ok-soft px-2 py-2 text-lg font-bold leading-tight text-ok ring-1 ring-ok/40 active:scale-95",
             onclick: () => showToOther([{ jp: reply.jp, zh: reply.zh }], "我的回答", true),
           },
           reply.zh,
@@ -152,7 +152,7 @@ export function openRescue(): void {
             "button",
             {
               type: "button",
-              class: "block min-h-16 w-full rounded-xl bg-card px-4 py-2 text-left ring-1 ring-hair active:scale-[0.98] active:bg-warn-soft",
+              class: "block min-h-16 w-full rounded-2xl bg-card px-4 py-2 text-left active:scale-[0.98] active:bg-warn-soft",
               onclick: () => showToOther([{ jp: phrase.jp, zh: phrase.zh }], phrase.zh, true),
             },
             h("span", { class: "block text-xl font-bold leading-snug" }, phrase.zh),
@@ -172,7 +172,7 @@ function rescueDock(): HTMLElement[] {
       "button",
       {
         type: "button",
-        class: "flex min-h-14 w-full items-center justify-center gap-2 rounded-xl bg-warn-soft text-xl font-bold text-ink ring-1 ring-hair active:scale-[0.98]",
+        class: "flex min-h-14 w-full items-center justify-center gap-2 rounded-2xl bg-warn-soft text-xl font-bold text-ink active:scale-[0.98]",
         onclick: openRescue,
       },
       icon("lifebuoy", "h-6 w-6"),
@@ -187,7 +187,7 @@ function rescueDock(): HTMLElement[] {
 function elevatorNote(place: Place): HTMLElement {
   return h(
     "div",
-    { class: "mt-3 rounded-xl bg-card p-3 ring-1 ring-hair" },
+    { class: "mt-3 rounded-2xl bg-card p-3" },
     h("p", { class: "flex items-center gap-2 text-lg font-bold" }, pictogram("elevator", "exit", "sm"), `${place.zh || place.name}・電梯筆記`),
     h("p", { class: "mt-1 whitespace-pre-line break-words text-lg" }, place.note),
     h(
@@ -211,7 +211,7 @@ function elevatorNote(place: Place): HTMLElement {
 function placePicker(places: Place[], picked: Place | null, pick: (place: Place) => void): HTMLElement {
   return h(
     "div",
-    { class: "mt-3 rounded-xl bg-ai-soft p-3" },
+    { class: "mt-3 rounded-2xl bg-ai-soft p-3" },
     h("p", { class: "text-lg font-bold" }, "要去哪裡？點一下換進句子"),
     h(
       "div",
@@ -246,13 +246,13 @@ function tabs(scene: Scene, heard: boolean): HTMLElement {
       {
         href,
         "aria-current": active ? "page" : undefined,
-        class: `flex min-h-14 items-center justify-center rounded-xl text-xl font-bold ${active ? "bg-ai text-on-accent" : "text-ai"}`,
+        class: `flex min-h-14 items-center justify-center rounded-2xl text-xl font-bold ${active ? "bg-ai text-on-accent" : "text-ai"}`,
       },
       label,
     );
   return h(
     "nav",
-    { class: "mt-2 grid grid-cols-2 gap-1 rounded-xl bg-card p-1 ring-1 ring-hair", "aria-label": "分頁" },
+    { class: "mt-2 grid grid-cols-2 gap-1 rounded-2xl bg-card p-1", "aria-label": "分頁" },
     tab(`#/scene/${scene.id}`, "我要說", !heard),
     tab(`#/scene/${scene.id}/heard`, "對方說", heard),
   );
@@ -310,7 +310,7 @@ export function renderScene(root: HTMLElement, [id, view]: string[]): void {
     !heard && usesPlace && places.length === 0
       ? h(
           "a",
-          { href: "#/setup", class: "mt-3 block rounded-xl bg-ai-soft p-3 text-lg" },
+          { href: "#/setup", class: "mt-3 block rounded-2xl bg-ai-soft p-3 text-lg" },
           "先在「設定資料」填好要去的車站，句子裡的〇〇就會自動換成站名。",
         )
       : pickerSlot,

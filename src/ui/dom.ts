@@ -132,32 +132,35 @@ export function icon(name: IconName, cls = "h-6 w-6"): SVGSVGElement {
   return template.content.firstElementChild as SVGSVGElement;
 }
 
-const PLATE_TONES = {
-  ai: "bg-ai text-on-accent",
-  shu: "bg-shu text-on-accent",
-  exit: "bg-exit text-exit-on",
+const PICTOGRAM_TONES = {
+  ai: "text-ai",
+  shu: "text-shu",
+  // Exits and elevators keep the station's yellow plate: there the colour is the sign.
+  exit: "rounded-lg bg-exit text-exit-on",
 };
 
 /**
- * A pictogram on a solid square plate, the way station signs show them.
- * Decorative: the label next to it carries the meaning.
+ * A fine-line pictogram in its tone's colour, without a plate (the washi
+ * look, docs/design.md). Decorative: the label next to it carries the meaning.
  */
-export function pictogram(name: IconName, tone: keyof typeof PLATE_TONES = "ai", size: "sm" | "md" | "lg" = "md"): HTMLElement {
-  const box = { sm: "h-9 w-9 rounded-md", md: "h-12 w-12 rounded-lg", lg: "h-14 w-14 rounded-lg" }[size];
-  const glyph = { sm: "h-6 w-6", md: "h-8 w-8", lg: "h-9 w-9" }[size];
-  const plate = h("span", { class: `inline-flex shrink-0 items-center justify-center ${box} ${PLATE_TONES[tone]}`, "aria-hidden": "true" });
-  plate.append(icon(name, glyph));
-  return plate;
+export function pictogram(name: IconName, tone: keyof typeof PICTOGRAM_TONES = "ai", size: "sm" | "md" | "lg" = "md"): HTMLElement {
+  const box = { sm: "h-9 w-9", md: "h-10 w-10", lg: "h-12 w-12" }[size];
+  const glyph = { sm: "h-7 w-7", md: "h-8 w-8", lg: "h-9 w-9" }[size];
+  const mark = h("span", { class: `inline-flex shrink-0 items-center justify-center ${box} ${PICTOGRAM_TONES[tone]}`, "aria-hidden": "true" });
+  const svg = icon(name, glyph);
+  svg.setAttribute("stroke-width", tone === "exit" ? "2" : "1.6");
+  mark.append(svg);
+  return mark;
 }
 
 const BUTTON_BASE =
-  "flex w-full min-h-16 items-center justify-center gap-3 rounded-xl px-5 py-3 text-xl font-bold transition active:scale-[0.98] disabled:opacity-40";
+  "flex w-full min-h-16 items-center justify-center gap-3 rounded-2xl px-5 py-3 text-xl font-bold transition active:scale-[0.98] disabled:opacity-40";
 
 /** Shared button looks; every one is at least 4rem tall. */
 export const BUTTON = {
   primary: `${BUTTON_BASE} bg-ai text-on-accent`,
   danger: `${BUTTON_BASE} bg-shu text-on-accent`,
-  secondary: `${BUTTON_BASE} bg-card text-ink ring-1 ring-hair`,
+  secondary: `${BUTTON_BASE} bg-sand text-ink`,
 };
 
 /** Small caption above a section. */

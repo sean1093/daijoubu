@@ -66,7 +66,7 @@ export function renderPrint(root: HTMLElement): void {
         isEmpty(profile) &&
           h(
             "a",
-            { href: "#/setup", class: "block rounded-xl bg-ai-soft p-4 text-lg" },
+            { href: "#/setup", class: "block rounded-2xl bg-ai-soft p-4 text-lg" },
             "還沒有填資料，卡片上不會有飯店、電話和健康資料。按這裡先填好。",
           ),
         h("button", { type: "button", class: BUTTON.primary, onclick: () => window.print() }, icon("print"), "列印"),

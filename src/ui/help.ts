@@ -13,7 +13,7 @@ import { showToOther } from "./overlay";
 export function cardBlock(block: CardBlock, size = "text-3xl"): HTMLElement {
   return h(
     "div",
-    { class: "rounded-xl bg-card p-4 ring-1 ring-hair" },
+    { class: "rounded-2xl bg-card p-4" },
     h("p", { lang: "ja", class: `${size} font-bold leading-snug` }, plain(block.jp)),
     block.extra.length > 0 &&
       h(
@@ -35,7 +35,7 @@ export function callButton(label: string, sub: string, tel: string, numberOnly =
     {
       href: `tel:${tel}`,
       "aria-label": `${label}，${sub}`,
-      class: "flex min-h-16 items-center gap-3 rounded-xl bg-card px-4 py-3 text-ink ring-1 ring-hair transition active:scale-[0.98]",
+      class: "flex min-h-16 items-center gap-3 rounded-2xl bg-card px-4 py-3 text-ink transition active:scale-[0.98]",
     },
     icon("phone", "h-7 w-7 shrink-0 text-ai"),
     h(
@@ -92,7 +92,7 @@ export function renderHelp(root: HTMLElement): void {
       blocks.length <= 2 &&
         h(
           "a",
-          { href: "#/setup", class: "block rounded-xl bg-ai-soft p-4 text-lg" },
+          { href: "#/setup", class: "block rounded-2xl bg-ai-soft p-4 text-lg" },
           "還沒有填飯店和家人電話。按這裡填好，卡片就會自動帶入地址和電話。",
         ),
       h(
@@ -108,7 +108,7 @@ export function renderHelp(root: HTMLElement): void {
           "button",
           {
             type: "button",
-            class: "flex min-h-16 w-full items-center gap-3 rounded-xl bg-card px-4 text-left text-xl font-bold ring-1 ring-hair active:scale-[0.98]",
+            class: "flex min-h-16 w-full items-center gap-3 rounded-2xl bg-card px-4 text-left text-xl font-bold active:scale-[0.98]",
             onclick: () =>
               showToOther(
                 [
@@ -131,7 +131,7 @@ export function renderHelp(root: HTMLElement): void {
         ),
         h(
           "details",
-          { class: "rounded-xl bg-card p-4 ring-1 ring-hair" },
+          { class: "rounded-2xl bg-card p-4" },
           h("summary", { class: "cursor-pointer text-xl font-bold text-ai" }, "更多電話（各地辦事處）"),
           h(
             "div",

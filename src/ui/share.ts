@@ -50,7 +50,7 @@ export function renderShare(root: HTMLElement): void {
   }
 
   const linkBox = h("textarea", {
-    class: "mt-3 block h-28 w-full resize-none rounded-xl bg-card p-3 font-mono text-sm text-ink ring-1 ring-hair",
+    class: "mt-3 block h-28 w-full resize-none rounded-2xl bg-card p-3 font-mono text-sm text-ink ring-1 ring-muted/60",
     readonly: true,
     "aria-label": "分享連結",
     onfocus: (event: Event) => (event.target as HTMLTextAreaElement).select(),
@@ -75,7 +75,7 @@ export function renderShare(root: HTMLElement): void {
     [
       h(
         "div",
-        { class: "mt-2 flex gap-3 rounded-xl bg-shu-soft p-4 text-lg leading-relaxed text-ink", role: "note" },
+        { class: "mt-2 flex gap-3 rounded-2xl bg-shu-soft p-4 text-lg leading-relaxed text-ink", role: "note" },
         h("span", { class: "shrink-0 text-shu" }, icon("alert", "h-7 w-7")),
         h(
           "p",
@@ -96,7 +96,7 @@ export function renderShare(root: HTMLElement): void {
       section(
         "或 2. 用相機掃 QR code",
         h("p", { class: "mb-3 text-lg text-muted" }, "旅客用手機相機對準這個 QR code，點開出現的連結就好。"),
-        h("div", { class: "mx-auto max-w-sm rounded-xl bg-white p-2 ring-1 ring-hair" }, qrSvg(url)),
+        h("div", { class: "mx-auto max-w-sm rounded-2xl bg-white p-2 ring-1 ring-hair" }, qrSvg(url)),
         url.length > DENSE_QR &&
           h("p", { class: "mt-2 text-lg text-muted" }, "資料比較多，QR code 比較密；掃不到的話請改用連結。"),
       ),

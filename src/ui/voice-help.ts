@@ -4,7 +4,7 @@ import { h } from "./dom";
 export function voiceHelp(open: boolean): HTMLElement {
   const details = h(
     "details",
-    { class: "rounded-xl bg-card p-4 ring-1 ring-hair" },
+    { class: "rounded-2xl bg-card p-4" },
     h("summary", { class: "cursor-pointer text-xl font-bold text-ai" }, "聽不到聲音？"),
     h(
       "ul",

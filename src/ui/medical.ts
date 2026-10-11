@@ -61,7 +61,7 @@ function symptomPicker(): HTMLElement {
             type: "button",
             "aria-pressed": "false",
             class:
-              "group flex min-h-16 items-center gap-3 rounded-lg bg-card px-3 py-2 text-left text-xl font-bold ring-1 ring-hair active:scale-95 aria-pressed:bg-shu-soft aria-pressed:ring-2 aria-pressed:ring-shu",
+              "group flex min-h-16 items-center gap-3 rounded-lg bg-card px-3 py-2 text-left text-xl font-bold active:scale-95 aria-pressed:bg-shu-soft aria-pressed:ring-2 aria-pressed:ring-shu",
           },
           // A check box that fills in, like ticking a form at a clinic's reception.
           h(
@@ -98,7 +98,7 @@ export function renderMedical(root: HTMLElement): void {
     isEmpty(profile) &&
       h(
         "a",
-        { href: "#/setup", class: "mt-2 block rounded-xl bg-ai-soft p-4 text-lg" },
+        { href: "#/setup", class: "mt-2 block rounded-2xl bg-ai-soft p-4 text-lg" },
         "還沒有填健康資料。按這裡填慢性病、常吃的藥和過敏，醫療卡和過敏卡就會自動產生。症狀卡現在就能用。",
       ),
     section("哪裡不舒服？點選症狀", symptomPicker()),

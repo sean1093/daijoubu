@@ -8,18 +8,19 @@
  * text/background pair against WCAG AA (4.5:1), so keep the format.
  */
 :root {
-  --paper: 251 248 243;
-  --card: 255 255 255;
-  --ink: 31 36 48;
-  --muted: 96 91 84;
-  --hair: 214 205 190;
-  --ai: 47 75 143;
-  --ai-soft: 233 238 248;
-  --shu: 180 40 30;
-  --shu-soft: 251 233 230;
-  --ok: 40 105 60;
-  --ok-soft: 229 243 233;
-  --warn-soft: 253 243 210;
+  --paper: 244 239 230;
+  --card: 251 248 242;
+  --sand: 235 228 215;
+  --ink: 43 42 39;
+  --muted: 107 99 87;
+  --hair: 222 212 196;
+  --ai: 61 79 122;
+  --ai-soft: 230 233 241;
+  --shu: 168 64 47;
+  --shu-soft: 247 229 222;
+  --ok: 56 100 66;
+  --ok-soft: 228 238 225;
+  --warn-soft: 245 234 205;
   /* Exit-sign yellow, as on station signage: black on yellow in both themes. */
   --exit: 247 200 30;
   --on-exit: 24 24 24;
@@ -29,21 +30,22 @@
 }
 
 :root[data-theme="dark"] {
-  --paper: 22 23 27;
-  --card: 33 35 41;
-  --ink: 238 235 230;
-  --muted: 176 171 163;
-  --hair: 66 68 76;
-  --ai: 150 175 245;
-  --ai-soft: 38 47 74;
-  --shu: 245 140 122;
-  --shu-soft: 70 36 34;
-  --ok: 120 205 145;
-  --ok-soft: 30 54 40;
-  --warn-soft: 66 54 20;
+  --paper: 28 26 23;
+  --card: 40 37 33;
+  --sand: 50 46 41;
+  --ink: 236 230 220;
+  --muted: 176 168 155;
+  --hair: 66 61 54;
+  --ai: 165 182 228;
+  --ai-soft: 44 49 66;
+  --shu: 232 140 118;
+  --shu-soft: 72 40 34;
+  --ok: 130 200 145;
+  --ok-soft: 34 52 38;
+  --warn-soft: 68 56 28;
   --exit: 240 195 40;
   --on-exit: 24 24 24;
-  --on-accent: 17 18 22;
+  --on-accent: 24 22 20;
   color-scheme: dark;
 }
 
