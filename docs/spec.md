@@ -353,7 +353,7 @@ interface Contact {
 ## 6. 分享連結編碼
 
 ```
-https://<user>.github.io/travel-buddy/#/s/1.<payload>
+https://<user>.github.io/travel-buddy/japan/#/s/1.<payload>
                                     │ └─ base64url( deflate-raw( UTF-8( JSON( wire ) ) ) )
                                     └─── 格式版本
 ```
