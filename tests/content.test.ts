@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { EMERGENCY_NUMBERS } from "../src/content/emergency";
+import { GUIDES } from "../src/content/guides";
 import { CONDITIONS, DIETS, DRUG_ALLERGIES, FOOD_ALLERGIES, SYMPTOMS, SYMPTOMS_INTRO } from "../src/content/medical";
 import { RESCUE } from "../src/content/rescue";
 import { SCENES } from "../src/content/scenes";
@@ -11,6 +12,7 @@ const content = {
   rescue: RESCUE,
   presets: { CONDITIONS, DRUG_ALLERGIES, FOOD_ALLERGIES, DIETS, SYMPTOMS },
   emergency: EMERGENCY_NUMBERS,
+  guides: GUIDES,
   extra: { ...LINES, SYMPTOMS_INTRO },
 };
 
@@ -71,6 +73,13 @@ describe("phrase groups", () => {
   it("splits the emergency scene into body, lost, separated and disaster", () => {
     const emergency = SCENES.find((s) => s.id === "emergency")!;
     expect(emergency.groups?.map((g) => g.id)).toEqual(["body", "lost", "separated", "disaster"]);
+  });
+
+  it("refuses a guide without a source or a verified date", () => {
+    const guide = GUIDES[0]!;
+    const problems = validateContent({ ...content, guides: [{ ...guide, sources: ["http://example.com"], verified: "soon" }] }).join("\n");
+    expect(problems).toContain("needs https sources");
+    expect(problems).toContain("needs a verified date");
   });
 
   it("catches a phrase outside the scene's groups", () => {

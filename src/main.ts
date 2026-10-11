@@ -2,6 +2,7 @@ import "./style.css";
 import { onVoicesChanged } from "./lib/speech";
 import { applySettings } from "./state";
 import { focusHeading } from "./ui/dom";
+import { renderGuide } from "./ui/guide";
 import { renderHelp } from "./ui/help";
 import { renderHome } from "./ui/home";
 import { renderHotel } from "./ui/hotel";
@@ -23,6 +24,7 @@ type Page = (root: HTMLElement, args: string[]) => void;
  */
 const PAGES: Record<string, Page> = {
   "": renderHome,
+  guide: renderGuide,
   help: renderHelp,
   hotel: renderHotel,
   medical: renderMedical,

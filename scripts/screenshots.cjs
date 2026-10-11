@@ -54,6 +54,7 @@ const SHOTS = [
   { name: "17-dark-detail", hash: "#/scene/transport", theme: "dark", act: (p) => openRow(p, "這班車有停新宿嗎") },
   { name: "18-scene-family", hash: "#/scene/family" },
   { name: "19-home-bottom", hash: "#/", act: (p) => p.evaluate(() => window.scrollTo(0, document.body.scrollHeight)) },
+  { name: "20-guide-tax-refund", hash: "#/guide/tax-refund" },
 ];
 
 (async () => {
