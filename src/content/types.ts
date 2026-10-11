@@ -51,7 +51,16 @@ export interface Heard {
   replies: Reply[];
 }
 
-export type SceneId = "transport" | "hotel" | "restaurant" | "konbini" | "shopping" | "drugstore" | "toilet" | "emergency";
+export type SceneId =
+  | "transport"
+  | "hotel"
+  | "restaurant"
+  | "konbini"
+  | "shopping"
+  | "drugstore"
+  | "toilet"
+  | "family"
+  | "emergency";
 
 export interface Scene {
   id: SceneId;

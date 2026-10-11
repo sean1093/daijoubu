@@ -117,7 +117,8 @@ export function renderHome(root: HTMLElement): void {
           SCENES.map((scene) =>
             h(
               "a",
-              { href: `#/scene/${scene.id}`, class: TILE },
+              // Nine scenes: emergency takes the last row on its own, so the grid has no gap.
+              { href: `#/scene/${scene.id}`, class: `${TILE} ${scene.id === "emergency" ? "col-span-2" : ""}` },
               pictogram(scene.icon, scene.id === "emergency" ? "shu" : "ai", "lg"),
               scene.title,
             ),
