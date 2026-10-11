@@ -1,7 +1,7 @@
 import { isEmpty, loadProfile } from "../profile/profile";
 import { shareUrl } from "../share/codec";
 import { qrSvg } from "../share/qr";
-import { announce, BUTTON, h, icon } from "./dom";
+import { BUTTON, h, icon } from "./dom";
 import { page, section } from "./layout";
 
 /** Above this, the QR code gets dense enough that some phones struggle to read it off a screen. */
@@ -34,10 +34,11 @@ export function renderShare(root: HTMLElement): void {
       // Clipboard needs a secure context and permission; selecting lets the person copy by hand.
       // The text is folded away by default: unfold it so it can be selected by hand.
       linkDetails.open = true;
+      linkBox.focus();
+      linkBox.scrollIntoView({ block: "center" });
       linkBox.select();
       status.textContent = "請長按下面的連結，選「拷貝」。";
     }
-    announce(status.textContent ?? "");
   }
 
   async function share(): Promise<void> {
@@ -58,7 +59,13 @@ export function renderShare(root: HTMLElement): void {
   const linkDetails = h(
     "details",
     { class: "mt-3" },
-    h("summary", { class: "inline-flex min-h-12 cursor-pointer items-center text-lg font-bold text-ai" }, "顯示連結文字"),
+    // inline-flex drops the native disclosure triangle, so draw one that turns when open.
+    h(
+      "summary",
+      { class: "group inline-flex min-h-12 cursor-pointer list-none items-center gap-1 text-lg font-bold text-ai [&::-webkit-details-marker]:hidden" },
+      icon("next", "h-5 w-5 transition-transform group-open:rotate-90"),
+      "顯示連結文字",
+    ),
     linkBox,
   );
 

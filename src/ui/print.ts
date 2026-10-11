@@ -1,6 +1,6 @@
 import { EMERGENCY_NUMBERS } from "../content/emergency";
 import { plain } from "../lib/jp";
-import { allergyCard, type CardBlock, helpCard, hotelCard, medicalCard } from "../profile/cards";
+import { allergyCard, type CardBlock, helpCard, hotelCard, lineText, medicalCard } from "../profile/cards";
 import { isEmpty, loadProfile } from "../profile/profile";
 import { BUTTON, h, icon } from "./dom";
 import { page } from "./layout";
@@ -27,7 +27,7 @@ function walletCard(title: string, blocks: CardBlock[], options: { big?: boolean
         "div",
         { class: "wallet-block" },
         h("p", { lang: "ja", class: "font-bold" }, plain(block.jp)),
-        block.extra.map((line) => h("p", { lang: "ja" }, line)),
+        block.extra.map((line) => h("p", { lang: "ja" }, lineText(line))),
       ),
     ),
   );

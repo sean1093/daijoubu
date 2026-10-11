@@ -6,22 +6,8 @@ import { loadProfile } from "../profile/profile";
 import { fill, h, icon, type IconName } from "./dom";
 import { dock, heading } from "./layout";
 import { playButton } from "./japanese";
+import { lineNode } from "./lines";
 import { showToOther } from "./overlay";
-
-/**
- * A name, address or number line. A phone number may wrap after "TEL" but
- * never inside the number, and shrinks on narrow screens rather than break.
- */
-function extraLine(line: string): HTMLElement {
-  const phone = /^TEL (.+)$/.exec(line);
-  if (!phone) return h("p", { class: "break-words" }, line);
-  return h(
-    "p",
-    null,
-    "TEL ",
-    h("span", { class: "inline-block whitespace-nowrap text-[min(1em,7.5vw)]" }, phone[1]),
-  );
-}
 
 /** One block of the help card: Japanese large for the helper, Chinese small for the traveller. */
 export function cardBlock(block: CardBlock, size = "text-3xl"): HTMLElement {
@@ -33,22 +19,31 @@ export function cardBlock(block: CardBlock, size = "text-3xl"): HTMLElement {
       h(
         "div",
         { lang: "ja", class: "mt-3 space-y-1 border-l-4 border-shu pl-3 text-2xl font-bold leading-snug" },
-        block.extra.map(extraLine),
+        block.extra.map((line) => lineNode(line)),
       ),
     h("p", { class: "mt-2 text-lg text-muted" }, block.zh),
   );
 }
 
-/** A big `tel:` button. */
-function callButton(label: string, sub: string, tel: string): HTMLElement {
+/**
+ * A big `tel:` button: what it calls on top, details below. When `sub` is
+ * just the number, `numberOnly` keeps it on one line.
+ */
+export function callButton(label: string, sub: string, tel: string, numberOnly = false): HTMLElement {
   return h(
     "a",
     {
       href: `tel:${tel}`,
+      "aria-label": `${label}，${sub}`,
       class: "flex min-h-16 items-center gap-3 rounded-xl bg-card px-4 py-3 text-ink ring-1 ring-hair transition active:scale-[0.98]",
     },
-    icon("phone", "h-7 w-7 shrink-0"),
-    h("span", { class: "min-w-0" }, h("span", { class: "block text-2xl font-bold" }, label), h("span", { class: "block text-base" }, sub)),
+    icon("phone", "h-7 w-7 shrink-0 text-ai"),
+    h(
+      "span",
+      { class: "min-w-0" },
+      h("span", { class: "block text-2xl font-bold" }, label),
+      h("span", { class: `block text-base ${numberOnly ? "whitespace-nowrap" : ""}` }, sub),
+    ),
   );
 }
 
