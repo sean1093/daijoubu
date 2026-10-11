@@ -39,6 +39,13 @@ export default {
     { id: "konbini-pay-cash", zh: "我付現金。", jp: "{現金|げんきん} で お{願|ねが}い します。" },
     { id: "konbini-receipt", zh: "請給我收據。", jp: "レシート を ください。" },
     {
+      id: "konbini-throw-away",
+      zh: "這個垃圾可以丟在這裡嗎？",
+      jp: "この ゴミ を ここ に {捨|す}てて も いい です か。",
+      tip: "日本街上垃圾桶很少。便利商店的垃圾桶是給店裡買的東西用的，先問一聲比較禮貌。",
+      answers: "yesNo",
+    },
+    {
       id: "konbini-charger",
       zh: "有賣手機充電器嗎？",
       jp: "スマホ の {充電器|じゅうでんき} は あります か。",

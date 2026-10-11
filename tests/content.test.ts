@@ -67,6 +67,11 @@ describe("phrase groups", () => {
     for (const p of transport.phrases) expect(ids).toContain(p.group);
   });
 
+  it("splits the emergency scene into body, lost, separated and disaster", () => {
+    const emergency = SCENES.find((s) => s.id === "emergency")!;
+    expect(emergency.groups?.map((g) => g.id)).toEqual(["body", "lost", "separated", "disaster"]);
+  });
+
   it("catches a phrase outside the scene's groups", () => {
     const transport = SCENES[0]!;
     const broken = {

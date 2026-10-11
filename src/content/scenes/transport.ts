@@ -42,6 +42,14 @@ export default {
       answers: "yesNo",
     },
     {
+      id: "transport-every-stop",
+      group: "train",
+      zh: "這班車每一站都停嗎？",
+      jp: "この {電車|でんしゃ} は {各駅|かくえき} に {止|と}まります か。",
+      tip: "快速、急行、特急不是每站都停，這是最常搭錯車的原因。",
+      answers: "yesNo",
+    },
+    {
       id: "transport-which-platform",
       group: "train",
       zh: "去〇〇的車在幾號月台？",
@@ -173,6 +181,21 @@ export default {
       fallbackZh: "（計程車）請載我到這個地址。（同時給司機看地址）",
     },
     {
+      id: "transport-taxi-card",
+      group: "bus-taxi",
+      zh: "（計程車）可以刷卡嗎？",
+      jp: "カード で {払|はら}えます か。",
+      tip: "上車前先問。小型車行和鄉下的計程車常常只收現金。",
+      answers: "yesNo",
+    },
+    {
+      id: "transport-taxi-receipt",
+      group: "bus-taxi",
+      zh: "請給我收據。",
+      jp: "{領収書|りょうしゅうしょ} を ください。",
+      tip: "收據上有車行的電話和車號，東西忘在車上時找得回來。",
+    },
+    {
       id: "transport-lost-item",
       group: "lost",
       zh: "我把東西忘在電車上了。",
@@ -180,10 +203,24 @@ export default {
       tip: "到站務員窗口說，並告訴對方幾點、從哪一站上車。",
     },
     {
+      id: "transport-lost-in-taxi",
+      group: "lost",
+      zh: "我把東西忘在計程車上了。",
+      jp: "タクシー に {忘|わす}れ{物|もの} を しました。",
+      tip: "給對方看計程車收據，上面有車行電話。",
+    },
+    {
       id: "transport-last-train",
       group: "train",
       zh: "末班車是幾點？",
       jp: "{終電|しゅうでん} は {何時|なんじ} です か。",
+    },
+    {
+      id: "transport-my-seat",
+      group: "train",
+      zh: "不好意思，這好像是我的位子。",
+      jp: "すみません、ここ は {私|わたし} の {席|せき} だ と {思|おも}います。",
+      tip: "同時給對方看車票上的車廂和座位號碼。",
     },
   ],
   heard: [
