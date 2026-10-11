@@ -1,7 +1,9 @@
 import type { Jp, Reply } from "../content/types";
 import { plain } from "../lib/jp";
+import type { Line } from "../profile/cards";
 import { BUTTON, h, icon } from "./dom";
 import { hush, play, playAll, playButton } from "./japanese";
+import { lineNode } from "./lines";
 
 /** Marks the history entries overlays push; the value is the overlay's own token. */
 const STATE_KEY = "daijoubuOverlay";
@@ -133,7 +135,7 @@ export interface ShowBlock {
   /** Chinese for the traveller holding the phone, to check before handing it over. */
   zh?: string;
   /** Extra lines shown as they are: an address, a phone number. */
-  extra?: string[];
+  extra?: Line[];
 }
 
 /**
@@ -163,9 +165,7 @@ export function showToOther(blocks: ShowBlock[], label = "給對方看", speakNo
               { lang: "ja", class: "font-bold leading-snug", style: armsLength(many ? total : plain(block.jp)) },
               plain(block.jp),
             ),
-            block.extra?.map((line) =>
-              h("p", { lang: "ja", class: "mt-2 break-words text-3xl font-bold leading-snug" }, line),
-            ),
+            block.extra?.map((line) => h("div", { lang: "ja" }, lineNode(line, "mt-2 text-3xl font-bold leading-snug"))),
             block.zh && h("p", { class: "mt-3 text-xl font-bold text-ink/80" }, block.zh),
           ),
         ),

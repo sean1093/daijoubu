@@ -3,7 +3,7 @@ import { EMERGENCY_NUMBERS } from "../src/content/emergency";
 import { SCENES } from "../src/content/scenes";
 import { checkJp } from "../src/content/validate";
 import { plain } from "../src/lib/jp";
-import { allergyCard, contactLines, helpCard, hotelCard, LINES, medicalCard, placeWord } from "../src/profile/cards";
+import { allergyCard, contactLines, helpCard, hotelCard, LINES, lineText, medicalCard, placeWord } from "../src/profile/cards";
 import { ready } from "../src/profile/fill";
 import { emptyProfile } from "../src/profile/profile";
 import { sampleProfile } from "./fixtures";
@@ -27,14 +27,14 @@ describe("help card", () => {
     const blocks = helpCard(sampleProfile(), "2026-11-06");
     expect(blocks[0]?.extra).toEqual(["名前：LIN MEI-HUA"]);
     expect(blocks[2]?.extra).toContain("京都タワーホテル");
-    expect(blocks[3]?.extra).toEqual(["女兒　林小美", "TEL +886 912-345-678", "（日本の電話から：010-886-912-345-678）"]);
-    expect(blocks[4]?.extra).toEqual(["朋友　田中", "TEL 090-1234-5678"]);
+    expect(blocks[3]?.extra).toEqual(["女兒　林小美", { phone: "+886 912-345-678" }, "（日本の電話から：010-886-912-345-678）"]);
+    expect(blocks[4]?.extra).toEqual(["朋友　田中", { phone: "090-1234-5678" }]);
     for (const block of blocks) expect(checkJp(block.jp)).toEqual([]);
   });
 
   it("makes a taxi card", () => {
     const card = hotelCard(sampleProfile().hotels[0]!);
-    expect(card.extra).toEqual(["ホテルグレイスリー新宿", "住所：東京都新宿区歌舞伎町1-19-1", "TEL 03-6833-2489"]);
+    expect(card.extra).toEqual(["ホテルグレイスリー新宿", "住所：東京都新宿区歌舞伎町1-19-1", { phone: "03-6833-2489" }]);
   });
 
   it("formats contacts without a phone", () => {
@@ -104,7 +104,7 @@ describe("medical and allergy cards", () => {
       "薬のアレルギー：ペニシリン",
       "食物アレルギー：えび、かに",
     ]);
-    expect(blocks.at(-1)?.extra).toEqual(["富邦產險", "証券番号：TRV-12345678", "TEL +886 2-2345-6789"]);
+    expect(blocks.at(-1)?.extra).toEqual(["富邦產險", "証券番号：TRV-12345678", { phone: "+886 2-2345-6789" }]);
     for (const block of blocks) expect(checkJp(block.jp)).toEqual([]);
   });
 
@@ -131,5 +131,12 @@ describe("medical and allergy cards", () => {
     expect(blocks[0]?.zh).toContain("蝦、蟹");
     expect(plain(blocks[1]!.jp)).toBe("牛肉は食べられません。");
     for (const block of blocks) expect(checkJp(block.jp)).toEqual([]);
+  });
+});
+
+describe("lineText", () => {
+  it("prints a phone line with its TEL label", () => {
+    expect(lineText({ phone: "03-6833-2489" })).toBe("TEL 03-6833-2489");
+    expect(lineText("住所：東京都")).toBe("住所：東京都");
   });
 });

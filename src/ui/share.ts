@@ -1,7 +1,7 @@
 import { isEmpty, loadProfile } from "../profile/profile";
 import { shareUrl } from "../share/codec";
 import { qrSvg } from "../share/qr";
-import { announce, BUTTON, h, icon } from "./dom";
+import { BUTTON, h, icon } from "./dom";
 import { page, section } from "./layout";
 
 /** Above this, the QR code gets dense enough that some phones struggle to read it off a screen. */
@@ -22,7 +22,8 @@ export function renderShare(root: HTMLElement): void {
     return;
   }
   const url = shareUrl(profile);
-  const status = h("p", { class: "mt-2 min-h-7 text-center text-lg font-bold text-ok", "aria-live": "polite" });
+  // Empty until there is something to say, so it takes no space before then.
+  const status = h("p", { class: "mt-2 text-center text-lg font-bold text-ok empty:mt-0", "aria-live": "polite" });
   const canShare = typeof navigator.share === "function";
 
   async function copy(): Promise<void> {
@@ -31,10 +32,13 @@ export function renderShare(root: HTMLElement): void {
       status.textContent = "已複製，可以貼到 LINE 傳給旅客。";
     } catch {
       // Clipboard needs a secure context and permission; selecting lets the person copy by hand.
+      // The text is folded away by default: unfold it so it can be selected by hand.
+      linkDetails.open = true;
+      linkBox.focus();
+      linkBox.scrollIntoView({ block: "center" });
       linkBox.select();
-      status.textContent = "請長按上面的連結，選「拷貝」。";
+      status.textContent = "請長按下面的連結，選「拷貝」。";
     }
-    announce(status.textContent ?? "");
   }
 
   async function share(): Promise<void> {
@@ -52,6 +56,18 @@ export function renderShare(root: HTMLElement): void {
     onfocus: (event: Event) => (event.target as HTMLTextAreaElement).select(),
   });
   linkBox.value = url;
+  const linkDetails = h(
+    "details",
+    { class: "mt-3" },
+    // inline-flex drops the native disclosure triangle, so draw one that turns when open.
+    h(
+      "summary",
+      { class: "group inline-flex min-h-12 cursor-pointer list-none items-center gap-1 text-lg font-bold text-ai [&::-webkit-details-marker]:hidden" },
+      icon("next", "h-5 w-5 transition-transform group-open:rotate-90"),
+      "顯示連結文字",
+    ),
+    linkBox,
+  );
 
   page(
     root,
@@ -59,7 +75,7 @@ export function renderShare(root: HTMLElement): void {
     [
       h(
         "div",
-        { class: "mt-2 flex gap-3 rounded-xl bg-shu-soft p-4 text-lg leading-relaxed text-ink ring-2 ring-shu", role: "note" },
+        { class: "mt-2 flex gap-3 rounded-xl bg-shu-soft p-4 text-lg leading-relaxed text-ink", role: "note" },
         h("span", { class: "shrink-0 text-shu" }, icon("alert", "h-7 w-7")),
         h(
           "p",
@@ -75,7 +91,7 @@ export function renderShare(root: HTMLElement): void {
           : null,
         h("button", { type: "button", class: `${canShare ? BUTTON.secondary : BUTTON.primary} mt-3`, onclick: () => void copy() }, icon("copy"), "複製連結"),
         status,
-        linkBox,
+        linkDetails,
       ),
       section(
         "或 2. 用相機掃 QR code",

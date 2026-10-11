@@ -3,7 +3,7 @@ import { dialable } from "../lib/phone";
 import { hotelCard, LINES } from "../profile/cards";
 import { currentHotel, loadProfile } from "../profile/profile";
 import { BUTTON, h, icon } from "./dom";
-import { cardBlock } from "./help";
+import { callButton, cardBlock } from "./help";
 import { playButton } from "./japanese";
 import { page, section } from "./layout";
 import { showToOther } from "./overlay";
@@ -44,13 +44,7 @@ export function renderHotel(root: HTMLElement, [index]: string[]): void {
         "放大",
       ),
     ),
-    phone &&
-      h(
-        "a",
-        { href: `tel:${phone.tel}`, class: `${BUTTON.secondary} mt-4` },
-        icon("phone"),
-        `打電話給飯店 ${phone.display}`,
-      ),
+    phone && h("div", { class: "mt-4" }, callButton("打電話給飯店", phone.display, phone.tel, true)),
     others.length > 0 &&
       section(
         "其他飯店",

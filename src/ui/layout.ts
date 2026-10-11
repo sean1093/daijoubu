@@ -1,7 +1,7 @@
 import { fill, h, icon, type Child } from "./dom";
 
 /**
- * A page with a big "back" button and a title. Every page is one step from
+ * A page with a "back" link and a title. Every page is one step from
  * home, so back always goes home unless `back` says otherwise.
  */
 export function page(root: HTMLElement, title: string, body: Child[], options: { back?: string; backLabel?: string } = {}): void {
@@ -14,12 +14,13 @@ export function page(root: HTMLElement, title: string, body: Child[], options: {
         "a",
         {
           href: options.back ?? "#/",
-          class: "inline-flex min-h-14 shrink-0 items-center gap-1 rounded-lg bg-card px-4 text-lg font-bold text-ai ring-1 ring-hair active:scale-95",
+          // A quiet text link, still a 56px target: the page content is what should stand out.
+          class: "-ml-1 inline-flex min-h-14 shrink-0 items-center gap-1 rounded-lg px-1 text-lg font-bold text-ai active:bg-ai-soft",
         },
         icon("back", "h-6 w-6"),
         options.backLabel ?? "回首頁",
       ),
-      h("h1", { class: "min-w-0 flex-1 truncate text-right text-2xl font-bold" }, title),
+      h("h1", { class: "min-w-0 flex-1 truncate text-right text-xl font-bold" }, title),
     ),
     h("main", { class: "px-4 pb-16" }, body),
   );

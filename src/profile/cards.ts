@@ -9,11 +9,27 @@ import { type Contact, currentHotel, type Hotel, type Place, type Profile } from
  * printed. Japanese for the person helping, Chinese in small print for the
  * traveller. Pure data, so tests can check every sentence.
  */
+/**
+ * A phone number, kept apart from plain text so every renderer can keep the
+ * digits on one line instead of guessing from the text.
+ */
+export interface PhoneLine {
+  phone: string;
+}
+
+/** One extra line of a card: plain text, or a phone number. */
+export type Line = string | PhoneLine;
+
+/** The line as plain text, for print and copying. */
+export function lineText(line: Line): string {
+  return typeof line === "string" ? line : `TEL ${line.phone}`;
+}
+
 export interface CardBlock {
   jp: Jp;
   zh: string;
   /** Lines shown as they are (names, addresses, numbers); never read aloud. */
-  extra: string[];
+  extra: Line[];
 }
 
 export const LINES = {
@@ -43,22 +59,24 @@ export function hotelWord(hotel: Hotel): Jp {
 }
 
 /** Address and phone of a hotel, as lines for the card. (〒 marks a postal code, so the address gets 住所.) */
-export function hotelLines(hotel: Hotel): string[] {
+export function hotelLines(hotel: Hotel): Line[] {
   const phone = dialable(hotel.phone, "jp");
-  return [hotel.name, hotel.address ? `住所：${hotel.address}` : "", phone ? `TEL ${phone.display}` : ""].filter(Boolean);
+  return [hotel.name, hotel.address ? `住所：${hotel.address}` : "", phone ? { phone: phone.display } : ""].filter(
+    (line): line is Line => Boolean(line),
+  );
 }
 
 /** A contact as lines a Japanese helper can dial from. */
-export function contactLines(contact: Contact, home: "tw" | "jp"): string[] {
+export function contactLines(contact: Contact, home: "tw" | "jp"): Line[] {
   const phone = dialable(contact.phone, home);
   const who = [contact.relation, contact.name].filter(Boolean).join("　");
   if (!phone) return [who].filter(Boolean);
   return [
     who,
-    `TEL ${phone.display}`,
+    { phone: phone.display },
     // How a Japanese phone reaches a Taiwanese number: the helper will not know.
     phone.fromJapan ? `（日本の電話から：${phone.fromJapan}）` : "",
-  ].filter(Boolean);
+  ].filter((line): line is Line => Boolean(line));
 }
 
 /** The "I need help" card: who I am, I'm lost, my hotel, call my family. */
@@ -128,8 +146,8 @@ export function medicalCard(profile: Profile, now = new Date()): CardBlock[] {
     blocks.push({
       jp: "{海外旅行|かいがいりょこう} {保険|ほけん} に {入|はい}って います。",
       zh: "我有保旅遊保險。",
-      extra: [ins.company, ins.policy && `証券番号：${ins.policy}`, phone && `TEL ${phone.display}`].filter(
-        (line): line is string => Boolean(line),
+      extra: [ins.company, ins.policy && `証券番号：${ins.policy}`, phone && { phone: phone.display }].filter(
+        (line): line is Line => Boolean(line),
       ),
     });
   }
