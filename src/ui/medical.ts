@@ -10,7 +10,13 @@ import { showToOther } from "./overlay";
 import { phraseRow, rowGroup } from "./scene";
 
 /** Phrases from the emergency scene that belong next to the cards. */
-const MEDICAL_PHRASES = ["emergency-ambulance", "emergency-to-hospital", "emergency-insurance", "emergency-documents"];
+const MEDICAL_PHRASES = [
+  "emergency-ambulance",
+  "emergency-to-hospital",
+  "emergency-insurance",
+  "emergency-documents",
+  "emergency-english-certificate",
+];
 
 /** The card, then 播放／放大 for it. */
 function cardWithActions(blocks: CardBlock[], label: string): HTMLElement {

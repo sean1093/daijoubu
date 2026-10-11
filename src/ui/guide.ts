@@ -1,29 +1,59 @@
 import { GUIDES, guideById } from "../content/guides";
+import { TOOLS } from "../content/tools";
 import { h, icon } from "./dom";
 import { heading, page, section } from "./layout";
 
-/** One row per guide, for the home page: title and a one-line summary. */
+function row(href: string, title: string, summary: string): HTMLElement {
+  return h(
+    "a",
+    {
+      href,
+      class: "flex min-h-16 items-center gap-3 px-4 py-3 transition-colors active:bg-ai-soft focus-visible:[outline-offset:-3px]",
+    },
+    h(
+      "span",
+      { class: "min-w-0 flex-1" },
+      h("span", { class: "block text-xl font-semibold leading-snug" }, title),
+      h("span", { class: "mt-0.5 block text-base text-muted" }, summary),
+    ),
+    icon("next", "h-6 w-6 shrink-0 text-ai"),
+  );
+}
+
+/** One row per guide for the home page, then the recommended tools. */
 export function guideRows(): HTMLElement {
   return h(
     "div",
     { class: "divide-y divide-dashed divide-hair overflow-hidden rounded-2xl bg-card" },
-    GUIDES.map((guide) =>
-      h(
-        "a",
-        {
-          href: `#/guide/${guide.id}`,
-          class: "flex min-h-16 items-center gap-3 px-4 py-3 transition-colors active:bg-ai-soft focus-visible:[outline-offset:-3px]",
-        },
+    GUIDES.map((guide) => row(`#/guide/${guide.id}`, guide.title, guide.summary)),
+    row("#/tools", "推薦的免費工具", "警報、翻譯、地圖、叫車、交通卡：這些交給專門的 App。"),
+  );
+}
+
+/** `#/tools`: free apps that already do a job well, named so they can be found in the app store. */
+export function renderTools(root: HTMLElement): void {
+  page(root, "旅遊小抄", [
+    h("h2", { class: "mt-2 text-2xl font-bold leading-snug" }, "推薦的免費工具"),
+    h(
+      "p",
+      { class: "mt-2 text-lg leading-relaxed text-muted" },
+      "這些事已經有好用的 App，出發前在 App Store 或 Google Play 搜尋名稱下載。",
+    ),
+    h(
+      "ul",
+      { class: "mt-5 divide-y divide-dashed divide-hair rounded-2xl bg-card" },
+      TOOLS.map((tool) =>
         h(
-          "span",
-          { class: "min-w-0 flex-1" },
-          h("span", { class: "block text-xl font-semibold leading-snug" }, guide.title),
-          h("span", { class: "mt-0.5 block text-base text-muted" }, guide.summary),
+          "li",
+          { class: "px-4 py-4" },
+          h("h3", { class: "text-xl font-semibold" }, tool.name),
+          h("p", { class: "mt-1 text-lg leading-relaxed" }, tool.use),
+          tool.note && h("p", { class: "mt-1 text-base text-muted" }, tool.note),
         ),
-        icon("next", "h-6 w-6 shrink-0 text-ai"),
       ),
     ),
-  );
+    section(null, h("p", { class: "text-base text-muted" }, "日本政府觀光局的 24 小時中文熱線在「我需要幫忙」頁。")),
+  ]);
 }
 
 /** `#/guide/<id>`: numbered steps, then what goes wrong, then where it comes from. */

@@ -111,6 +111,42 @@ export const GUIDES: Guide[] = [
     ],
     verified: "2026-10-11",
   },
+  {
+    id: "medical-claim",
+    title: "看病與保險理賠",
+    summary: "在日本看病是自費。當場拿齊文件，回台灣才申請得到保險和健保。",
+    steps: [
+      {
+        title: "先打保險公司的急難救助電話",
+        body: "電話印在保單或保險卡上。問他們該去哪家醫院、能不能由保險公司直接付款。",
+      },
+      {
+        title: "帶護照和醫療卡去看病",
+        body: "醫療卡在這個 App 的「醫療卡」頁，給醫生看。很多診所要先打電話確認能不能看。",
+      },
+      {
+        title: "付錢時拿齊文件",
+        body: "診斷書（最好是英文）、收據正本、費用明細。診斷書可能要另外付費，也可能要等幾天才拿得到。",
+      },
+      {
+        title: "回台灣後申請",
+        body: "照保險公司的要求寄文件。健保的「自墊醫療費用核退」也可以申請，期限是看診或出院後 6 個月內。",
+      },
+    ],
+    notes: [
+      "健保核退要附：申請書、收據正本和明細、診斷書（外文要附中文翻譯）、這次出入境的證明。",
+      "走自動通關的話，出入境證明可能要另外申請，出發前先問清楚。",
+      "健保核退只限緊急傷病，金額有上限，通常不會全額退。旅遊保險要另外買。",
+      "藥局買藥也要留收據。",
+    ],
+    sources: [
+      // Ministry of Health and Welfare / NHIA: overseas emergency self-paid reimbursement, 6 months, documents
+      // (application, original receipts and itemised bill, certificate with Chinese translation, entry/exit proof).
+      "https://www.mohw.gov.tw/cp-16-73066-1.html",
+      "https://www.nhi.gov.tw/",
+    ],
+    verified: "2026-10-11",
+  },
 ];
 
 export function guideById(id: string | undefined): Guide | undefined {

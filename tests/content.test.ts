@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { EMERGENCY_NUMBERS } from "../src/content/emergency";
 import { GUIDES } from "../src/content/guides";
+import { TOOLS } from "../src/content/tools";
 import { CONDITIONS, DIETS, DRUG_ALLERGIES, FOOD_ALLERGIES, SYMPTOMS, SYMPTOMS_INTRO } from "../src/content/medical";
 import { RESCUE } from "../src/content/rescue";
 import { SCENES } from "../src/content/scenes";
@@ -74,6 +75,14 @@ describe("phrase groups", () => {
   it("splits the emergency scene into body, lost, separated and disaster", () => {
     const emergency = SCENES.find((s) => s.id === "emergency")!;
     expect(emergency.groups?.map((g) => g.id)).toEqual(["body", "lost", "separated", "disaster"]);
+  });
+
+  it("describes every recommended tool", () => {
+    expect(new Set(TOOLS.map((t) => t.id)).size).toBe(TOOLS.length);
+    for (const tool of TOOLS) {
+      expect(tool.name.trim(), tool.id).not.toBe("");
+      expect(tool.use.trim(), tool.id).not.toBe("");
+    }
   });
 
   it("refuses a guide without a source or a verified date", () => {
